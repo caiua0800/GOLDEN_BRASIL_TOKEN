@@ -255,8 +255,21 @@ export const getWallet = async (CPF) => {
 };
 
 export const retornaResposta = (dado) => {
-    return consultarALLOWSELL(dado) ? 'VALORIZANDO' : "Contrato Finalizado"
-}
+    switch (dado.STATUS) {
+        case 1:
+            return 'VALORIZANDO';
+        case 2:
+            return 'Contrato Finalizado';
+        case 3:
+            return 'CANCELADO';
+        case 4:
+            console.log('s')
+            return 'PENDENTE';
+        default:
+            return 'Status Desconhecido';
+    }
+};
+
 
 export const preventCurrentIncome = (valorLucro, valorGasto) => {
     if (valorLucro === "indefinido" || !valorLucro || valorGasto === "indefinido" || !valorGasto)
@@ -271,3 +284,22 @@ export const preventCurrentIncome = (valorLucro, valorGasto) => {
     const percentage = (lucro / gasto) * 100;
     return parseFloat(percentage.toFixed(2));
 };
+
+
+
+
+export const mapFieldNameToFirebase = (fieldName) => {
+    const fieldMapping = {
+      nome: 'NAME',
+      usuario: 'USERNAME',
+      email: 'EMAIL',
+      contato: 'CONTACT',
+      endereco: 'ADRESS',
+      bairro: 'NEIGHBORHOOD',
+      cep: 'POSTALCODE',
+      cidade: 'CITY',
+      estado: 'STATE'
+    };
+
+    return fieldMapping[fieldName] || fieldName;
+  };

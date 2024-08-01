@@ -1,13 +1,9 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { useContratosFormatados } from '../../supliers/ContratoSuplier';
-import { isDateAfterToday, formatarMoedaDollar, formatNumber, consultarALLOWSELL, calcularLucroAcumulado } from '../../assets/utils';
+import React, { useContext, useState, useEffect } from 'react'
+import { formatarMoedaDollar, formatNumber, consultarALLOWSELL, calcularLucroAcumulado } from '../../assets/utils';
 import * as Style from './TabelaContratosStyle';
 import { formatDateSystem } from '../../assets/utils';
 import { AuthContext } from '../../context/AuthContext';
 import { preventCurrentIncome, retornaResposta } from '../../assets/utils';
-
-
-
 
 
 const TabelaDeContratos = () => {
@@ -47,13 +43,14 @@ const TabelaDeContratos = () => {
                             <Style.TabelaData>{formatNumber(dado.COINS)}</Style.TabelaData>
                             <Style.TabelaData>{formatarMoedaDollar(dado.TOTALSPENT)}</Style.TabelaData>
                             <Style.TabelaData>
+                                
                                 {formatarMoedaDollar(calcularLucroAcumulado(formatDateSystem(dado.PURCHASEDATE), dado.MAXIMUMNUMBEROFDAYSTOYIELD, dado.TOTALSPENT, dado.TOTALINCOME))}
-
                                 {/* {preventCurrentIncome(dado.CURRENTINCOME, dado.TOTALSPENT)}% */}
+
                             </Style.TabelaData>
                             <Style.TabelaData>{preventCurrentIncome(dado.TOTALINCOME, dado.TOTALSPENT)}%</Style.TabelaData>
                             <Style.TabelaData>{formatarMoedaDollar(calcularLucroAcumulado(formatDateSystem(dado.PURCHASEDATE), dado.MAXIMUMNUMBEROFDAYSTOYIELD, dado.TOTALSPENT, dado.TOTALINCOME) + parseFloat(dado.TOTALSPENT))}</Style.TabelaData>
-                            <Style.TabelaData>{retornaResposta(formatDateSystem(dado.YIELDTERM))}</Style.TabelaData>
+                            <Style.TabelaData>{retornaResposta(dado)}</Style.TabelaData>
                         </Style.TabelaRow>
                     ))
                 )}

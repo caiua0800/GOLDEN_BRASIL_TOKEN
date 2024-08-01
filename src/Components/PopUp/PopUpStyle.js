@@ -1,37 +1,26 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
-// const fadeIn = keyframes`
-//     from {
-//         opacity: 0;
-//         transform: translateY(-20px);
-//     }
-//     to {
-//         opacity: 1;
-//         transform: translateY(0);
-//     }
-// `;
-
-// const fadeOut = keyframes`
-//     from {
-//         opacity: 1;
-//         transform: translateY(0);
-//     }
-//     to {
-//         opacity: 0;
-//         transform: translateY(-20px);
-//     }
-// `;
+// Defina cores diferentes para os tipos de mensagem
+const getColor = (type) => {
+    switch(type) {
+        case 'success':
+            return 'linear-gradient(to bottom, #b5c806, #3fa34d)'; // Verde para sucesso
+        case 'error':
+            return 'linear-gradient(to bottom, #ff4d4d, #d32f2f)'; // Vermelho para erro
+        default:
+            return 'linear-gradient(to bottom, #b5c806, #3fa34d)'; // Padrão verde
+    }
+};
 
 export const PopUpContainer = styled.div`
     position: fixed;
     top: 20px;
     right: 20px;
     z-index: 98888;
-  
 `;
 
 export const PopUpContent = styled.div`
-    background: linear-gradient(to bottom, #b5c806, #3fa34d) ;
+    background: ${(props) => getColor(props.type)};
     color: #fff;
     padding: 16px;
     border-radius: 8px;

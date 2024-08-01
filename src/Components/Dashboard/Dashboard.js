@@ -5,24 +5,31 @@ import * as D from './DashboardStyle';
 import { AuthContext } from '../../context/AuthContext';
 import { abreviarNome, formatNumber, ULLT, ULLTNUMBER } from '../../assets/utils';
 import GrapthLikeBinance from '../GoldGrapth/GrapthLikeBinance';
-import Loading from '../Loading/Loader';
+import { usePulse } from '../../context/LoadContext';
 import SideBarBox from '../Sidebar/SideBarBox';
 import Recarregar from '../Recarregar/Recarregar';
 
-//00260862045 TesteSenha xmarvins
-
 export default function Dashboard() {
-
   const { userData, reloadUserData } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
+  const { showPulse, hidePulse } = usePulse();
 
   useEffect(() => {
-    if (userData) setLoading(false);
-  }, [userData]);
+    const loadUserData = async () => {
+      showPulse(); // Show pulse animation while loading
+      await reloadUserData();
+      hidePulse(); // Hide pulse animation when loading is complete
+      setLoading(false);
+    };
 
-  console.log(userData)
+    if (userData) {
+      setLoading(false);
+    } else {
+      loadUserData();
+    }
+  }, [userData, reloadUserData, showPulse, hidePulse]);
 
-  if (loading)  return <Loading />;
+  if (loading) return null; // Alternatively, return a placeholder or loading message if needed
   
   return (
     <SideBarBox>
@@ -33,7 +40,7 @@ export default function Dashboard() {
         <D.SaldacoesUsuario>
           <span>OLÁ {abreviarNome((userData?.NAME || '').toUpperCase())}</span>
         </D.SaldacoesUsuario>
-        <Recarregar setLoading={setLoading}/>
+        <Recarregar setLoading={setLoading} />
         <D.ContainerContent>
           <D.FirstRow>
             <D.ContratosAtivos>
@@ -48,11 +55,11 @@ export default function Dashboard() {
                 <D.SaldoPlataformaDivs>
                   <div>
                     <h3>VALOR INVESTIMENTO</h3>
-                    <span>{userData ? ULLT(userData.TOTAL_SPENT, userData.VALOR_SACADO) : '0'}</span>
+                    <span>{userData ? ULLT(userData.TOTAL_SPENT, 0) : '0'}</span>
                   </div>
                   <div>
                     <h3>VALOR LUCRO</h3>
-                    <span>{userData ? ULLT(userData.LUCRO_CONTRATOS, userData.VALOR_SACADO) : '0'}</span>
+                    <span>{userData ? ULLT(userData.LUCRO_CONTRATOS, 0) : '0'}</span>
                   </div>
                   <div>
                     <h3>SALDO DE INDICAÇÃO</h3>

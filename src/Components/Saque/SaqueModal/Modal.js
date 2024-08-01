@@ -3,6 +3,8 @@ import * as M from './ModalStyle';
 import { formatNumber } from '../../../assets/utils';
 import { AuthContext } from "../../../context/AuthContext";
 import { atualizarSaque } from "../../../database/firebaseService";
+import { usePulse } from "../../../context/LoadContext";
+
 
 export default function Modal({ handleModalSaque }) {
     const [valorSolicitado, setValorSolicitado] = useState('');
@@ -12,6 +14,7 @@ export default function Modal({ handleModalSaque }) {
     const disponivelSaque = userData && userData.DISPONIVEL_SAQUE ? parseFloat(userData.DISPONIVEL_SAQUE) : 0;
     const valorSolicitadoNumber = parseFloat(valorSolicitado.replace(',', '.')) || 0;
     const valorRestante = Math.max(disponivelSaque - valorSolicitadoNumber, 0); 
+    const { showPulse, hidePulse } = usePulse()
 
     let corSolicitado;
     if (valorSolicitadoNumber < disponivelSaque) {
@@ -30,10 +33,15 @@ export default function Modal({ handleModalSaque }) {
     };
 
     const handleSolicitarSaque = async () => {
+        showPulse();
         try {
             await atualizarSaque(userData, valorSolicitado, reloadUserData);
-            console.log('solicitação de saque feita')
+            console.log('solicitação de saque feita')        
+            alert('solicitação de saque feita!');
+            hidePulse()
         } catch (error) {
+            hidePulse()
+            alert("Erro ao atualizar saque: ", error);
             console.log(error)
         }
         handleModalSaque();

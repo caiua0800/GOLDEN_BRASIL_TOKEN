@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { FaPencilAlt, FaCheck, FaArrowLeft } from 'react-icons/fa';
-import * as U from './UserPageStyle'; 
+import { FaPencilAlt, FaCheck } from 'react-icons/fa';
+import * as U from './UserPageStyle';
 import assets from '../../assets/assets';
 import { AuthContext } from '../../context/AuthContext';
+import axios from 'axios';
+import { mapFieldNameToFirebase } from '../../assets/utils';
 
-
-const static_image_profile = 'https://firebasestorage.googleapis.com/v0/b/white-lable-528b0.appspot.com/o/assets%2FPeroWL.png?alt=media&token=4552ff3d-41f4-4715-85b7-1a2b9f7f7e89';
-
-const ProfilePage = () => {
+const ProfilePage = ({ setProfilePage }) => {
     const { userData, logout } = useContext(AuthContext);
 
     const [inputsEnabled, setInputsEnabled] = useState({
+        nome: false,
         usuario: false,
+        email: false,
         contato: false,
         endereco: false,
         bairro: false,
@@ -21,7 +22,10 @@ const ProfilePage = () => {
     });
 
     const [inputIcons, setInputIcons] = useState({
+        nome: <FaPencilAlt />,
         usuario: <FaPencilAlt />,
+        email: <FaPencilAlt />,
+        contato: <FaPencilAlt />,
         endereco: <FaPencilAlt />,
         bairro: <FaPencilAlt />,
         cep: <FaPencilAlt />,
@@ -30,7 +34,9 @@ const ProfilePage = () => {
     });
 
     const [inputValues, setInputValues] = useState({
+        nome: "",
         usuario: "",
+        email: "",
         contato: "",
         endereco: "",
         bairro: "",
@@ -42,8 +48,10 @@ const ProfilePage = () => {
     useEffect(() => {
         if (userData) {
             setInputValues({
-                usuario: userData.NAME || "",
-                contato: userData.EMAIL || "",
+                nome: userData.NAME || "",
+                usuario: userData.USERNAME || "",
+                email: userData.EMAIL || "",
+                contato: userData.CONTACT || "indefinido",
                 endereco: userData.ADRESS || "",
                 bairro: userData.NEIGHBORHOOD || "",
                 cep: userData.POSTALCODE || "",
@@ -53,30 +61,20 @@ const ProfilePage = () => {
         }
     }, [userData]);
 
+
     const toggleInput = async (inputName) => {
         if (inputsEnabled[inputName]) {
-
-            // try {
-            //     await updateUserProfile(userProfile.CPF, {
-            //         NAME: inputValues.usuario,
-            //         ADRESS: inputValues.endereco,
-            //         NEIGHBORHOOD: inputValues.bairro,
-            //         POSTALCODE: inputValues.cep,
-            //         CITY: inputValues.cidade,
-            //         STATE: inputValues.estado,
-            //     });
-            //     setUserProfile(prev => ({
-            //         ...prev,
-            //         NAME: inputValues.usuario,
-            //         ADRESS: inputValues.endereco,
-            //         NEIGHBORHOOD: inputValues.bairro,
-            //         POSTALCODE: inputValues.cep,
-            //         CITY: inputValues.cidade,
-            //         STATE: inputValues.estado,
-            //     }));
-            // } catch (error) {
-            //     console.error("Error updating document: ", error);
-            // }
+            try {
+                const firebaseFieldName = mapFieldNameToFirebase(inputName);
+                const response = await axios.post('http://localhost:4000/api/client/alterarInfo', {
+                    DOC_ID: userData.CPF,
+                    NOME_DO_CAMPO: firebaseFieldName,
+                    NOVO_VALOR: inputValues[inputName]
+                });
+                console.log('Campo atualizado:', response.data);
+            } catch (error) {
+                console.error('Erro ao atualizar campo:', error);
+            }
         }
 
         setInputsEnabled(prev => ({
@@ -97,26 +95,20 @@ const ProfilePage = () => {
     };
 
     const handleFileChange = async (event) => {
-        // const file = event.target.files[0];
-
-        // try {
-        //     const downloadURL = await uploadProfilePicture(file, userProfile.CPF);
-        //     await updateUserProfile(userProfile.CPF, { PROFILEPICTURE: downloadURL });
-        //     setUserProfile(prev => ({
-        //         ...prev,
-        //         PROFILEPICTURE: downloadURL,
-        //     }));
-        // } catch (error) {
-        //     console.error('Error handling file change:', error);
-        // }
+        // Implementar a lógica para alteração da foto de perfil
     };
 
     const handleLogout = () => {
         logout();
     }
 
+    const handleGetBack = () => {
+        setProfilePage(false);
+    }
+
     return (
         <U.Container>
+            <U.BackIcon onClick={handleGetBack} />
             <U.ProfileCard>
                 <U.InitialContent>
                     <U.ProfilePicture>
@@ -149,7 +141,6 @@ const ProfilePage = () => {
                 </U.ProfileInfo>
                 <U.LogoutBtn onClick={handleLogout}>SAIR</U.LogoutBtn>
             </U.ProfileCard>
-
         </U.Container>
     );
 };

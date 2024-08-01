@@ -24,13 +24,12 @@ export const Sidebar = ({ isOpen }) => {
         <>
 
             {profilePage && (
-                <ProfilePage />
-
+                <ProfilePage setProfilePage={setProfilePage} />
             )}
 
             <S.Container className={isOpen ? "open" : "closed"}>
                 <S.LogoBox>
-                    <img src={assets.gold} alt="Diamond Icon" />
+                    <img src={assets.pulseImage} alt="Diamond Icon" />
                     <span>GOLDEN BRASIL</span>
                 </S.LogoBox>
                 <S.Mapper>

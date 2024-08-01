@@ -1,18 +1,19 @@
 import styled from 'styled-components';
-import { FaPencilAlt, FaCheck, FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft } from 'react-icons/fa';
 
 export const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 1);
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 999;
-
+    z-index: 99999;
+    padding: 20px 0;
+    box-sizing: border-box;
     @media (max-width: 800px) {
         height: 80vh;
         top: 100px;
@@ -23,17 +24,25 @@ export const ProfileCard = styled.div`
     background-color: white;
     border-radius: 8px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-    width: 800px;
+    width: 800px;   
+    overflow-y: scroll;
+    height: 90vh;
     padding: 20px;
     position: relative;
 `;
 
 export const BackIcon = styled(FaArrowLeft)`
     position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 20px;
+    top: 20px;
+    left: 20px;
+    font-size: 38px;
     cursor: pointer;
+    trnasition: .3s;
+
+
+    &:hover{
+        transform: scale(0.95);
+    }
 `;
 
 export const InitialContent = styled.div`

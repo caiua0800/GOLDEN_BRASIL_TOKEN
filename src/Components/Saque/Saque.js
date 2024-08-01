@@ -72,7 +72,7 @@ export default function Saque() {
                         <S.WalletValues>
                             <S.WalletValue>
                                 <h2>SALDO PLATAFORMA</h2>
-                                <h6>(investido + lucro)</h6>
+                                <h6>(investido + lucro + indicação)</h6>
                                 <span>U$ {userData && (userData.TOTAL_PLATAFORMA ? formatNumber(userData.TOTAL_PLATAFORMA) : 0)}</span>
                             </S.WalletValue>
                             <S.WalletValue>

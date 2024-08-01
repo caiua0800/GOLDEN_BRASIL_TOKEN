@@ -16,7 +16,7 @@ export const Table = styled.table`
     color: #000;
     font-size: 16px;
 
-    tbody{
+    tbody {
         color: #a2d6f9;
         font-weight: 500;
     }
@@ -26,17 +26,15 @@ export const Table = styled.table`
         text-align: left;
         border-bottom: 1px solid #ddd;
         text-shadow: 1px 2px 1px rgba(0,0,0,0.2);
-
     }
 
-    th{
+    th {
         padding: 12px 15px;
         text-align: left;
         color: white;
         font-weight: bold;
         border-bottom: 1px solid #ddd;
     }
-
 
     tr {
         &:nth-child(even) {
@@ -46,6 +44,20 @@ export const Table = styled.table`
 
         &:hover {
             background-color: rgba(0,0,0,0.2);
+        }
+    }
+
+    .value-cell {
+        &.contrato {
+            color: #6acc1a; /* verde escuro para contrato */
+        }
+
+        &.saque {
+            color: #fe5f55; /* vermelho escuro para saque */
+        }
+
+        &.indicacao {
+            color: #6acc1a; /* verde escuro para indicação */
         }
     }
 `;

@@ -5,18 +5,27 @@ import { Sidebar } from "../Sidebar/Sidebar";
 import assets from "../../assets/assets";
 import Loading from "../Loading/Loader";
 import SideBarBox from "../Sidebar/SideBarBox";
+import { usePulse } from "../../context/LoadContext";
 
 export default function Noticias() {
     const [newsList, setNewsList] = useState([]);
 
     const [loading, setLoading] = useState(true); // Inicialmente está carregando
-
+    const { showPulse, hidePulse } = usePulse()
 
     const fetchNews = async () => {
+
+        showPulse()
         try {
             const response = await axios.get('http://localhost:4000/api/news/getAll');
             setNewsList(response.data);
+            setTimeout(() => {
+                hidePulse()
+            },1000);
         } catch (error) {
+            setTimeout(() => {
+                hidePulse()
+            },1000);
             console.error('Erro ao buscar notícias:', error);
         }
     };
@@ -27,7 +36,7 @@ export default function Noticias() {
 
     // Função para verificar se todas as imagens foram carregadas
     const handleImageLoad = () => {
-        setLoading(false); // Define como falso quando todas as imagens forem carregadas
+        hidePulse(); // Define como falso quando todas as imagens forem carregadas
     };
 
     useEffect(() => {
@@ -47,10 +56,6 @@ export default function Noticias() {
         }
     }, [newsList]);
 
-    const convertDate = (dateString) => {
-        const [day, month, year] = dateString.split('/').map(Number);
-        return new Date(year, month - 1, day);
-    };
 
     return (
 
@@ -60,24 +65,22 @@ export default function Noticias() {
                 <N.NoticiasTitle>
                     NOTÍCIAS
                 </N.NoticiasTitle>
-                {loading ? (
-                    <Loading />
-                ) : (
-                    <N.NewsBoxes>
-                        {newsList.map(news => (
-                            <N.NewsCard key={news.id}>
-                                <N.NewsImageBox>
-                                    <N.NewsImage src={news.imageUrl} alt="News Image" />
-                                </N.NewsImageBox>
-                                <N.NewsTitle>{news.title}</N.NewsTitle>
-                                <N.NewsBody>
-                                    <ExpandableText text={news.body} />
-                                </N.NewsBody>
-                                <N.NewsData>{news.data}</N.NewsData>
-                            </N.NewsCard>
-                        ))}
-                    </N.NewsBoxes>
-                )}
+
+                <N.NewsBoxes>
+                    {newsList.map(news => (
+                        <N.NewsCard key={news.id}>
+                            <N.NewsImageBox>
+                                <N.NewsImage src={news.imageUrl} alt="News Image" />
+                            </N.NewsImageBox>
+                            <N.NewsTitle>{news.title}</N.NewsTitle>
+                            <N.NewsBody>
+                                <ExpandableText text={news.body} />
+                            </N.NewsBody>
+                            <N.NewsData>{news.data}</N.NewsData>
+                        </N.NewsCard>
+                    ))}
+                </N.NewsBoxes>
+
             </N.NewsContainer>
         </SideBarBox>
 

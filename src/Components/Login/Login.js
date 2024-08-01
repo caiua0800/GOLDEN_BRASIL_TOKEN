@@ -3,23 +3,38 @@ import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import assets from '../../assets/assets';
 import * as Styles from './LoginStyle';
+import { usePulse } from '../../context/LoadContext';
 
-const LoginPage = ({ setAparecer }) => {
+const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
   const { login, error, userData } = useContext(AuthContext);
+  const { showPulse, hidePulse } = usePulse();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    showPulse();
     await login(username, password);
   };
 
   useEffect(() => {
+    if (error) {
+      setShowError(true);
+      const timer = setTimeout(() => {
+        setShowError(false);
+      }, 2000); // O mesmo tempo da animação da barra de erro
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  useEffect(() => {
     if (userData) {
+      hidePulse();
       navigate('/dashboard');
     }
-  }, [userData, navigate]);
+  }, [userData, navigate, hidePulse]);
 
   return (
     <Styles.Container>
@@ -41,7 +56,7 @@ const LoginPage = ({ setAparecer }) => {
           />
           <Styles.SubmitButton type="submit">Login</Styles.SubmitButton>
         </Styles.LoginForm>
-        {error && (
+        {showError && (
           <Styles.ErrorPopup>
             <Styles.ErrorMessage>{error}</Styles.ErrorMessage>
             <Styles.ErrorBar />

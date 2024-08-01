@@ -31,6 +31,7 @@ const assets = {
     sidebarMenu: 'https://firebasestorage.googleapis.com/v0/b/golden-token-62a99.appspot.com/o/ICONS%2Fmenu-alt-2-svgrepo-com.png?alt=media&token=77475c95-1cb5-445a-b2bd-19b189d8ad54',
     carteiraFechada: 'https://firebasestorage.googleapis.com/v0/b/wldata.appspot.com/o/carteiraFechada.png?alt=media&token=38118eb4-495d-4b87-bc44-da402cfbf936',
     carteiraAberta: 'https://firebasestorage.googleapis.com/v0/b/wldata.appspot.com/o/carteiraAberta.png?alt=media&token=3e9dafab-46ff-407c-856a-8a7e8c3a2493',
+    pulseImage: 'https://firebasestorage.googleapis.com/v0/b/wldata.appspot.com/o/logoGoldenToken-removebg-preview.png?alt=media&token=5109abf4-41b8-4c9a-8803-4b4adbab0cb2'
 };
 
 export default assets;

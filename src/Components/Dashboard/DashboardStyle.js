@@ -10,7 +10,7 @@ export const DashboardContainer = styled.div`
     padding: 50px 30px 200px 30px;
     display: flex;
     flex-direction: column;
-    position: relative;
+
     @media (max-width: 800px){
         flex-direction: column;
         justify-content: center;

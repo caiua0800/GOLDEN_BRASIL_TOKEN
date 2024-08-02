@@ -104,9 +104,13 @@ export const Footer = styled.div`
         box-shadow: 2px 2px 6px rgba(0,0,0,0.7);
         background-color: white;
         overflow: hidden;
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
         img{
-            width: 100%;
-            height: 100%;
+            width: 150%;
+            // height: 100%;
         }
     }
 

@@ -5,10 +5,14 @@ import assets from '../../assets/assets';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import { mapFieldNameToFirebase } from '../../assets/utils';
+import { db, storage, doc, updateDoc } from '../../database/firebaseConfig';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { usePulse } from '../../context/LoadContext';
+
 
 const ProfilePage = ({ setProfilePage }) => {
-    const { userData, logout } = useContext(AuthContext);
-
+    const { userData, logout, reloadUserData } = useContext(AuthContext);
+    const { showPulse, hidePulse } = usePulse();
     const [inputsEnabled, setInputsEnabled] = useState({
         nome: false,
         usuario: false,
@@ -61,7 +65,6 @@ const ProfilePage = ({ setProfilePage }) => {
         }
     }, [userData]);
 
-
     const toggleInput = async (inputName) => {
         if (inputsEnabled[inputName]) {
             try {
@@ -71,6 +74,7 @@ const ProfilePage = ({ setProfilePage }) => {
                     NOME_DO_CAMPO: firebaseFieldName,
                     NOVO_VALOR: inputValues[inputName]
                 });
+                reloadUserData()
                 console.log('Campo atualizado:', response.data);
             } catch (error) {
                 console.error('Erro ao atualizar campo:', error);
@@ -95,7 +99,47 @@ const ProfilePage = ({ setProfilePage }) => {
     };
 
     const handleFileChange = async (event) => {
-        // Implementar a lógica para alteração da foto de perfil
+        const file = event.target.files[0];
+        console.log('Arquivo selecionado:', file);
+        showPulse();
+        if (file) {
+            const userFolder = userData.CPF;
+            const storageRef = ref(storage, `users/${userFolder}/${file.name}`);
+
+            try {
+                // Fazer upload do arquivo
+                await uploadBytes(storageRef, file);
+
+                // Obter a URL de download da imagem
+                const downloadURL = await getDownloadURL(storageRef);
+
+                // Atualizar a URL da imagem no Firestore
+                await updateProfilePicture(downloadURL);
+
+                // Atualizar o estado da URL da imagem
+                setInputValues(prev => ({
+                    ...prev,
+                    perfilPictureUrl: downloadURL
+                }));
+                hidePulse()
+                console.log('Foto de perfil atualizada com sucesso!');
+            } catch (error) {
+                hidePulse()
+                console.error('Erro ao fazer upload da foto:', error);
+            }
+        }
+    };
+
+
+    const updateProfilePicture = async (imageUrl) => {
+        const userRef = doc(db, 'USERS', userData.CPF);
+
+        try {
+            reloadUserData()
+            await updateDoc(userRef, { URLFOTOPERFIL: imageUrl, CONTEMFOTOPERFIL: true });
+        } catch (error) {
+            console.error('Erro ao atualizar a URL da foto de perfil no Firestore:', error);
+        }
     };
 
     const handleLogout = () => {

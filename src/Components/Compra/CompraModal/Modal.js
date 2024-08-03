@@ -3,8 +3,10 @@ import * as M from './ModalStyle';
 import PDFGenerator from "./PDFGenerator";
 import { AuthContext } from "../../../context/AuthContext";
 import PopUp from '../../PopUp/PopUp'; // Importe o PopUp
+import { gerarStringAleatoria } from "../../../assets/utils";
+import axios from "axios";
 
-export default function Modal({ modalData, handleModalCompra, criarCompraDB, handleOpenPopUp }) {
+export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, setPopUpMessage, reloadUserData }) {
     const [assinatura, setAssinatura] = useState('');
     const [usuario, setUsuario] = useState('');
     const [senha, setSenha] = useState('');
@@ -20,39 +22,44 @@ export default function Modal({ modalData, handleModalCompra, criarCompraDB, han
     };
 
     const handleConfirmarCompra = async () => {
+
         if (assinatura !== 'assinado') {
             alert('Por favor, assine o contrato antes de confirmar a compra.');
             return;
         }
 
-        try {
-            const response = await fetch('http://localhost:4000/api/client/confirmation', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    USUARIO: usuario,
-                    DocId: userData.CPF,
-                    PASSWORD: senha,
-                }),
-            });
+        if (userData) {
+            const requestData = {
+                USERNAME: usuario,
+                PASSWORD: senha,
+                docId: userData.CPF,
+                contratoData: {
+                    COINS: modalData.qttContratos,
+                    COINVALUE: modalData.qttContratos,
+                    CURRENTINCOME: "0",
+                    IDCOMPRA: gerarStringAleatoria(),
+                    MAXIMUMNUMBEROFDAYSTOYIELD: "36",
+                    MAXIMUMQUOTAYIELD: "150",
+                    RENDIMENTO_ATUAL: 0,
+                    STATUS: 4,
+                    TOTALINCOME: "0",
+                    TOTALSPENT: (parseFloat(modalData.valorPorContrato)*parseFloat(modalData.qttContratos)).toFixed(2),
+                }
+            };
 
-            if (response.ok) {
+            try {
+                const response = await axios.post('http://localhost:4000/clientes/criarContrato', requestData);
+
+                const type = response.data.includes('sucesso') ? 'success' : 'error';
+                setPopUpMessage(response.data);
+                handleOpenPopUp(type);
                 handleModalCompra();
-                setLoading(true);
-                handleOpenPopUp()
-
-                setTimeout(() => {
-                    criarCompraDB();
-                    setLoading(false);
-                }, 3000); 
-            } else {
-                alert('Falha na confirmação. Verifique suas credenciais e tente novamente.');
+                reloadUserData()
+            } catch (error) {
+                console.error("Erro ao adicionar contrato:", error);
+                setPopUpMessage('Ocorreu um erro ao processar sua compra. Por favor, tente novamente.');
+                handleOpenPopUp('error');
             }
-        } catch (error) {
-            console.error('Erro ao confirmar compra:', error);
-            alert('Ocorreu um erro ao tentar confirmar a compra.');
         }
     };
 

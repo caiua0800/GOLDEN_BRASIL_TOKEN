@@ -44,12 +44,12 @@ const TabelaDeContratos = () => {
                             <Style.TabelaData>{formatarMoedaDollar(dado.TOTALSPENT)}</Style.TabelaData>
                             <Style.TabelaData>
                                 
-                                {formatarMoedaDollar(calcularLucroAcumulado(formatDateSystem(dado.PURCHASEDATE), dado.MAXIMUMNUMBEROFDAYSTOYIELD, dado.TOTALSPENT, dado.TOTALINCOME))}
-                                {/* {preventCurrentIncome(dado.CURRENTINCOME, dado.TOTALSPENT)}% */}
-
+                            U$ {(dado.TOTALSPENT * (dado.RENDIMENTO_ATUAL/100)).toFixed(2)} ({dado.RENDIMENTO_ATUAL.toFixed(2)}%)
+                
                             </Style.TabelaData>
                             <Style.TabelaData>{preventCurrentIncome(dado.TOTALINCOME, dado.TOTALSPENT)}%</Style.TabelaData>
-                            <Style.TabelaData>{formatarMoedaDollar(calcularLucroAcumulado(formatDateSystem(dado.PURCHASEDATE), dado.MAXIMUMNUMBEROFDAYSTOYIELD, dado.TOTALSPENT, dado.TOTALINCOME) + parseFloat(dado.TOTALSPENT))}</Style.TabelaData>
+
+                            <Style.TabelaData>U$ {(parseFloat(dado.TOTALSPENT) + (dado.TOTALSPENT * (dado.RENDIMENTO_ATUAL/100))).toFixed(2)}</Style.TabelaData>
                             <Style.TabelaData>{retornaResposta(dado)}</Style.TabelaData>
                         </Style.TabelaRow>
                     ))

@@ -4,7 +4,7 @@ import { formatNumber } from '../../../assets/utils';
 import { AuthContext } from "../../../context/AuthContext";
 import { atualizarSaque } from "../../../database/firebaseService";
 import { usePulse } from "../../../context/LoadContext";
-
+import axios from "axios";
 
 export default function Modal({ handleModalSaque }) {
     const [valorSolicitado, setValorSolicitado] = useState('');
@@ -34,11 +34,23 @@ export default function Modal({ handleModalSaque }) {
 
     const handleSolicitarSaque = async () => {
         showPulse();
+
+        const requestData = {
+            USERNAME: usuario,
+            PASSWORD: senha,
+            docId: userData.CPF,
+            saqueData: {
+                CODCLI: userData.CPF,
+                STATUS: 2,
+                VALORSOLICITADO: parseFloat(valorSolicitado)
+            }
+        }
         try {
-            await atualizarSaque(userData, valorSolicitado, reloadUserData);
-            console.log('solicitação de saque feita')        
-            alert('solicitação de saque feita!');
+            const response = await axios.post('http://localhost:4000/clientes/criarSaque', requestData);
+            console.log('solicitação de saque feita', response)        
             hidePulse()
+            reloadUserData();
+            setTimeout(()=> {alert('solicitação de saque feita!');},1000);
         } catch (error) {
             hidePulse()
             alert("Erro ao atualizar saque: ", error);

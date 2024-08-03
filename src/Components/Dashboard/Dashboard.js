@@ -29,7 +29,8 @@ export default function Dashboard() {
     }
   }, [userData, reloadUserData, showPulse, hidePulse]);
 
-  if (loading) return null; // Alternatively, return a placeholder or loading message if needed
+  if (loading) return null; 
+
   
   return (
     <SideBarBox>
@@ -45,21 +46,21 @@ export default function Dashboard() {
           <D.FirstRow>
             <D.ContratosAtivos>
               <h1>CONTRATOS ATIVOS</h1>
-              <span>{userData && userData.totalCoins}</span>
+              <span>{userData && userData.TOTAL_COINS}</span>
               <TwoBars totalSpent={userData ? ULLTNUMBER(userData.TOTAL_SPENT, userData.VALOR_SACADO) : 0} totalValue={userData ? ULLTNUMBER(userData.TOTAL_PLATAFORMA, userData.VALOR_SACADO) : 0} />
             </D.ContratosAtivos>
             <D.SaldoCorrente>
               <D.SaldoNaPlataforma>
                 <h2>SALDO NA PLATAFORMA</h2>
-                <span>{userData ? ULLT(userData.TOTAL_PLATAFORMA, userData.VALOR_SACADO) : '0'}</span>
+                <span>U$ {userData ? ULLT(userData.TOTAL_PLATAFORMA, userData.VALOR_SACADO) : '0'}</span>
                 <D.SaldoPlataformaDivs>
                   <div>
                     <h3>VALOR INVESTIMENTO</h3>
-                    <span>{userData ? ULLT(userData.TOTAL_SPENT, 0) : '0'}</span>
+                    <span>U$ {userData ? ULLT(userData.TOTAL_SPENT, 0) : '0'}</span>
                   </div>
                   <div>
                     <h3>VALOR LUCRO</h3>
-                    <span>{userData ? ULLT(userData.LUCRO_CONTRATOS, 0) : '0'}</span>
+                    <span>U$ {userData ? ULLT(userData.LUCRO_CONTRATOS, 0) : '0'}</span>
                   </div>
                   <div>
                     <h3>SALDO DE INDICAÇÃO</h3>
@@ -70,7 +71,7 @@ export default function Dashboard() {
             </D.SaldoCorrente>
           </D.FirstRow>
           <D.SecondRow>
-            <h1>DISPONÍVEL PARA SAQUE | {userData ? ULLT(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) : '0'}</h1>
+            <h1>DISPONÍVEL PARA SAQUE | U$  {userData ? ULLT(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) : '0'}</h1>
             <D.SaldoDisponivelParaSaque>
               <D.ProgressBar>
                 <D.ProgressFill percentage={userData ? (ULLTNUMBER(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />

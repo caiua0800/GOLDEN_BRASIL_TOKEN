@@ -159,7 +159,7 @@ export const ULLT = (valor, valor2) => {
             valor = valor.toString();
         }
         let res = parseFloat(valor.replace(',', '.'));
-        res = formatarMoedaDollar(res.toFixed(2).replace('.', ','));
+        res = formatNumber(res);
 
         return res
     }
@@ -174,6 +174,7 @@ export const ULLTNUMBER = (valor, valor2) => {
         }
         let res = parseFloat(valor.replace(',', '.')) - valor2;
         res = (res);
+
         return (res);
     }
     if (!valor2 && valor) {
@@ -181,6 +182,7 @@ export const ULLTNUMBER = (valor, valor2) => {
             valor = valor.toString();
         }
         let res = parseFloat(valor.replace(',', '.'));
+
         res = (res);
         return res
     }
@@ -200,7 +202,6 @@ export const calculateProfit = (months, initialValue, percentage) => {
     const futureDate = addMonths(now, months);
     const totalDays = differenceInDays(futureDate, now);
 
-    console.log(initialValue)
     const totalProfit = initialValue * (percentage / 100);
     const finalValue = initialValue + totalProfit;
 
@@ -263,7 +264,6 @@ export const retornaResposta = (dado) => {
         case 3:
             return 'CANCELADO';
         case 4:
-            console.log('s')
             return 'PENDENTE';
         default:
             return 'Status Desconhecido';

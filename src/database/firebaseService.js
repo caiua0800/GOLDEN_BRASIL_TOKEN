@@ -3,6 +3,7 @@ import { db, storage } from '../database/firebaseConfig';
 import { doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { format, addYears } from 'date-fns';
 import { usePulse } from '../context/LoadContext';
+import axios from 'axios';
 
 export const uploadFile = async (file, userId, type) => {
     try {
@@ -29,6 +30,7 @@ export const updateUserDocument = async (userId, updates, reloadUserData) => {
     }
 };
 
+
 export const criarContratoDB = async (userDataClient, compraInfo, reloadUserData) => {
     try {
         // Verifique se os documentos foram enviados e verificados
@@ -40,40 +42,43 @@ export const criarContratoDB = async (userDataClient, compraInfo, reloadUserData
             return 'AGUARDE A VERIFICAÇÃO DOS DOCUMENTOS PARA REALIZAR TRANSAÇÕES';
         }
 
-        // Cria um contrato no banco de dados
+        // Formata a data atual e a data de vencimento
         const currentDate = new Date();
-        const formattedDate = format(currentDate, 'yyyy-MM-dd HH:mm:ss');
-
         const yieldTermDate = addYears(currentDate, 3);
         const formattedYieldTermDate = format(yieldTermDate, 'yyyy-MM-dd HH:mm:ss');
         
-        const userDocRef = doc(db, 'USERS', userDataClient.CPF);
-        await updateDoc(userDocRef, {
-            CONTRATOS: arrayUnion({
-                COINS: compraInfo.COINS.toString(),
-                COINVALUE: compraInfo.COINVALUE,
-                IDCOMPRA: compraInfo.IDCOMPRA,
-                MAXIMUMNUMBEROFDAYSTOYIELD: compraInfo.MAXIMUMNUMBEROFDAYSTOYIELD,
-                MAXIMUMQQUOTAYIELD: compraInfo.MAXIMUMQQUOTAYIELD,
-                PURCHASEDATE: formattedDate,
-                TOTALINCOME: compraInfo.TOTALINCOME.toString(),
-                TOTALSPENT: compraInfo.TOTALSPENT,
-                YIELDTERM: formattedYieldTermDate,
-                CURRENTINCOME: '0',
-                STATUS: 4,
-            })
+        // Prepara os dados do contrato
+        const contratoData = {
+            COINS: compraInfo.COINS.toString(),
+            COINVALUE: compraInfo.COINVALUE,
+            IDCOMPRA: compraInfo.IDCOMPRA,
+            MAXIMUMNUMBEROFDAYSTOYIELD: compraInfo.MAXIMUMNUMBEROFDAYSTOYIELD,
+            MAXIMUMQQUOTAYIELD: compraInfo.MAXIMUMQQUOTAYIELD,
+            RENDIMENTO_ATUAL: 0,
+            TOTALINCOME: compraInfo.TOTALINCOME.toString(),
+            TOTALSPENT: compraInfo.TOTALSPENT,
+            YIELDTERM: formattedYieldTermDate,
+            CURRENTINCOME: '0',
+            STATUS: 4,
+        };
+        console.log('tentei')
+        // Envia a solicitação HTTP
+        const response = await axios.post('http://localhost:4000/clientes/criarContrato', {
+            docId: userDataClient.CPF,
+            contratoData: contratoData
         });
 
         // Atualiza os dados do usuário
         if (reloadUserData) await reloadUserData();
         
-        return 'Contrato adicionado com sucesso!';
+        return response.data.message || 'Contrato adicionado com sucesso!';
 
     } catch (error) {
         console.error("Erro ao criar contrato: ", error);
         return 'Ocorreu um erro ao processar sua compra. Por favor, tente novamente.';
     }
 };
+
 
 
 export const gerarStringAleatoria = () => {
@@ -94,7 +99,7 @@ export const atualizarSaque = async (userDataClient, valorRequerido, reloadUserD
 
         const novoSaque = {
             VALORREQUERIDO: valorRequerido.toString(),
-            DATAREQUERIMENTO: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+            DATASOLICITACAO: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
             ACEITO: false,
             VISTO: false,
             SAQUECOD: gerarStringAleatoria()

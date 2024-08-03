@@ -17,11 +17,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = (username, password) => {
     const LoginSendableData = {
-      USUARIO: username,
+      USERNAME: username,
       PASSWORD: password,
     };
 
-    return axios.post('http://localhost:4000/api/client/login', LoginSendableData)
+    return axios.post('http://localhost:4000/clientes/loginCliente', LoginSendableData)
       .then((response) => {
         console.log('Usuário Logado:', response.data.NAME);
         const data = response.data;
@@ -61,13 +61,11 @@ export const AuthProvider = ({ children }) => {
     }
 
     const LoginSendableData = {
-      USUARIO: userData.USERNAME, // Nome de usuário para o reload
-      PASSWORD: userData.PASSWORD, // Senha para o reload
+      CPF: userData.CPF,
     };
 
-    return axios.post('http://localhost:4000/api/client/reloadUserData', LoginSendableData)
+    return axios.post('http://localhost:4000/clientes/pesquisarCliente', LoginSendableData)
       .then((response) => {
-        console.log('Dados do usuário recarregados:', response.data.NAME);
         const data = response.data;
         setUserData(data);
         localStorage.setItem('userData', JSON.stringify(data)); // Atualizar dados no localStorage

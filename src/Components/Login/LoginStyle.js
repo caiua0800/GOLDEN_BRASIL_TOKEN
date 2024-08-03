@@ -1,3 +1,4 @@
+
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -127,5 +128,37 @@ export const ErrorBar = styled.div`
     100% {
       width: 0;
     }
+  }
+`;
+
+export const singUpLink = styled.span`
+  margin-top: 3px;
+  color: rgba(255, 255, 25, 0.6);
+  font-size: 12px;
+  width: 100%;
+  text-align: center;
+
+  a{
+    color: rgba(100,100,255, 1);
+    transition: .3s;
+    cursor: pointer;
+    &:hover{
+      color: aliceblue;
+    }
+  }
+`;
+
+export const forgotPassLinky = styled.a`
+  margin: 0;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  width: 100%;
+  text-align: end;
+  transition: .3s;
+  cursor: pointer;
+  &:hover{
+    color: white;
   }
 `;

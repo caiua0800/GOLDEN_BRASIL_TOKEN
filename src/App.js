@@ -11,6 +11,7 @@ import Noticias from './Components/Noticias/Noticias';
 import Extrato from './Components/Extrato/Extrato';
 import Validacao from './Components/Validacao.js/Validacao';
 import PulseAnimation from './Components/Loading/Pulse';
+import CadastroPage from './Components/Cadastro/CadastroPage';
 import { LoadProvider } from './context/LoadContext'; // Updated import
 import assets from './assets/assets'; // Ensure path is correct
 import useImagePreloader from './hooks/useImagePreloader';
@@ -26,6 +27,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<LoginPage />} />
+            <Route path="/cadastro" element={<CadastroPage />} />
             <Route path="/validacao" element={<PrivateRoute element={Validacao} />} />
             <Route path="/dashboard" element={<PrivateRoute element={Dashboard} />} />
             <Route path="/novacompra" element={<PrivateRoute element={Compra} />} />

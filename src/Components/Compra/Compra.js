@@ -2,19 +2,18 @@ import React, { useState, useEffect, useContext } from "react";
 import * as S from './CompraStyle';
 import assets from '../../assets/assets';
 import Loading from '../Loading/Loader';
-import { calculateProfit, formatarMoedaDollar, formatNumber } from "../../assets/utils";
+import { calculateProfit, formatNumber } from "../../assets/utils";
 import Modal from "./CompraModal/Modal";
 import TabelaDeContratos from "../Tabelas/TabelaContratos";
 import { AuthContext } from "../../context/AuthContext";
 import SideBarBox from "../Sidebar/SideBarBox";
-import { criarContratoDB, gerarStringAleatoria } from "../../database/firebaseService";
 import PopUp from "../PopUp/PopUp";
 import { usePulse } from '../../context/LoadContext';
+
 
 export default function Compra() {
     const { userData, reloadUserData } = useContext(AuthContext);
     const [qttContratos, setQttContratos] = useState(1);
-    const [loading, setLoading] = useState(false); // Estado de carregamento
     const [simulado, setSimulado] = useState(false);
     const [resultadoSimulacao, setResultadoSimulacao] = useState({});
     const [modalCompra, setModalCompra] = useState(false);
@@ -23,7 +22,7 @@ export default function Compra() {
     const [popUpMessage, setPopUpMessage] = useState('');
     const [popUpType, setPopUpType] = useState('');
     const { showPulse, hidePulse } = usePulse();
-
+    const [loadingSimulation, setLoadigSimulation] = useState(false);
 
 
     let valorContratoUni = 50;
@@ -39,12 +38,13 @@ export default function Compra() {
 
     const handleSimulate = () => {
         setSimulado(false);
+        setLoadigSimulation(true);
 
-        showPulse()
         setResultadoSimulacao(calculateProfit(36, (qttContratos * valorContratoUni), 150));
         setTimeout(() => {
-            hidePulse()
             setSimulado(true);
+            setLoadigSimulation(false);
+
         }, 1000);
     }
 
@@ -78,42 +78,14 @@ export default function Compra() {
     }, []);
 
 
-    const handleNewCompra = async () => {
-        if (userData) {
-            let compraInfo = {
-                COINS: qttContratos,
-                COINVALUE: valorContratoUni.toFixed(2),
-                IDCOMPRA: gerarStringAleatoria(),
-                MAXIMUMNUMBEROFDAYSTOYIELD: "36",
-                MAXIMUMQQUOTAYIELD: "150",
-                TOTALINCOME: resultadoSimulacao.totalProfit,
-                TOTALSPENT: (valorContratoUni * qttContratos).toString(),
-            };
-
-            try {
-                const response = await criarContratoDB(userData, compraInfo, reloadUserData);
-                const type = response.includes('sucesso') ? 'success' : 'error';
-                setPopUpMessage(response);  // Defina a mensagem do pop-up
-                handleOpenPopUp(type);      // Passe o tipo de mensagem para o pop-up
-                handleModalCompra();        // Feche o modal de compra
-            } catch (error) {
-                console.error("Erro ao adicionar contrato:", error);
-                setPopUpMessage('Ocorreu um erro ao processar sua compra. Por favor, tente novamente.');
-                handleOpenPopUp('error');
-            }
-        }
-    };
-
-
-
     const handleClosePopUp = () => {
         setPopUpActive(false);
     }
 
     const handleOpenPopUp = (type) => {
         showPulse();
-        setPopUpType(type); 
-    
+        setPopUpType(type);
+
         setTimeout(() => {
             setPopUpActive(true);
             hidePulse();
@@ -181,7 +153,7 @@ export default function Compra() {
                     </S.SimularCompra>
 
                     <S.Simulacao>
-                        {loading && (
+                        {loadingSimulation && (
                             <Loading />
                         )}
 
@@ -218,7 +190,7 @@ export default function Compra() {
                     </S.Simulacao>
 
                     {modalCompra && (
-                        <Modal handleOpenPopUp={handleOpenPopUp} criarCompraDB={handleNewCompra} handleModalCompra={handleModalCompra} modalData={{
+                        <Modal handleOpenPopUp={handleOpenPopUp}  setPopUpMessage={setPopUpMessage} reloadUserData={reloadUserData} handleModalCompra={handleModalCompra} modalData={{
                             meses: 36,
                             dias: resultadoSimulacao.totalDays,
                             lucroDiario: resultadoSimulacao.dailyProfit,

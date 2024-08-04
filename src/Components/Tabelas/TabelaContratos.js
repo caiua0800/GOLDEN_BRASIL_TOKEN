@@ -1,18 +1,21 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react';
 import { formatarMoedaDollar, formatNumber, consultarALLOWSELL, calcularLucroAcumulado } from '../../assets/utils';
 import * as Style from './TabelaContratosStyle';
 import { formatDateSystem } from '../../assets/utils';
 import { AuthContext } from '../../context/AuthContext';
 import { preventCurrentIncome, retornaResposta } from '../../assets/utils';
 
-
 const TabelaDeContratos = () => {
     const [contratos, setContratos] = useState([]);
     const { userData } = useContext(AuthContext);
 
     useEffect(() => {
-        userData ? setContratos(userData.CONTRATOS) : setContratos([])
-    }, [userData])
+        if (userData && Array.isArray(userData.CONTRATOS)) {
+            setContratos(userData.CONTRATOS);
+        } else {
+            setContratos([]);
+        }
+    }, [userData]);
 
     return (
         <Style.Tabela>
@@ -43,13 +46,12 @@ const TabelaDeContratos = () => {
                             <Style.TabelaData>{formatNumber(dado.COINS)}</Style.TabelaData>
                             <Style.TabelaData>{formatarMoedaDollar(dado.TOTALSPENT)}</Style.TabelaData>
                             <Style.TabelaData>
-                                
-                            U$ {(dado.TOTALSPENT * (dado.RENDIMENTO_ATUAL/100)).toFixed(2)} ({dado.RENDIMENTO_ATUAL.toFixed(2)}%)
-                
+                                U$ {(dado.TOTALSPENT * (dado.RENDIMENTO_ATUAL / 100)).toFixed(2)} ({dado.RENDIMENTO_ATUAL.toFixed(2)}%)
                             </Style.TabelaData>
                             <Style.TabelaData>{preventCurrentIncome(dado.TOTALINCOME, dado.TOTALSPENT)}%</Style.TabelaData>
-
-                            <Style.TabelaData>U$ {(parseFloat(dado.TOTALSPENT) + (dado.TOTALSPENT * (dado.RENDIMENTO_ATUAL/100))).toFixed(2)}</Style.TabelaData>
+                            <Style.TabelaData>
+                                U$ {(parseFloat(dado.TOTALSPENT) + (dado.TOTALSPENT * (dado.RENDIMENTO_ATUAL / 100))).toFixed(2)}
+                            </Style.TabelaData>
                             <Style.TabelaData>{retornaResposta(dado)}</Style.TabelaData>
                         </Style.TabelaRow>
                     ))

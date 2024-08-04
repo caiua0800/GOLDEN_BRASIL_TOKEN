@@ -285,21 +285,55 @@ export const preventCurrentIncome = (valorLucro, valorGasto) => {
     return parseFloat(percentage.toFixed(2));
 };
 
-
-
-
 export const mapFieldNameToFirebase = (fieldName) => {
     const fieldMapping = {
-      nome: 'NAME',
-      usuario: 'USERNAME',
-      email: 'EMAIL',
-      contato: 'CONTACT',
-      endereco: 'ADRESS',
-      bairro: 'NEIGHBORHOOD',
-      cep: 'POSTALCODE',
-      cidade: 'CITY',
-      estado: 'STATE'
+        nome: 'NAME',
+        usuario: 'USERNAME',
+        email: 'EMAIL',
+        contato: 'CONTACT',
+        endereco: 'ADRESS',
+        bairro: 'NEIGHBORHOOD',
+        cep: 'POSTALCODE',
+        cidade: 'CITY',
+        estado: 'STATE'
     };
 
     return fieldMapping[fieldName] || fieldName;
-  };
+};
+
+export const formatCPF = (value) => {
+    return value
+        .replace(/\D/g, '') // Remove tudo o que não é dígito
+        .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona ponto após 3 dígitos
+        .replace(/\.(\d{3})(\d)/, '.$1.$2') // Adiciona ponto após 3 dígitos
+        .replace(/\.(\d{3})(\d)/, '.$1-$2') // Adiciona hífen após 3 dígitos
+        .replace(/(-\d{2})\d+?$/, '$1'); // Limita a 11 dígitos
+};
+
+export const formatTelefone = (value) => {
+    return value
+        .replace(/\D/g, '') // Remove tudo o que não é dígito
+        .replace(/(\d{2})(\d)/, '($1) $2') // Adiciona parênteses e espaço
+        .replace(/(\d{5})(\d)/, '$1-$2') // Adiciona hífen
+        .replace(/(-\d{4})\d+?$/, '$1'); // Limita a 11 dígitos
+};
+
+export const formatCEP = (value) => {
+    return value
+        .replace(/\D/g, '') // Remove tudo o que não é dígito
+        .replace(/(\d{5})(\d)/, '$1-$2') // Adiciona hífen após 5 dígitos
+        .replace(/(-\d{3})\d+?$/, '$1'); // Limita a 8 dígitos
+};
+
+export const removeFormatting = (type, value) => {
+    switch (type) {
+        case 'cpf':
+            return value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        case 'telefone':
+            return value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        case 'cep':
+            return value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        default:
+            return value; // Retorna o valor sem alterações se o tipo não corresponder a nenhum dos casos
+    }
+};

@@ -10,7 +10,7 @@ import ProfilePage from "../UserPage/UserPage";
 export const Sidebar = ({ isOpen }) => {
 
     const { userData } = useContext(AuthContext);
-    const [fotoPerfil, setFotoPerfil] = useState(assets.user)
+    const [fotoPerfil, setFotoPerfil] = useState(assets.user3)
     const [profilePage, setProfilePage] = useState(false);
 
     useEffect(() => {
@@ -73,7 +73,7 @@ export const Sidebar = ({ isOpen }) => {
                     <span>
                         <img src={fotoPerfil} />
                     </span>
-                    <p>CAIUÃ MELLO</p>
+                    <p>{userData && userData.USERNAME}</p>
                 </S.Footer>
             </S.Container>
         </>

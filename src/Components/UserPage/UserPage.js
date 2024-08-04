@@ -69,10 +69,10 @@ const ProfilePage = ({ setProfilePage }) => {
         if (inputsEnabled[inputName]) {
             try {
                 const firebaseFieldName = mapFieldNameToFirebase(inputName);
-                const response = await axios.post('http://localhost:4000/api/client/alterarInfo', {
-                    DOC_ID: userData.CPF,
-                    NOME_DO_CAMPO: firebaseFieldName,
-                    NOVO_VALOR: inputValues[inputName]
+                const response = await axios.post('http://localhost:4000/clientes/editarInfoClient', {
+                    docId: userData.CPF,
+                    field: firebaseFieldName,
+                    newValue: inputValues[inputName]
                 });
                 reloadUserData()
                 console.log('Campo atualizado:', response.data);
@@ -98,7 +98,7 @@ const ProfilePage = ({ setProfilePage }) => {
         }));
     };
 
-    const handleFileChange = async (event) => {
+    const handleFileChange = (event) => {
         const file = event.target.files[0];
         console.log('Arquivo selecionado:', file);
         showPulse();
@@ -106,41 +106,45 @@ const ProfilePage = ({ setProfilePage }) => {
             const userFolder = userData.CPF;
             const storageRef = ref(storage, `users/${userFolder}/${file.name}`);
 
-            try {
-                // Fazer upload do arquivo
-                await uploadBytes(storageRef, file);
-
-                // Obter a URL de download da imagem
-                const downloadURL = await getDownloadURL(storageRef);
-
-                // Atualizar a URL da imagem no Firestore
-                await updateProfilePicture(downloadURL);
-
-                // Atualizar o estado da URL da imagem
-                setInputValues(prev => ({
-                    ...prev,
-                    perfilPictureUrl: downloadURL
-                }));
-                hidePulse()
-                console.log('Foto de perfil atualizada com sucesso!');
-            } catch (error) {
-                hidePulse()
-                console.error('Erro ao fazer upload da foto:', error);
-            }
+            uploadBytes(storageRef, file)
+                .then(() => getDownloadURL(storageRef))
+                .then((downloadURL) => {
+                    // Atualiza a URL da foto no backend
+                    axios.post('http://localhost:4000/clientes/editarInfoClient', {
+                        docId: userData.CPF,
+                        field: 'URLFOTOPERFIL',
+                        newValue: downloadURL
+                    })
+                        .then(() => {
+                            return axios.post('http://localhost:4000/clientes/editarInfoClient', {
+                                docId: userData.CPF,
+                                field: 'CONTEMFOTOPERFIL',
+                                newValue: true
+                            });
+                        })
+                        .then(() => {
+                            setInputValues(prev => ({
+                                ...prev,
+                                perfilPictureUrl: downloadURL
+                            }));
+                            hidePulse();
+                            reloadUserData();
+                            console.log('Foto de perfil atualizada com sucesso!');
+                        })
+                        .catch(error => {
+                            hidePulse();
+                            console.error('Erro ao atualizar informações do cliente:', error);
+                        });
+                })
+                .catch(error => {
+                    hidePulse();
+                    console.error('Erro ao fazer upload da foto:', error);
+                });
         }
     };
 
 
-    const updateProfilePicture = async (imageUrl) => {
-        const userRef = doc(db, 'USERS', userData.CPF);
 
-        try {
-            reloadUserData()
-            await updateDoc(userRef, { URLFOTOPERFIL: imageUrl, CONTEMFOTOPERFIL: true });
-        } catch (error) {
-            console.error('Erro ao atualizar a URL da foto de perfil no Firestore:', error);
-        }
-    };
 
     const handleLogout = () => {
         logout();

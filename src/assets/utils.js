@@ -242,19 +242,6 @@ export const verifyLogin = async (cpf, username, password) => {
     }
 };
 
-export const getWallet = async (CPF) => {
-    try {
-        const response = await axios.post('http://localhost:4000/api/client/wallet', {
-            cpf: CPF
-        });
-
-        return response.data;
-
-    } catch (error) {
-        console.error('Erro ao buscar dados da carteira:', error);
-    }
-};
-
 export const retornaResposta = (dado) => {
     switch (dado.STATUS) {
         case 1:

@@ -6,6 +6,10 @@ import { atualizarSaque } from "../../../database/firebaseService";
 import { usePulse } from "../../../context/LoadContext";
 import axios from "axios";
 
+
+const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE
+const CRIAR_SAQUE = process.env.REACT_APP_CRIAR_SAQUE
+
 export default function Modal({ handleModalSaque }) {
     const [valorSolicitado, setValorSolicitado] = useState('');
     const { userData, reloadUserData } = useContext(AuthContext);
@@ -46,7 +50,7 @@ export default function Modal({ handleModalSaque }) {
             }
         }
         try {
-            const response = await axios.post('http://localhost:4000/clientes/criarSaque', requestData);
+            const response = await axios.post(`${BASE_ROUTE}${CRIAR_SAQUE}`, requestData);
             console.log('solicitação de saque feita', response)        
             hidePulse()
             reloadUserData();

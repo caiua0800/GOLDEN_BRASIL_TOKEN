@@ -46,6 +46,8 @@ export default function Saque() {
         });
     }, []);
 
+    console.log(userData)
+
     return (
         <S.SaqueContainer>
             {loading ? (

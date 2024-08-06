@@ -9,6 +9,8 @@ import { db, storage, doc, updateDoc } from '../../database/firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { usePulse } from '../../context/LoadContext';
 
+const BASE_ROUTE=process.env.REACT_APP_BASE_ROUTE;
+const EDITAR_CLIENTE_INFO=process.env.REACT_APP_EDITAR_CLIENTE_INFO;
 
 const ProfilePage = ({ setProfilePage }) => {
     const { userData, logout, reloadUserData } = useContext(AuthContext);
@@ -69,7 +71,7 @@ const ProfilePage = ({ setProfilePage }) => {
         if (inputsEnabled[inputName]) {
             try {
                 const firebaseFieldName = mapFieldNameToFirebase(inputName);
-                const response = await axios.post('http://localhost:4000/clientes/editarInfoClient', {
+                const response = await axios.post(`${BASE_ROUTE}${EDITAR_CLIENTE_INFO}`, {
                     docId: userData.CPF,
                     field: firebaseFieldName,
                     newValue: inputValues[inputName]

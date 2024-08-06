@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import * as N from './NoticiasStyle';
-import { Sidebar } from "../Sidebar/Sidebar";
-import assets from "../../assets/assets";
-import Loading from "../Loading/Loader";
 import SideBarBox from "../Sidebar/SideBarBox";
 import { usePulse } from "../../context/LoadContext";
+import clientsRoutes from "../Routes/Routes";
+
+const BASE_ROUTE=process.env.REACT_APP_BASE_ROUTE;
+const NEWS_URL=process.env.REACT_APP_NEWS_URL;
 
 export default function Noticias() {
     const [newsList, setNewsList] = useState([]);
 
-    const [loading, setLoading] = useState(true); // Inicialmente está carregando
+    const [loading, setLoading] = useState(true); 
     const { showPulse, hidePulse } = usePulse()
 
-    const fetchNews = async () => {
 
+    const fetchNews = async () => {
         showPulse()
         try {
-            const response = await axios.get('http://localhost:4000/api/news/getAll');
+            console.log(`${BASE_ROUTE}${NEWS_URL}`)
+            const response = await axios.get(`${BASE_ROUTE}${NEWS_URL}`);
             setNewsList(response.data);
             setTimeout(() => {
                 hidePulse()

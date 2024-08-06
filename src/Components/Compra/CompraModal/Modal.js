@@ -6,6 +6,9 @@ import PopUp from '../../PopUp/PopUp'; // Importe o PopUp
 import { gerarStringAleatoria } from "../../../assets/utils";
 import axios from "axios";
 
+const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE;
+const CRIAR_CONTRATO = process.env.REACT_APP_CRIAR_CONTRATO;
+
 export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, setPopUpMessage, reloadUserData }) {
     const [assinatura, setAssinatura] = useState('');
     const [usuario, setUsuario] = useState('');
@@ -48,7 +51,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
             };
 
             try {
-                const response = await axios.post('http://localhost:4000/clientes/criarContrato', requestData);
+                const response = await axios.post(`${BASE_ROUTE}${CRIAR_CONTRATO}`, requestData);
 
                 const type = response.data.includes('sucesso') ? 'success' : 'error';
                 setPopUpMessage(response.data);

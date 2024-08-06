@@ -4,6 +4,9 @@ import assets from "../../assets/assets";
 import { formatCPF, formatCEP, formatTelefone, removeFormatting } from "../../assets/utils";
 import axios from "axios";
 
+const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE;
+const CRIAR_CLIENTE = process.env.REACT_APP_CRIAR_CLIENTE;
+
 export default function CadastroPage() {
     // Estados para os inputs
     const [nome, setNome] = useState('');
@@ -50,7 +53,7 @@ export default function CadastroPage() {
         };
 
         try {
-            const response = await axios.post('http://localhost:4000/clientes/criarCliente', clientData);
+            const response = await axios.post(`${BASE_ROUTE}${CRIAR_CLIENTE}`, clientData);
             setResposta(response.data); // Atualiza o estado com a resposta do servidor
             alert(`Resposta do Servidor: ${response.data}`); // Mostra a resposta em um alerta
         } catch (error) {

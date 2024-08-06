@@ -1,7 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-
 export const AuthContext = createContext();
+
+
+const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE;
+const LOGIN_CLIENTE = process.env.REACT_APP_LOGIN_CLIENTE;
+const PESQUISAR_CLIENTE = process.env.REACT_APP_PESQUISAR_CLIENTE;
 
 export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
@@ -20,8 +24,8 @@ export const AuthProvider = ({ children }) => {
       USERNAME: username,
       PASSWORD: password,
     };
-
-    return axios.post('http://localhost:4000/clientes/loginCliente', LoginSendableData)
+    console.log(`${BASE_ROUTE}${LOGIN_CLIENTE}`)
+    return axios.post(`${BASE_ROUTE}${LOGIN_CLIENTE}`, LoginSendableData)
       .then((response) => {
         console.log('Usuário Logado:', response.data.NAME);
         const data = response.data;
@@ -64,7 +68,7 @@ export const AuthProvider = ({ children }) => {
       CPF: userData.CPF,
     };
 
-    return axios.post('http://localhost:4000/clientes/pesquisarCliente', LoginSendableData)
+    return axios.post(`${BASE_ROUTE}${PESQUISAR_CLIENTE}`, LoginSendableData)
       .then((response) => {
         const data = response.data;
         setUserData(data);

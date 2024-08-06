@@ -49,18 +49,6 @@ const TabelaExtrato = ({ startDate, endDate }) => {
     // Ordene as transações por data do mais recente para o mais antigo
     validTransactions.sort((a, b) => parseDate(b.date) - parseDate(a.date));
 
-    const getTransactionColor = (type) => {
-        switch (type) {
-            case 'contrato':
-                return '#004d00'; // verde escuro para contrato
-            case 'saque':
-                return '#660000'; // vermelho escuro para saque
-            case 'indicacao':
-                return '#003300'; // verde escuro para indicação
-            default:
-                return '#000';
-        }
-    };
 
     const getSign = (type) => {
         switch (type) {

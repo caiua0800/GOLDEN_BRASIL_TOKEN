@@ -17,6 +17,7 @@ const LoginPage = () => {
     e.preventDefault();
     showPulse();
     await login(username, password);
+    hidePulse();
   };
 
   useEffect(() => {
@@ -24,7 +25,7 @@ const LoginPage = () => {
       setShowError(true);
       const timer = setTimeout(() => {
         setShowError(false);
-      }, 2000); // O mesmo tempo da animação da barra de erro
+      }, 2000); 
       return () => clearTimeout(timer);
     }
   }, [error]);

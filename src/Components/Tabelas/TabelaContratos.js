@@ -48,7 +48,7 @@ const TabelaDeContratos = () => {
                             <Style.TabelaData>
                                 U$ {(dado.TOTALSPENT * (dado.RENDIMENTO_ATUAL / 100)).toFixed(2)} ({dado.RENDIMENTO_ATUAL.toFixed(2)}%)
                             </Style.TabelaData>
-                            <Style.TabelaData>{preventCurrentIncome(dado.TOTALINCOME, dado.TOTALSPENT)}%</Style.TabelaData>
+                            <Style.TabelaData>{dado.MAXIMUMQUOTAYIELD}%</Style.TabelaData>
                             <Style.TabelaData>
                                 U$ {(parseFloat(dado.TOTALSPENT) + (dado.TOTALSPENT * (dado.RENDIMENTO_ATUAL / 100))).toFixed(2)}
                             </Style.TabelaData>

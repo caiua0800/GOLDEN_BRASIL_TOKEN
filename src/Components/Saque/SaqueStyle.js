@@ -114,6 +114,10 @@ export const WalletValues = styled.div`
     & > div:nth-child(6) {
         grid-column: span 2; /* A quarta div ocupa a largura total na segunda linha */
     }
+
+    & > div:nth-child(7) {
+        grid-column: span 2; /* A quarta div ocupa a largura total na segunda linha */
+    }
 `;
 
 export const WalletValue = styled.div`
@@ -164,9 +168,41 @@ export const RealizarSaqueBtn = styled.div`
     }
 `;
 
-// export const nome = styled.div``;
+export const DiasDeSaque = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
-// export const nome = styled.div``;
+    h2{
+        margin: 0;
+        font-weight: 600;
+        font-size: 18px;
+        color: rgba(100, 155, 100, 1);
+        text-shadow: 2px 2px 1px rgba(0,0,0,0.2);
+        border-bottom: 2px solid rgba(100, 155, 100, 1);
+        width: 100%;
+        text-align: center;
+    }
+
+    .diasContainer{
+        width: 100%;
+        display: flex;
+        justify-content: center
+    }
+`;
+
+export const Dia = styled.div`
+    width: 100%;
+    text-align: center;
+
+    span{
+        color: rgba(0,0,0,0.8);
+        font-size: 16px;
+        font-weight: 600;
+    }
+`;
 
 // export const nome = styled.div``;
 

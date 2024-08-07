@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import * as M from './ModalStyle';
 import PDFGenerator from "./PDFGenerator";
 import { AuthContext } from "../../../context/AuthContext";
-import PopUp from '../../PopUp/PopUp'; // Importe o PopUp
+
 import { gerarStringAleatoria } from "../../../assets/utils";
 import axios from "axios";
 

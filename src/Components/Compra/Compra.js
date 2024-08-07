@@ -9,7 +9,8 @@ import { AuthContext } from "../../context/AuthContext";
 import SideBarBox from "../Sidebar/SideBarBox";
 import PopUp from "../PopUp/PopUp";
 import { usePulse } from '../../context/LoadContext';
-
+import { db } from "../../database/firebaseConfig";
+import { getDoc, doc } from "../../database/firebaseConfig";
 
 export default function Compra() {
     const { userData, reloadUserData } = useContext(AuthContext);
@@ -23,9 +24,31 @@ export default function Compra() {
     const [popUpType, setPopUpType] = useState('');
     const { showPulse, hidePulse } = usePulse();
     const [loadingSimulation, setLoadigSimulation] = useState(false);
+    const [valorContratoUni, setValorContratoUni] = useState(0);
 
 
-    let valorContratoUni = 50;
+    useEffect(() => {
+        const fetchValorContrato = async () => {
+            try {
+                const docRef = doc(db, 'SYSTEM_VARIABLES', 'TOKEN');
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data && data.TOKEN_VALUE) {
+                        setValorContratoUni(data.TOKEN_VALUE);
+                    }
+                } else {
+                    console.log('Documento não encontrado!');
+                }
+            } catch (error) {
+                console.error('Erro ao buscar o valor do contrato: ', error);
+            }
+        };
+
+        fetchValorContrato();
+    }, []);
+
+
 
     const handleIncreaseInputQtt = (tipo) => {
         tipo === '-' ? qttContratos <= 1 ? setQttContratos(1) : setQttContratos(parseInt(qttContratos) - 1) : setQttContratos(parseInt(qttContratos) + 1);

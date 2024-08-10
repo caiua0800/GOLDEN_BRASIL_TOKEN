@@ -28,14 +28,14 @@ const BarFill = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    boox-shadow: 2px 3px 3px rgba(0,0,0,0.4);
+    box-shadow: 2px 3px 3px rgba(0,0,0,0.4);
     transition: width 5s ease;
 `;
 
 const BarContainer = styled.div`
     position: relative;
     width: 100%;
-    height: 30px; // Ajuste a altura da barra
+    height: 30px; 
     display: flex;
     align-items: center;
     border-radius: 15px;
@@ -50,6 +50,11 @@ const BarContainer = styled.div`
         transition: background-color 0.3s ease;
         background-color: ${(props) => props.hoverColor};
     }
+
+    @media (max-width: 1000px){
+        height: 20px; 
+        
+    }
 `;
 
 const BarBackground = styled.div`
@@ -63,15 +68,16 @@ const BarBackground = styled.div`
 `;
 
 const BarText = styled.p`
-    // position: absolute;
-    // left: 50%;
-    // top: 50%;
-    // transform: translate(-50%, -50%);
+
     margin-left: 20px;
     font-size: 14px; // Ajuste o tamanho da fonte conforme necessário
-    font-weight: bold;
+    font-weight: 500;
     color: black;
     z-index: 1; // Garante que o texto fique sobre a barra
+
+    @media (max-width: 1000px){
+        font-size: 12px;
+    }
 `;
 
 export default HorizontalProgressBar;

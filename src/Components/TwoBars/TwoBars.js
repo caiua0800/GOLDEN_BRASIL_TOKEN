@@ -34,6 +34,7 @@ const ParentContainer = styled.div`
     gap: 10px;
     width: 100%;
     margin-top: 20px;
+    
     h6{
         margin: 0;
         margin-bottom: -5px;

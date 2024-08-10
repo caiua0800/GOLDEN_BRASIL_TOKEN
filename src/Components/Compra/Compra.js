@@ -139,10 +139,7 @@ export default function Compra() {
                                 <h1>SALDO PLATAFORMA</h1>
                                 <span>U$ {userData && formatNumber(userData.TOTAL_PLATAFORMA)}</span>
                             </S.CarteiraInfoBox>
-                            <S.CarteiraInfoBox>
-                                <h1>SALDO DE INDICAÇÃO</h1>
-                                <span>0</span>
-                            </S.CarteiraInfoBox>
+
                         </S.CarteiraInfo>
                     </S.CarteiraContainer>
 

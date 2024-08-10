@@ -54,4 +54,9 @@ const BtnSidebar = styled.button`
         filter: drop-shadow(0 10px 10px rgba(255, 255, 0, 0.2));
         height: 100%;
     }
+
+    @media (max-width: 1000px){
+        top: 20px;
+        right: 20px;
+    }
 `;

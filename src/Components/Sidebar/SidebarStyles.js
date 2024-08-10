@@ -22,6 +22,14 @@ export const Container = styled.div`
         transform: translateX(0);
     }
 
+    @media (max-width: 1000px){
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        margin: 0;
+        border-radius: 0;
+    }
+
 `;
 
 export const LogoBox = styled.div`
@@ -45,6 +53,16 @@ export const LogoBox = styled.div`
         font-size: 32px;
         text-align: center;
     }
+
+    @media (max-width: 1000px){
+        img{
+            width: 100px;
+        }
+
+        span{
+           font-size: 22px; 
+        }
+    }
 `;
 
 
@@ -57,8 +75,15 @@ export const Mapper = styled.div`
     padding: 10px;
     height: 60%;
     background: linear-gradient(to right, #d6d6d6, #ffff);
+
     a{
         text-decoration: none;
+    }
+
+    @media (max-width: 1000px){
+        padding: 5px;
+        height: 50%;
+        gap: 5px;
     }
 `;
 
@@ -76,12 +101,20 @@ export const NavItem = styled.div`
         color: rgba(0,0,0,1);
         transform: scale(1.03);
     }   
+
+    @media (max-width: 1000px){
+        padding: 8px;
+    }
 `;
 
 export const NavLink = styled.div`
     box-sizing: border-box;
     font-size: 22px;
     font-weight: 600;
+
+    @media (max-width: 1000px){
+        font-size: 18px;
+    }
 `;
 
 export const Footer = styled.div`

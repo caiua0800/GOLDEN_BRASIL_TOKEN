@@ -8,6 +8,7 @@ import axios from "axios";
 
 const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE;
 const CRIAR_CONTRATO = process.env.REACT_APP_CRIAR_CONTRATO;
+const ADICIONAR_SALDO_INDICACAO = process.env.REACT_APP_PESQUISAR_CLIENTE_ADICIONAR_SALDO_INDICACAO;
 
 export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, setPopUpMessage, reloadUserData }) {
     const [assinatura, setAssinatura] = useState('');
@@ -53,7 +54,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
             try {
                 const response = await axios.post(`${BASE_ROUTE}${CRIAR_CONTRATO}`, requestData);
 
-                const type = response.data.includes('sucesso') ? 'success' : 'error';
+                const type = response.data.includes('sucesso') ? 'success' : 'success';
                 setPopUpMessage(response.data);
                 handleOpenPopUp(type);
                 handleModalCompra();

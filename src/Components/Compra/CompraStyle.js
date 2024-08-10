@@ -20,44 +20,21 @@ export const CompraContainer = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    @media (max-width: 800px) {
+
+    @media (max-width: 1000px) {
         flex-direction: column;
         justify-content: center;
-        padding: 60px 10px 100px 10px;
-    }
-`;
-
-export const BtnSidebar = styled.button`
-
-    position: fixed;
-    top: 50px;
-    right: 50px;
-    z-index: 9999;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white;
-    border: 2px solid black;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: .3s;
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
-    &:hover{
-        transform: scale(1.1);
-    }
-
-    img{
-        z-index: 9999
-        width: 100%;
-        height: 100%;
+        padding: 50px 20px 100px 20px;
     }
 `;
 
 export const CompraTitle = styled.div`
     font-size: 18px;
     text-shadow: 3px 4px 1px rgba(0,0,0,0.2);
+
+    @media (max-width: 1000px){
+        font-size: 14px;
+    }
 `;
 
 export const ValorContrato = styled.div`
@@ -65,15 +42,28 @@ export const ValorContrato = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+
     p {
         margin: 0;
         font-size: 26px;
         font-weight: 500;
         color: rgba(0,0,0,0.8);
         text-shadow: 2px 4px 2px rgba(0,0,0,0.3);
+
         span {
             color: rgba(0,0,0,1);
             margin: 0;
+            
+        }
+    }
+
+    @media (max-width: 1000px){
+        text-align: center;
+        flex-direction: column;
+        p{
+            text-align: center;
+            width: 90%;
+            text-shadow: 2px 4px 2px rgba(0,0,0,0);
         }
     }
 `;
@@ -99,6 +89,11 @@ export const CustoSemTaxa = styled.div`
         margin: 0;
         margin-left: 10px;
         font-weight: 600;
+    }
+
+    @media (max-width: 1000px){
+        flex-direction: column;
+        text-align: center;
     }
 `;
 
@@ -131,6 +126,10 @@ export const ResultadoSimulacaoContainer = styled.div`
     display: flex;
     margin-top: 10px;
     gap: 10px;
+
+    @media (max-width: 1000px){
+        margin-top: 20px;
+    }
 `;
 
 export const SimulacaoBox = styled.div`
@@ -155,6 +154,15 @@ export const SimulacaoBox = styled.div`
         font-weight: 800;
         color: rgba(0,0,0,0.7);
     }
+
+    @media (max-width: 1000px){
+        height: 150px;
+        padding: 10px;
+        box-sizing: border-box;
+        text-align: center;
+
+
+    }
 `;
 
 export const RealizarCompraBtn = styled.div`
@@ -178,6 +186,10 @@ export const FecharSimulacao = styled.div`
         &:hover {
             color: black;
         }
+    }
+
+        @media (max-width: 1000px){
+        margin-top: 20px;
     }
 `;
 
@@ -229,6 +241,19 @@ export const InputQtt = styled.div`
             border: 2px solid black;
         }
     }
+
+    @media (max-width: 1000px){
+        button{
+            font-size: 26px;
+            box-sizing: border-box;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-weight: 800;
+        }
+    }
 `;
 
 export const CarteiraContainer = styled.div`
@@ -237,6 +262,10 @@ export const CarteiraContainer = styled.div`
     padding: 20px 20px 40px 20px;
     overflow: hidden;
     position: relative;
+
+    @media (max-width: 1000px){
+        padding: 10px 10px 80px 20px;
+    }
 `;
 
 export const CarteiraIcon = styled.div`
@@ -255,6 +284,10 @@ export const CarteiraIcon = styled.div`
             transform: scale(0.95);
         }
     }
+
+    @media (max-width: 1000px){
+
+    }
 `;
 
 export const CarteiraInfo = styled.div`
@@ -270,6 +303,13 @@ export const CarteiraInfo = styled.div`
     animation: ${props => (props.isVisible ? slideIn : 'none')} 0.3s ease-out;
     transform: ${props => (props.isVisible ? 'translateX(0)' : 'translateX(-100%)')};
     transition: transform 0.3s ease-out;
+
+    @media(max-width: 1000px){
+        width: 65%;
+        left: 80px;
+        gap: 5px;
+        transform: ${props => (props.isVisible ? 'translateX(0)' : 'translateX(-150%)')};
+    }
 `;
 
 export const CarteiraInfoBox = styled.div`
@@ -277,9 +317,21 @@ export const CarteiraInfoBox = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+
     h1 {
         margin: 0;
         font-size: 16px;
         font-weight: 500;
+    }
+    @media(max-width: 1000px){
+        h1 {
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+        }
+        span{
+            text-align: center;
+            font-size: 12px;
+        }
     }
 `;

@@ -11,10 +11,10 @@ export const DashboardContainer = styled.div`
     display: flex;
     flex-direction: column;
 
-    @media (max-width: 800px){
+    @media (max-width: 1000px){
         flex-direction: column;
         justify-content: center;
-        padding: 60px 10px 100px 10px;
+        padding: 40px 20px 100px 20px;
     }
 `;
 
@@ -30,21 +30,20 @@ export const ContainerTitle = styled.div`
     align-items: center;
     cursor: pointer;
 
-    span{
-        font-size: 28px;
-    }
+
     p{
         margin: 0;
     }
+
     &:hover{
         padding: 0px 0px 0px 10px;
         color: #ffd100;
         text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
     }
-    @media (max-width: 800px){
-        flex-direction: column;
-        span{
-            font-size: 16px;
+
+    @media (max-width: 1000px){
+        p{
+            font-size: 28px;
         }
     }
 `;
@@ -59,6 +58,15 @@ export const SaldacoesUsuario = styled.div`
         text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
         font-weight: 600;
         font-size: 22px;
+    }
+
+    @media (max-width: 1000px){
+        margin-top: 10px;
+
+        span{
+            font-size: 18px;
+        }
+    
     }
 `;
 
@@ -91,7 +99,6 @@ export const FirstRow = styled.div`
 export const FirstRowBox = styled.div`
     width: 100%;
     height: 350px;
-    // border: 1px solid rgba(0,0,0,0.3);
     border-radius: 20px;
     box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
     box-sizing: border-box;
@@ -101,12 +108,22 @@ export const FirstRowBox = styled.div`
     align-items: center;
     padding: 20px 20px;
     position: relative;
+
     h1{
         font-size: 22px;
         margin: 0;
         color: rgba(0,0,0,0.7);
     }
 
+    @media (max-width: 1000px){
+        height: max-content;
+        h1{
+            font-size: 18px;
+            color: black;
+            font-weight: 500;
+            text-shadow: 2px 2px 1px rgba(255, 255, 255, 0.3);
+        }
+    }
 
 `;
 
@@ -126,6 +143,13 @@ export const ContratosAtivos = styled(FirstRowBox)`
             text-shadow: 2px 2px 1px rgba(0,0,0,0.3);
         }
     }
+
+    @media (max-width: 1000px){
+        span{
+            margin-top: 0;
+            font-size: 32px;
+        }
+    }
 `;
 
 export const SaldoCorrente = styled(FirstRowBox)`
@@ -139,6 +163,7 @@ export const SaldoNaPlataforma = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+
     h2{
         margin: 0;
         color: rgba(0,0,0,0.7);
@@ -150,6 +175,20 @@ export const SaldoNaPlataforma = styled.div`
         font-size: 38px;
         text-shadow: 2px 2px 1px rgba(0,0,0,0.4);
         font-weight: 800;
+    }
+
+    @media (max-width: 1000px){
+        h2{
+            margin: 0;
+            font-size: 22px;
+            font-weight: 500;
+            text-shadow: 2px 2px 1px rgba(255, 255, 255, 0.4);
+        }
+
+        span{
+            margin-top: 0;
+            font-size: 26px;
+        }
     }
     
 `;
@@ -192,8 +231,21 @@ export const SaldoPlataformaDivs = styled.div`
         }
     }
 
-    @media (max-width: 500px){
+    @media (max-width: 1000px){
         flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+
+        div{
+            h3{
+                font-size: 16px;
+                color: rgba(10, 70, 255, 1);
+            }
+
+            span{
+                font-size: 16px;
+            }
+        }
     }
 `;
 
@@ -226,9 +278,11 @@ export const PercentageCount = styled.div`
     border-radius: 20px;
     font-weight: 600;
     background-color: rgba(99, 253, 15, 0.8);
-    @media (max-width: 800px){
-        width: 40px;
+
+    @media (max-width: 1000px){
+        width: 60px;
         font-size: 12px;
+        color: black;
     }
 `;
 
@@ -241,15 +295,22 @@ export const SecondRow = styled.div`
     gap: 40px;
     margin-top: 40px;
 
-    @media (max-width: 800px) {
-        flex-direction: column;
-    }
+
 
     h1 {
         text-align: center;
         margin: 0;
         color: #72ce27;
         text-shadow: 2px 2px 2px rgba(0,0,0,0.4)
+    }
+
+    @media (max-width: 1000px) {
+        flex-direction: column;
+        margin-top: 20px;
+        h1{
+            font-size: 18px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0);
+        }
     }
 `;
 
@@ -270,6 +331,7 @@ export const IndiqueEGanha = styled.div`
     p{
         color: #3288be;
         margin: 0;
+        text-align: center;
     }
     span{
         color: #31d0e3;
@@ -286,6 +348,10 @@ export const IndiqueEGanha = styled.div`
         }
         background-color: #3288be;
         transform: scale(1.03);
+    }
+
+    @media (max-width: 1000px){
+    
     }
 `;
 

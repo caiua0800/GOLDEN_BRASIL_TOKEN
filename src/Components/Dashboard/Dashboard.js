@@ -31,7 +31,7 @@ export default function Dashboard() {
 
   if (loading) return null; 
 
-  
+  console.log(userData)
   return (
     <SideBarBox>
       <D.DashboardContainer>
@@ -41,7 +41,7 @@ export default function Dashboard() {
         <D.SaldacoesUsuario>
           <span>OLÁ {abreviarNome((userData?.NAME || '').toUpperCase())}</span>
         </D.SaldacoesUsuario>
-        <Recarregar setLoading={setLoading} />
+
         <D.ContainerContent>
           <D.FirstRow>
             <D.ContratosAtivos>

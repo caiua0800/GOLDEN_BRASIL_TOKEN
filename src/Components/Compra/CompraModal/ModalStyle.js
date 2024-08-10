@@ -25,6 +25,7 @@ export const ModalBox = styled.div`
   display: flex;
   flex-direction: column;
   overflow: scroll;
+  position: relative;
 `;
 
 export const FecharModalBtn = styled.div`
@@ -63,6 +64,18 @@ export const CheckboxContainer = styled.div`
   input {
     margin-right: 8px;
     cursor: pointer;
+  }
+`;
+
+export const PayFormDiv = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  select{
+    width: 200px;
+    height: 30px;
   }
 `;
 
@@ -106,7 +119,18 @@ export const LoginBox = styled.div`
     }
 `;
 
-// export const nome = styled.div``;
+export const LoadingBuy = styled.div`
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  background-color: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 // export const nome = styled.div``;
 // export const nome = styled.div``;
 // export const nome = styled.div``;

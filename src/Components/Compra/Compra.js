@@ -206,11 +206,14 @@ export default function Compra() {
                                 </S.RealizarCompraBtn>
                             </>
                         )}
-                        <TabelaDeContratos dados={userData ? userData.CONTRATOS : []} />
+                        <S.TabelaContratosContainer>
+                            <TabelaDeContratos dados={userData ? userData.CONTRATOS : []} />
+
+                        </S.TabelaContratosContainer>
                     </S.Simulacao>
 
                     {modalCompra && (
-                        <Modal handleOpenPopUp={handleOpenPopUp}  setPopUpMessage={setPopUpMessage} reloadUserData={reloadUserData} handleModalCompra={handleModalCompra} modalData={{
+                        <Modal handleOpenPopUp={handleOpenPopUp} setPopUpMessage={setPopUpMessage} reloadUserData={reloadUserData} handleModalCompra={handleModalCompra} modalData={{
                             meses: 36,
                             dias: resultadoSimulacao.totalDays,
                             lucroDiario: resultadoSimulacao.dailyProfit,

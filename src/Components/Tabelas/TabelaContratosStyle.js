@@ -44,6 +44,12 @@ export const TabelaData = styled.td`
     text-align: left;
     border-bottom: 1px solid #ddd;
 
+    span{
+        text-decoration: underline;
+        color: rgba(20,200,100,1);
+        cursor: pointer;
+        text-align: center;
+    }
 `;
 
 export const Certificado = styled.div`

@@ -324,3 +324,14 @@ export const removeFormatting = (type, value) => {
             return value; // Retorna o valor sem alterações se o tipo não corresponder a nenhum dos casos
     }
 };
+
+
+export const GeneratePIX_MP = async (body) => {
+    return await axios.post(`${process.env.REACT_APP_BASE_ROUTE}${process.env.REACT_APP_GERAR_PIX}`, body)
+
+    // .then(response => {
+    //     response
+    // }).catch((error) => {
+    //     console.log("Erro ao gerar PIX: ", error)
+    // })
+}

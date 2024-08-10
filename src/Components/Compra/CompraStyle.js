@@ -12,19 +12,21 @@ const slideIn = keyframes`
 
 export const CompraContainer = styled.div`
     width: 100%;
-    min-height: 100vh;
-    overflow: hidden;
+    // height: max-content;
+    height: 100vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
     background: linear-gradient(to right, #d4fcff, #d4fcff, #d4fcff, #d4fcff);
     box-sizing: border-box;
-    padding: 50px 30px 400px 30px;
+    padding: 50px 30px 40px 30px;
     display: flex;
     flex-direction: column;
     position: relative;
 
     @media (max-width: 1000px) {
         flex-direction: column;
+        overflow-y: scroll;
         justify-content: center;
-        padding: 50px 20px 100px 20px;
     }
 `;
 
@@ -334,4 +336,12 @@ export const CarteiraInfoBox = styled.div`
             font-size: 12px;
         }
     }
+`;
+
+export const TabelaContratosContainer= styled.div`
+    width: 100%;
+    max-height: 350px;
+    overflow: scroll;
+    margin-top: 50px;
+    margin-bottom: 30px;
 `;

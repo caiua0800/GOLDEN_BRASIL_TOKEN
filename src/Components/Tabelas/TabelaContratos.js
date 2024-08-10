@@ -5,6 +5,8 @@ import { formatDateSystem } from '../../assets/utils';
 import { AuthContext } from '../../context/AuthContext';
 import { preventCurrentIncome, retornaResposta } from '../../assets/utils';
 
+const linkContaDeposito = '/ContaDeDeposito'
+
 const TabelaDeContratos = () => {
     const [contratos, setContratos] = useState([]);
     const { userData } = useContext(AuthContext);
@@ -17,6 +19,14 @@ const TabelaDeContratos = () => {
         }
     }, [userData]);
 
+    const handleOpenLink = (link) => {
+        window.open(link, '_blank');
+    }
+
+    const handleReturnStatusForTicket = (s) => {
+        return (s === 1 || s === 2 || s === 3) ? false : true;
+    }
+
     return (
         <Style.Tabela>
             <Style.TabelaHead>
@@ -27,8 +37,8 @@ const TabelaDeContratos = () => {
                     <Style.TabelaHeader>CONTRATOS</Style.TabelaHeader>
                     <Style.TabelaHeader>VALOR</Style.TabelaHeader>
                     <Style.TabelaHeader>LUCRO OBTIDO</Style.TabelaHeader>
-                    <Style.TabelaHeader>LUCRO TOTAL CONTRATO</Style.TabelaHeader>
-                    <Style.TabelaHeader>VALOR TOTAL ATUAL</Style.TabelaHeader>
+                    <Style.TabelaHeader>LUCRO TOTAL FINAL</Style.TabelaHeader>
+                    <Style.TabelaHeader>TICKET</Style.TabelaHeader>
                     <Style.TabelaHeader>STATUS</Style.TabelaHeader>
                 </Style.TabelaRow>
             </Style.TabelaHead>
@@ -50,7 +60,13 @@ const TabelaDeContratos = () => {
                             </Style.TabelaData>
                             <Style.TabelaData>{dado.MAXIMUMQUOTAYIELD}%</Style.TabelaData>
                             <Style.TabelaData>
-                                U$ {(parseFloat(dado.TOTALSPENT) + (dado.TOTALSPENT * (dado.RENDIMENTO_ATUAL / 100))).toFixed(2)}
+                                {handleReturnStatusForTicket(dado.STATUS) ? (
+                                    dado.TICKET ? (
+                                        <span onClick={() => handleOpenLink(dado.TICKET)}>PAGAR</span>
+                                    ) : (
+                                        <span onClick={() => handleOpenLink(linkContaDeposito)}>VER CONTA</span>
+                                    )
+                                ) : 'PAGO'}
                             </Style.TabelaData>
                             <Style.TabelaData>{retornaResposta(dado)}</Style.TabelaData>
                         </Style.TabelaRow>

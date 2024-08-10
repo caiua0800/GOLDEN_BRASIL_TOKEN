@@ -15,6 +15,7 @@ import CadastroPage from './Components/Cadastro/CadastroPage';
 import { LoadProvider } from './context/LoadContext'; // Updated import
 import assets from './assets/assets'; // Ensure path is correct
 import useImagePreloader from './hooks/useImagePreloader';
+import Pagina from './Components/ContaDeposito/Pagina';
 
 function App() {
   // Use the hook to preload images
@@ -35,6 +36,8 @@ function App() {
             <Route path="/user" element={<PrivateRoute element={ProfilePage} />} />
             <Route path="/noticias" element={<PrivateRoute element={Noticias} />} />
             <Route path="/extrato" element={<PrivateRoute element={Extrato} />} />
+            <Route path="/ContaDeDeposito" element={<Pagina  />} />
+
           </Routes>
         </Router>
       </LoadProvider> {/* Updated provider */}

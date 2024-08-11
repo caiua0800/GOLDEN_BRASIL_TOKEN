@@ -27,6 +27,13 @@ const TabelaDeContratos = () => {
         return (s === 1 || s === 2 || s === 3) ? false : true;
     }
 
+    const handleToFixed = (val1, val2) => {
+        if(val1 && val2)
+            return `${(val1 * (val2/100)) } (${val2})`
+        else return ''
+   
+    }
+
     return (
         <Style.Tabela>
             <Style.TabelaHead>
@@ -56,7 +63,7 @@ const TabelaDeContratos = () => {
                             <Style.TabelaData>{formatNumber(dado.COINS)}</Style.TabelaData>
                             <Style.TabelaData>{formatarMoedaDollar(dado.TOTALSPENT)}</Style.TabelaData>
                             <Style.TabelaData>
-                                U$ {(dado.TOTALSPENT * (dado.RENDIMENTO_ATUAL / 100)).toFixed(2)} ({dado.RENDIMENTO_ATUAL.toFixed(2)}%)
+                                U$ {handleToFixed(dado.TOTALSPENT, dado.RENDIMENTO_ATUAL)}
                             </Style.TabelaData>
                             <Style.TabelaData>{dado.MAXIMUMQUOTAYIELD}%</Style.TabelaData>
                             <Style.TabelaData>

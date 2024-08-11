@@ -56,6 +56,7 @@ export default function CadastroPage() {
             const response = await axios.post(`${BASE_ROUTE}${CRIAR_CLIENTE}`, clientData);
             setResposta(response.data); // Atualiza o estado com a resposta do servidor
             alert(`Resposta do Servidor: ${response.data}`); // Mostra a resposta em um alerta
+            window.location.href="/"
         } catch (error) {
             setResposta(`Erro ao criar cadastro: ${error.message}`); // Atualiza o estado com a mensagem de erro
             alert(`Erro ao criar cadastro: ${error.message}`); // Mostra a mensagem de erro em um alerta

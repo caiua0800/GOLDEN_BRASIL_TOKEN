@@ -29,7 +29,7 @@ const TabelaDeContratos = () => {
 
     const handleToFixed = (val1, val2) => {
         if(val1 && val2)
-            return `${(val1 * (val2/100)) } (${val2})`
+            return `${formatNumber(val1 * (val2/100)) } (${val2.toFixed(2)}%)`
         else return ''
    
     }

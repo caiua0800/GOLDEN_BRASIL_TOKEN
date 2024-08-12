@@ -41,7 +41,7 @@ export default function Modal({ handleModalSaque }) {
 
         const requestData = {
             USERNAME: usuario,
-            PASSWORD: senha,
+            CPF: senha,
             docId: userData.CPF,
             saqueData: {
                 CODCLI: userData.CPF,
@@ -99,8 +99,8 @@ export default function Modal({ handleModalSaque }) {
                             onChange={(e) => setUsuario(e.target.value)}
                         />
                         <input
-                            placeholder="senha"
-                            type="password"
+                            placeholder="cpf"
+                            type="TEXT"
                             value={senha}
                             onChange={(e) => setSenha(e.target.value)}
                         />

@@ -55,7 +55,7 @@ const LoginPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Styles.forgotPassLinky>Esqueceu a senha?</Styles.forgotPassLinky>
+          <Styles.forgotPassLinky onClick={() => {window.location.href="/recover"}}>Esqueceu a senha?</Styles.forgotPassLinky>
           <Styles.SubmitButton type="submit">Login</Styles.SubmitButton>
           <Styles.singUpLink>Não possui cadastro? <a onClick={() => {window.location.href="/cadastro"}}>cadastre-se já</a> </Styles.singUpLink>
         </Styles.LoginForm>

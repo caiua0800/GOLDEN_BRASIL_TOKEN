@@ -1,10 +1,13 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { auth } from '../database/firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 export const AuthContext = createContext();
 
 
 const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE;
 const LOGIN_CLIENTE = process.env.REACT_APP_LOGIN_CLIENTE;
+const OBTER_EMAIL = process.env.REACT_APP_LOGIN_EMAIL;
 const PESQUISAR_CLIENTE = process.env.REACT_APP_PESQUISAR_CLIENTE;
 
 export const AuthProvider = ({ children }) => {
@@ -19,43 +22,52 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (username, password) => {
-    const LoginSendableData = {
-      USERNAME: username,
-      PASSWORD: password,
-    };
-    console.log(`${BASE_ROUTE}${LOGIN_CLIENTE}`)
-    return axios.post(`${BASE_ROUTE}${LOGIN_CLIENTE}`, LoginSendableData)
-      .then((response) => {
-        console.log('Usuário Logado:', response.data.NAME);
-        const data = response.data;
-        setUserData(data);
-        localStorage.setItem('userData', JSON.stringify(data)); // Armazenar dados no localStorage
-        setError(null);
-      })
-      .catch((error) => {
-        if (error.response) {
-          if (error.response.status === 404) {
-            setError('Usuário não encontrado.');
-          } else if (error.response.status === 401) {
-            setError('Senha inválida.');
-          } else if (error.response.status === 400) {
-            setError('Usuário e senha são obrigatórios.');
-          } else if (error.response.status === 500) {
-            setError('Erro interno no servidor. Tente novamente mais tarde.');
-          } else {
-            setError('Erro desconhecido. Por favor, tente novamente.');
-          }
+  const login = async (username, password) => {
+
+    try {
+
+      const response = await axios.post(`${BASE_ROUTE}${OBTER_EMAIL}`, { USERNAME: username });
+      const email = response.data.EMAIL;
+      const cpf = response.data.CPF;
+
+      if (!email) {
+        throw new Error('Email não encontrado');
+      }
+
+      // Passo 2: Fazer login no Firebase com o email e senha
+      await signInWithEmailAndPassword(auth, email, password);
+
+      const userResponse = await axios.post(`${BASE_ROUTE}${PESQUISAR_CLIENTE}`, { CPF: cpf });
+      const data = userResponse.data;
+      setUserData(data);
+      localStorage.setItem('userData', JSON.stringify(data));
+      console.log('Usuário autenticado com sucesso');
+      setError(null);
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 404) {
+          setError('Usuário não encontrado.');
+        } else if (error.response.status === 401) {
+          setError('Senha inválida.');
+        } else if (error.response.status === 400) {
+          setError('Usuário e senha são obrigatórios.');
+        } else if (error.response.status === 500) {
+          setError('Erro interno no servidor. Tente novamente mais tarde.');
         } else {
-          setError('Erro na conexão com o servidor.');
+          setError('Erro desconhecido. Por favor, tente novamente.');
         }
-        console.log('Erro ao fazer a requisição para API:', error);
-      });
+      } else {
+        setError('Erro na conexão com o servidor.');
+      }
+      console.log('Erro ao fazer a requisição para API:', error);
+    }
+
+
   };
 
   const logout = () => {
     setUserData(null);
-    localStorage.removeItem('userData'); 
+    localStorage.removeItem('userData');
   };
 
   const reloadUserData = () => {

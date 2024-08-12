@@ -20,6 +20,8 @@ export const Container = styled.div`
     }
 `;
 
+
+
 export const ProfileCard = styled.div`
     background-color: white;
     border-radius: 8px;
@@ -37,13 +39,38 @@ export const BackIcon = styled(FaArrowLeft)`
     left: 20px;
     font-size: 38px;
     cursor: pointer;
-    trnasition: .3s;
+    transition: .3s;
 
-
-    &:hover{
+    &:hover {
         transform: scale(0.95);
     }
 `;
+
+export const TabContainer = styled.div`
+    display: flex;
+    border-bottom: 2px solid #ddd;
+`;
+
+export const Tab = styled.div`
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border-bottom: 2px solid ${props => (props.active ? '#007bff' : 'transparent')};
+    background-color: ${props => (props.active ? '#f9f9f9' : 'white')};
+    transition: background-color 0.3s, border-bottom-color 0.3s;
+`;
+
+export const ProfileContent = styled.div`
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+
 
 export const InitialContent = styled.div`
     display: flex;
@@ -109,11 +136,17 @@ export const FileInput = styled.input`
 `;
 
 export const ProfileName = styled.h2`
-    font-size: 24px;
+    margin: 0;
+    font-size: 18px;
     margin-bottom: 5px;
+    font-weight: 500;
 `;
 
 export const ProfileInfo = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     h4 {
         font-size: 18px;
         margin-bottom: 10px;
@@ -122,52 +155,133 @@ export const ProfileInfo = styled.div`
 
 export const Info = styled.div`
     display: flex;
+    width: 100%;
     flex-direction: column;
-    margin-top: 20px;
 `;
 
 export const InfoBox = styled.div`
     display: flex;
-    align-items: flex-start;
-    margin-bottom: 20px;
-
-    h3 {
-        margin: 0;
-        margin-right: 10px;
-        font-size: 16px;
-        margin-bottom: 0;
-        width: 100px;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+    justify-content: start;
+    align-items: center;
+    gap: 5px;
+    box-sizing: border-box;
+    border: 2px solid rgba(0,0,0,0.1);
+    padding-left: 10px;
+    padding-right: 10px;
+    box-shadow: 3px 3px 2px rgba(0,0,0,0.2); 
+    // background-color: rgba(0,0,0,0.2);
+    h3{
+        font-weight: 500;
     }
-
-    input {
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding-left: 20px;
+    input, select{
+        height: 40px;
+        flex: 1;
+        border: 0;
+        box-shadow: 3px 3px 2px rgba(0,0,0,0.2); 
         box-sizing: border-box;
-        font-size: 16px;
-        flex-grow: 1;
-        margin-right: 10px;
-        height: 35px;
+        padding-left: 10px
     }
 `;
 
 export const EditIcon = styled.div`
     cursor: pointer;
-    font-size: 18px;
+    margin-left: 10px;
+    color: #007bff;
+    transition: color 0.3s;
+
+    &:hover {
+        color: #0056b3;
+    }
 `;
 
 export const LogoutBtn = styled.button`
-    width: 100%;
-    height: 35px;
-    border: 0;
-    background-color: #f44545;
-    color: black;
-    font-size: 18px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
     cursor: pointer;
-    
+    margin-top: 20px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+
     &:hover {
-        background-color: #f91d1d;
+        background-color: #c82333;
     }
 `;
 
 
+export const AccountContent = styled.div`
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    flex-direction: column;
+
+    h4{
+        font-weight: 500;
+        font-size: 18px;
+
+    }
+`;
+
+
+export const AccountBox = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+`;
+
+export const BoxAcccount = styled.div`
+    width: 100%;
+`;
+
+export const Footer = styled.div`
+  margin-top: 20px;
+`;
+
+export const SaveButton = styled.button`
+  background: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+
+export const EditHandler = styled.span`
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    font-size: 12px;
+    cursor: pointer;
+    color: rgba(10, 26, 240, 0.6);
+    font-weight: 500;
+
+    &:hover{
+        color: rgba(10, 26, 240, 1);
+    }
+`;
+
+export const SaveAccountHandler = styled.span`
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    font-size: 12px;
+    cursor: pointer;
+    color: rgba(10, 100, 20, 0.6);
+    font-weight: 500;
+
+    &:hover{
+        color: rgba(10, 240, 20, 1);
+    }
+`;
+
+// export const AccountBox = styled.div``;

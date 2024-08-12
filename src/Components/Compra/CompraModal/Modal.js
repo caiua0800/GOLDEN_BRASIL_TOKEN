@@ -63,7 +63,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
 
             const requestData = {
                 USERNAME: usuario,
-                PASSWORD: senha,
+                CPF: senha,
                 docId: userData.CPF,
                 contratoData: {
                     COINS: modalData.qttContratos,
@@ -144,8 +144,8 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                             onChange={(e) => setUsuario(e.target.value)}
                         />
                         <input
-                            placeholder="senha"
-                            type="password"
+                            placeholder="CPF"
+                            type="text"
                             value={senha}
                             onChange={(e) => setSenha(e.target.value)}
                         />

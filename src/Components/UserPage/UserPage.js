@@ -5,12 +5,13 @@ import assets from '../../assets/assets';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import { mapFieldNameToFirebase } from '../../assets/utils';
+import { usePulse } from '../../context/LoadContext';
 import { db, storage, doc, updateDoc } from '../../database/firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { usePulse } from '../../context/LoadContext';
 
-const BASE_ROUTE=process.env.REACT_APP_BASE_ROUTE;
-const EDITAR_CLIENTE_INFO=process.env.REACT_APP_EDITAR_CLIENTE_INFO;
+const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE;
+const EDITAR_CLIENTE_INFO = process.env.REACT_APP_EDITAR_CLIENTE_INFO;
+const REACT_APP_EDITAR_CLIENTE_MAIS_CAMPOS_INFO = process.env.REACT_APP_EDITAR_CLIENTE_MAIS_CAMPOS_INFO;
 
 const ProfilePage = ({ setProfilePage }) => {
     const { userData, logout, reloadUserData } = useContext(AuthContext);
@@ -25,7 +26,38 @@ const ProfilePage = ({ setProfilePage }) => {
         cep: false,
         cidade: false,
         estado: false,
+        agency: false,
+        account: false,
+        beneficiario: false,
+        keyPix: false,
+        accountType: false,
     });
+    const [accountInputEnebled, setAccountInputEnebled] = useState(true)
+
+    const handleAccountInputEneble = () => {
+        setInputsEnabled({
+            agency: true,
+            account: true,
+            beneficiario: true,
+            keyPix: true,
+            accountType: true,
+        })
+        setAccountInputEnebled(false)
+    }
+
+    const handleAccountInputDisable = () => {
+        setInputsEnabled({
+            agency: false,
+            account: false,
+            beneficiario: false,
+            keyPix: false,
+            accountType: false,
+        })
+        setAccountInputEnebled(true)
+        handleAccountInfoSave();
+    }
+
+
 
     const [inputIcons, setInputIcons] = useState({
         nome: <FaPencilAlt />,
@@ -37,6 +69,11 @@ const ProfilePage = ({ setProfilePage }) => {
         cep: <FaPencilAlt />,
         cidade: <FaPencilAlt />,
         estado: <FaPencilAlt />,
+        agency: <FaPencilAlt />,
+        account: <FaPencilAlt />,
+        beneficiario: <FaPencilAlt />,
+        keyPix: <FaPencilAlt />,
+        accountType: <FaPencilAlt />,
     });
 
     const [inputValues, setInputValues] = useState({
@@ -49,7 +86,14 @@ const ProfilePage = ({ setProfilePage }) => {
         cep: "",
         cidade: "",
         estado: "",
+        agency: "",
+        account: "",
+        beneficiario: "",
+        keyPix: "",
+        accountType: "",
     });
+
+    const [activeTab, setActiveTab] = useState('profile'); // Novo estado para gerenciar a aba ativa
 
     useEffect(() => {
         if (userData) {
@@ -62,7 +106,11 @@ const ProfilePage = ({ setProfilePage }) => {
                 bairro: userData.NEIGHBORHOOD || "",
                 cep: userData.POSTALCODE || "",
                 cidade: userData.CITY || "",
-                estado: userData.STATE || "",
+                agency: userData.AGENCY || "",
+                account: userData.ACCOUNT || "",
+                beneficiario: userData.BENEFICIARIO || "",
+                keyPix: userData.KEYPIX || "",
+                accountType: userData.ACCOUNTTYPE || "",
             });
         }
     }, [userData]);
@@ -76,7 +124,7 @@ const ProfilePage = ({ setProfilePage }) => {
                     field: firebaseFieldName,
                     newValue: inputValues[inputName]
                 });
-                reloadUserData()
+                reloadUserData();
                 console.log('Campo atualizado:', response.data);
             } catch (error) {
                 console.error('Erro ao atualizar campo:', error);
@@ -145,9 +193,6 @@ const ProfilePage = ({ setProfilePage }) => {
         }
     };
 
-
-
-
     const handleLogout = () => {
         logout();
     }
@@ -156,39 +201,171 @@ const ProfilePage = ({ setProfilePage }) => {
         setProfilePage(false);
     }
 
+    const handleTabChange = (tabName) => {
+        setActiveTab(tabName);
+    }
+
+    const handleAccountInfoSave = async () => {
+        if (inputValues["agency"] != userData.AGENCY ||
+            inputValues["account"] != userData.ACCOUNT ||
+            inputValues["keyPix"] != userData.KEYPIX ||
+            inputValues["accountType"] != userData.ACCOUNTTYPE
+        ) {
+            const response = await axios.post(`${BASE_ROUTE}${REACT_APP_EDITAR_CLIENTE_MAIS_CAMPOS_INFO}`, {
+                docId: userData.CPF,
+                updates: [
+                    {
+                        field: "AGENCY",
+                        fieldNewValue: inputValues["agency"]
+                    },
+                    {
+                        field: "ACCOUNT",
+                        fieldNewValue: inputValues["account"]
+                    },
+                    {
+                        field: "KEYPIX",
+                        fieldNewValue: inputValues["keyPix"]
+                    },
+                    {
+                        field: "ACCOUNTTYPE",
+                        fieldNewValue: inputValues["accountType"]
+                    }
+                ]
+            })
+
+            switch (response.status) {
+                case 200:
+                    alert(`STATUS ${response.status}: Informações atualizadas`)
+                    break;
+                case 400:
+                    alert(`STATUS ${response.status}: Insira todas as informações`)
+                    break;
+                case 404:
+                    alert(`STATUS ${response.status}: Cliente não encontrado`)
+                    break;
+                case 500:
+                    alert(`STATUS ${response.status}: Erro no servidor`)
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    }
+
+
+
     return (
         <U.Container>
             <U.BackIcon onClick={handleGetBack} />
             <U.ProfileCard>
-                <U.InitialContent>
-                    <U.ProfilePicture>
-                        <img src={(userData && userData.CONTEMFOTOPERFIL) ? userData.URLFOTOPERFIL : assets.user} alt="Profile Picture" />
-                        <U.ChangePhotoOverlay>
-                            <U.ChangePhotoText>Mude a foto</U.ChangePhotoText>
-                            <U.FileInput type="file" onChange={handleFileChange} />
-                        </U.ChangePhotoOverlay>
-                    </U.ProfilePicture>
-                    <U.ProfileName>{inputValues.usuario}</U.ProfileName>
-                </U.InitialContent>
+                <U.TabContainer>
+                    <U.Tab active={activeTab === 'profile'} onClick={() => handleTabChange('profile')}>Informações do Perfil</U.Tab>
+                    <U.Tab active={activeTab === 'account'} onClick={() => handleTabChange('account')}>Conta de Recebimento</U.Tab>
+                </U.TabContainer>
+                {activeTab === 'profile' && (
+                    <U.ProfileContent>
+                        <U.InitialContent>
+                            <U.ProfilePicture>
+                                <img src={(userData && userData.CONTEMFOTOPERFIL) ? userData.URLFOTOPERFIL : assets.user} alt="Profile Picture" />
+                                <U.ChangePhotoOverlay>
+                                    <U.ChangePhotoText>Mude a foto</U.ChangePhotoText>
+                                    <U.FileInput type="file" onChange={handleFileChange} />
+                                </U.ChangePhotoOverlay>
+                            </U.ProfilePicture>
+                            <U.ProfileName>{inputValues.usuario}</U.ProfileName>
+                        </U.InitialContent>
 
-                <U.ProfileInfo>
-                    <h4>Informações do Perfil</h4>
-                    <U.Info>
-                        {Object.keys(inputValues).map(key => (
-                            <U.InfoBox key={key}>
-                                <h3>{key.charAt(0).toUpperCase() + key.slice(1)}: </h3>
+                        <U.ProfileInfo>
+                            <h4>Informações do Perfil</h4>
+                            <U.Info>
+                                {Object.keys(inputValues).map(key => (
+                                    <U.InfoBox key={key}>
+                                        <h3>{key.charAt(0).toUpperCase() + key.slice(1)}: </h3>
+                                        <input
+                                            disabled={!inputsEnabled[key]}
+                                            value={inputValues[key]}
+                                            onChange={(e) => handleInputChange(key, e.target.value)}
+                                        />
+                                        <U.EditIcon onClick={() => toggleInput(key)}>
+                                            {inputIcons[key]}
+                                        </U.EditIcon>
+                                    </U.InfoBox>
+                                ))}
+                            </U.Info>
+                        </U.ProfileInfo>
+                    </U.ProfileContent>
+                )}
+                {activeTab === 'account' && (
+                    <U.AccountContent>
+                        <h4>Detalhes da Conta de Recebimento</h4>
+
+                        <U.AccountBox>
+                            {accountInputEnebled ? (
+                                <U.EditHandler onClick={handleAccountInputEneble}>Clique aqui para editar</U.EditHandler>
+                            ) : (
+                                <U.SaveAccountHandler onClick={handleAccountInputDisable}>SALVAR</U.SaveAccountHandler>
+                            )}
+                            <U.InfoBox>
+                                <h3>Agência:</h3>
                                 <input
-                                    disabled={!inputsEnabled[key]}
-                                    value={inputValues[key]}
-                                    onChange={(e) => handleInputChange(key, e.target.value)}
+                                    placeholder='Agencia e dígito'
+                                    disabled={!inputsEnabled["agency"]}
+                                    value={inputValues["agency"]}
+                                    onChange={(e) => handleInputChange("agency", e.target.value)}
                                 />
-                                <U.EditIcon onClick={() => toggleInput(key)}>
-                                    {inputIcons[key]}
-                                </U.EditIcon>
                             </U.InfoBox>
-                        ))}
-                    </U.Info>
-                </U.ProfileInfo>
+
+                            <U.InfoBox>
+                                <h3>Conta:</h3>
+                                <input
+                                    placeholder='Conta e Dígito'
+                                    disabled={!inputsEnabled["account"]}
+                                    value={inputValues["account"]}
+                                    onChange={(e) => handleInputChange("account", e.target.value)}
+                                />
+
+                            </U.InfoBox>
+
+                            <U.InfoBox>
+                                <h3>Beneficiário:</h3>
+                                <input
+                                    placeholder='Nome'
+                                    disabled={!inputsEnabled["beneficiario"]}
+                                    value={inputValues["beneficiario"]}
+                                    onChange={(e) => handleInputChange("beneficiario", e.target.value)}
+                                />
+
+                            </U.InfoBox>
+
+                            <U.InfoBox>
+                                <h3>Chave Pix:</h3>
+                                <input
+                                    placeholder='...'
+                                    disabled={!inputsEnabled["keyPix"]}
+                                    value={inputValues["keyPix"]}
+                                    onChange={(e) => handleInputChange("keyPix", e.target.value)}
+                                />
+
+                            </U.InfoBox>
+
+                            <U.InfoBox>
+                                <h3>Tipo de Conta:</h3>
+                                <select
+                                    disabled={!inputsEnabled["accountType"]}
+                                    value={inputValues["accountType"]}
+                                    onChange={(e) => handleInputChange("accountType", e.target.value)}
+                                >
+                                    <option value="Conta de Pagamento">Conta de Pagamento</option>
+                                    <option value="Conta de Recebimento">Conta de Recebimento</option>
+                                    <option value="Conta de Poupança">Conta de Poupança</option>
+                                    <option value="Conta de Corrente">Conta de Corrente</option>
+                                </select>
+
+                            </U.InfoBox>
+                        </U.AccountBox>
+                    </U.AccountContent>
+                )}
                 <U.LogoutBtn onClick={handleLogout}>SAIR</U.LogoutBtn>
             </U.ProfileCard>
         </U.Container>

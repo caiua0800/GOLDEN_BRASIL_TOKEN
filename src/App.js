@@ -12,10 +12,13 @@ import Extrato from './Components/Extrato/Extrato';
 import Validacao from './Components/Validacao.js/Validacao';
 import PulseAnimation from './Components/Loading/Pulse';
 import CadastroPage from './Components/Cadastro/CadastroPage';
-import { LoadProvider } from './context/LoadContext'; // Updated import
-import assets from './assets/assets'; // Ensure path is correct
+import CadastroPageIndicacao from './Components/Cadastro/CadastroPageIndicacao';
+import { LoadProvider } from './context/LoadContext'; // Atualizar import
+import assets from './assets/assets'; // Certifique-se de que o caminho está correto
 import useImagePreloader from './hooks/useImagePreloader';
 import Pagina from './Components/ContaDeposito/Pagina';
+import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
+import ForgotPasswordUsername from './Components/ForgotPassword/ForgotPasswordUsername';
 
 function App() {
   // Use the hook to preload images
@@ -23,12 +26,15 @@ function App() {
 
   return (
     <AuthProvider>
-      <LoadProvider> {/* Updated provider */}
+      <LoadProvider> {/* Atualizar provider */}
         <PulseAnimation />
         <Router>
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/cadastro" element={<CadastroPage />} />
+            <Route path="/cadastroIndicacao" element={<CadastroPageIndicacao />} />
+            <Route path="/recover" element={<ForgotPassword />} />
+            <Route path="/recoverByUsername" element={<ForgotPasswordUsername />} />
             <Route path="/validacao" element={<PrivateRoute element={Validacao} />} />
             <Route path="/dashboard" element={<PrivateRoute element={Dashboard} />} />
             <Route path="/novacompra" element={<PrivateRoute element={Compra} />} />
@@ -36,11 +42,10 @@ function App() {
             <Route path="/user" element={<PrivateRoute element={ProfilePage} />} />
             <Route path="/noticias" element={<PrivateRoute element={Noticias} />} />
             <Route path="/extrato" element={<PrivateRoute element={Extrato} />} />
-            <Route path="/ContaDeDeposito" element={<Pagina  />} />
-
+            <Route path="/ContaDeDeposito" element={<Pagina />} />
           </Routes>
         </Router>
-      </LoadProvider> {/* Updated provider */}
+      </LoadProvider> {/* Atualizar provider */}
     </AuthProvider>
   );
 }

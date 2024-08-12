@@ -7,7 +7,7 @@ import { abreviarNome, formatNumber, ULLT, ULLTNUMBER } from '../../assets/utils
 import GrapthLikeBinance from '../GoldGrapth/GrapthLikeBinance';
 import { usePulse } from '../../context/LoadContext';
 import SideBarBox from '../Sidebar/SideBarBox';
-import Recarregar from '../Recarregar/Recarregar';
+import { encrypt } from '../../assets/utils';
 
 export default function Dashboard() {
   const { userData, reloadUserData } = useContext(AuthContext);
@@ -29,7 +29,21 @@ export default function Dashboard() {
     }
   }, [userData, reloadUserData, showPulse, hidePulse]);
 
-  if (loading) return null; 
+
+  const copyLink = () => {
+    if (userData?.CPF) {
+      const encryptedCPF = encrypt(userData.CPF);
+      const link = `http://localhost:3000/cadastroIndicacao?id=${encryptedCPF}`;
+      navigator.clipboard.writeText(link).then(
+        () => alert('Link copiado para a área de transferência!'),
+        (err) => console.error('Falha ao copiar o link: ', err)
+      );
+    } else {
+      alert('CPF do usuário não encontrado.');
+    }
+  };
+
+  if (loading) return null;
 
   console.log(userData)
   return (
@@ -80,7 +94,7 @@ export default function Dashboard() {
             </D.SaldoDisponivelParaSaque>
           </D.SecondRow>
           <D.IndiqueEGanha>
-            <p>INDIQUE E GANHE 10% DA PRIMEIRA COMPRA DO INDICADO, <span>COPIAR LINK</span></p>
+          <p>INDIQUE E GANHE 10% DA PRIMEIRA COMPRA DO INDICADO, <span onClick={copyLink}>COPIAR LINK</span></p>
           </D.IndiqueEGanha>
           <D.GrapthContainer>
             <GrapthLikeBinance />

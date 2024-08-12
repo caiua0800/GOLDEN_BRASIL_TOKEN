@@ -2,6 +2,7 @@
 import { addMonths, differenceInDays } from 'date-fns';
 import { db, doc, getDoc } from '../database/firebaseConfig'
 import axios from 'axios';
+import CryptoJS from 'crypto-js'
 
 export const formatNumber = (number) => {
     // Verifica se o valor é uma string e tenta convertê-lo para um número
@@ -327,11 +328,22 @@ export const removeFormatting = (type, value) => {
 
 
 export const GeneratePIX_MP = async (body) => {
-    return await axios.post(`${process.env.REACT_APP_BASE_ROUTE}${process.env.REACT_APP_GERAR_PIX}`, body)
+    return await axios.post(`${process.env.REACT_APP_GERAR_PIX}`, body)
 
     // .then(response => {
     //     response
     // }).catch((error) => {
     //     console.log("Erro ao gerar PIX: ", error)
     // })
+}
+
+const SECRET_KEY = process.env.REACT_APP_SECRET_KEY_CRYPT;
+
+export function encrypt(text) {
+    try {
+        return CryptoJS.AES.encrypt(text, SECRET_KEY).toString();
+    } catch (error) {
+        console.error('Erro ao criptografar:', error);
+        return null;
+    }
 }

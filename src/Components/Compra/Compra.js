@@ -120,7 +120,7 @@ export default function Compra() {
             <S.CompraContainer>
                 <>
                     {popUpActive && (
-                        <PopUp message={popUpMessage} closePopUp={handleClosePopUp} type={popUpType} />
+                        <PopUp message={popUpMessage} closePopUp={handleClosePopUp} type={popUpType}  />
                     )}
 
                     <S.CompraTitle><h1>Compra de Contratos</h1></S.CompraTitle>
@@ -133,7 +133,7 @@ export default function Compra() {
                         <S.CarteiraInfo isVisible={carteiraState}>
                             <S.CarteiraInfoBox>
                                 <h1>SALDO DE DISPONÍVEL</h1>
-                                <span>U$ {userData && formatNumber(userData.DISPONIVEL_SAQUE)}</span>
+                                <span>U${userData && formatNumber(userData.DISPONIVEL_SAQUE)}</span>
                             </S.CarteiraInfoBox>
                             <S.CarteiraInfoBox>
                                 <h1>SALDO PLATAFORMA</h1>

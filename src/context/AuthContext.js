@@ -14,13 +14,7 @@ export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Recuperar dados do localStorage ao iniciar o aplicativo
-    const storedUserData = localStorage.getItem('userData');
-    if (storedUserData) {
-      setUserData(JSON.parse(storedUserData));
-    }
-  }, []);
+
 
   const login = async (username, password) => {
 
@@ -37,9 +31,10 @@ export const AuthProvider = ({ children }) => {
       // Passo 2: Fazer login no Firebase com o email e senha
       await signInWithEmailAndPassword(auth, email, password);
 
-      const userResponse = await axios.post(`${BASE_ROUTE}${PESQUISAR_CLIENTE}`, { CPF: cpf });
+      const userResponse = await axios.post(`${BASE_ROUTE}${PESQUISAR_CLIENTE}`, { clientId: cpf });
       const data = userResponse.data;
       setUserData(data);
+      console.log(data)
       localStorage.setItem('userData', JSON.stringify(data));
       console.log('Usuário autenticado com sucesso');
       setError(null);
@@ -77,14 +72,20 @@ export const AuthProvider = ({ children }) => {
     }
 
     const LoginSendableData = {
-      CPF: userData.CPF,
+      clientId: userData.CPF,
     };
+
+
+
+    // COINVALUE EM STRING, COIN EM STRING
+
 
     return axios.post(`${BASE_ROUTE}${PESQUISAR_CLIENTE}`, LoginSendableData)
       .then((response) => {
         const data = response.data;
+        console.log("data")
+        console.log(data)
         setUserData(data);
-        localStorage.setItem('userData', JSON.stringify(data)); // Atualizar dados no localStorage
         setError(null);
       })
       .catch((error) => {

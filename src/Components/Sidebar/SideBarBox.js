@@ -14,7 +14,7 @@ export default function SideBarBox({ children }) {
         <>
             <Sidebar isOpen={sideBarState}/>
             <BtnSidebar onClick={handleSidebar}>
-                <img src={assets.pulseImage} alt='menu' />
+                <img src='logo-golden.png' alt='menu' />
                 {/* <img src={assets.sidebarMenu} alt='menu' /> */}
             </BtnSidebar>
 

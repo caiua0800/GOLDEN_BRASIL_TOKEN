@@ -14,7 +14,7 @@ export const CompraContainer = styled.div`
     width: 100%;
     // height: max-content;
     height: 100vh;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     background: linear-gradient(to right, #d4fcff, #d4fcff, #d4fcff, #d4fcff);
     box-sizing: border-box;
@@ -23,11 +23,7 @@ export const CompraContainer = styled.div`
     flex-direction: column;
     position: relative;
 
-    @media (max-width: 1000px) {
-        flex-direction: column;
-        overflow-y: scroll;
-        justify-content: center;
-    }
+ 
 `;
 
 export const CompraTitle = styled.div`

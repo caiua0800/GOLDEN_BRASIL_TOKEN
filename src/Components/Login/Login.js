@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import assets from '../../assets/assets';
+import InfoModal from './InfoModal';
 import * as Styles from './LoginStyle';
 import { usePulse } from '../../context/LoadContext';
 
@@ -12,6 +12,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login, error, userData } = useContext(AuthContext);
   const { showPulse, hidePulse } = usePulse();
+  const [closeInfoModal, setCloseInfoModal] = useState(true);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,7 +26,7 @@ const LoginPage = () => {
       setShowError(true);
       const timer = setTimeout(() => {
         setShowError(false);
-      }, 2000); 
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [error]);
@@ -39,8 +40,11 @@ const LoginPage = () => {
 
   return (
     <Styles.Container>
+      {closeInfoModal && (
+        <InfoModal setCloseInfoModal={setCloseInfoModal} />
+      )}
       <Styles.LoginBox onSubmit={handleLogin}>
-        <Styles.Logo src={assets.imageBrandPlatform} alt="Logo" />
+        <Styles.Logo src='logo-golden.png' alt="Logo" />
         <Styles.Title>Welcome Back!</Styles.Title>
         <Styles.LoginForm>
           <Styles.Input
@@ -55,9 +59,9 @@ const LoginPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Styles.forgotPassLinky onClick={() => {window.location.href="/recover"}}>Esqueceu a senha?</Styles.forgotPassLinky>
+          <Styles.forgotPassLinky onClick={() => { window.location.href = "/recover" }}>Esqueceu a senha?</Styles.forgotPassLinky>
           <Styles.SubmitButton type="submit">Login</Styles.SubmitButton>
-          <Styles.singUpLink>Não possui cadastro? <a onClick={() => {window.location.href="/cadastro"}}>cadastre-se já</a> </Styles.singUpLink>
+          <Styles.singUpLink>Não possui cadastro? <a onClick={() => { window.location.href = "/cadastro" }}>cadastre-se já</a> </Styles.singUpLink>
         </Styles.LoginForm>
         {showError && (
           <Styles.ErrorPopup>

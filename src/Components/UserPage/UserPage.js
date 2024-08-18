@@ -279,19 +279,21 @@ const ProfilePage = ({ setProfilePage }) => {
                         <U.ProfileInfo>
                             <h4>Informações do Perfil</h4>
                             <U.Info>
-                                {Object.keys(inputValues).map(key => (
-                                    <U.InfoBox key={key}>
-                                        <h3>{key.charAt(0).toUpperCase() + key.slice(1)}: </h3>
-                                        <input
-                                            disabled={!inputsEnabled[key]}
-                                            value={inputValues[key]}
-                                            onChange={(e) => handleInputChange(key, e.target.value)}
-                                        />
-                                        <U.EditIcon onClick={() => toggleInput(key)}>
-                                            {inputIcons[key]}
-                                        </U.EditIcon>
-                                    </U.InfoBox>
-                                ))}
+                                {Object.keys(inputValues)
+                                    .filter(key => !['agency', 'account', 'beneficiario', 'keyPix', 'accountType'].includes(key))
+                                    .map(key => (
+                                        <U.InfoBox key={key}>
+                                            <h3>{key.charAt(0).toUpperCase() + key.slice(1)}: </h3>
+                                            <input
+                                                disabled={!inputsEnabled[key]}
+                                                value={inputValues[key]}
+                                                onChange={(e) => handleInputChange(key, e.target.value)}
+                                            />
+                                            <U.EditIcon onClick={() => toggleInput(key)}>
+                                                {inputIcons[key]}
+                                            </U.EditIcon>
+                                        </U.InfoBox>
+                                    ))}
                             </U.Info>
                         </U.ProfileInfo>
                     </U.ProfileContent>

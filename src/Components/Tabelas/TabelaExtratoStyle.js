@@ -7,6 +7,8 @@ export const TabelaContainer = styled.div`
     background: linear-gradient(-60deg, #3d4763, #3288be, #31d0e3);
     margin-top: 20px;
     box-shadow: 2px 3px 4px rgba(0,0,0,0.7);
+
+    overflow: auto;
 `;
 
 export const Table = styled.table`

@@ -63,3 +63,8 @@ export const Certificado = styled.div`
         height: 30px;
     }
 `;
+
+export const DownloadContratoButton = styled.button`
+    font-weight: 500;
+    
+`;

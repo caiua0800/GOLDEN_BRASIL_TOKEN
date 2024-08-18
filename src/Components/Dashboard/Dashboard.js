@@ -14,13 +14,14 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const { showPulse, hidePulse } = usePulse();
 
+  const loadUserData = async () => {
+    showPulse();
+    await reloadUserData();
+    hidePulse();
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const loadUserData = async () => {
-      showPulse(); // Show pulse animation while loading
-      await reloadUserData();
-      hidePulse(); // Hide pulse animation when loading is complete
-      setLoading(false);
-    };
 
     if (userData) {
       setLoading(false);
@@ -29,11 +30,15 @@ export default function Dashboard() {
     }
   }, [userData, reloadUserData, showPulse, hidePulse]);
 
+  const handleReloadWeb = () => {
+    loadUserData();
+  }
+
 
   const copyLink = () => {
     if (userData?.CPF) {
       const encryptedCPF = encrypt(userData.CPF);
-      const link = `http://localhost:3000/cadastroIndicacao?id=${encryptedCPF}`;
+      const link = `https://golden-clients.web.app/cadastroIndicacao?id=${encryptedCPF}`;
       navigator.clipboard.writeText(link).then(
         () => alert('Link copiado para a área de transferência!'),
         (err) => console.error('Falha ao copiar o link: ', err)
@@ -45,7 +50,6 @@ export default function Dashboard() {
 
   if (loading) return null;
 
-  console.log(userData)
   return (
     <SideBarBox>
       <D.DashboardContainer>
@@ -55,6 +59,8 @@ export default function Dashboard() {
         <D.SaldacoesUsuario>
           <span>OLÁ {abreviarNome((userData?.NAME || '').toUpperCase())}</span>
         </D.SaldacoesUsuario>
+
+        <D.ReloadWeb><span onClick={handleReloadWeb}>atualizar</span></D.ReloadWeb>
 
         <D.ContainerContent>
           <D.FirstRow>
@@ -66,15 +72,15 @@ export default function Dashboard() {
             <D.SaldoCorrente>
               <D.SaldoNaPlataforma>
                 <h2>SALDO NA PLATAFORMA</h2>
-                <span>U$ {userData ? ULLT(userData.TOTAL_PLATAFORMA, userData.VALOR_SACADO) : '0'}</span>
+                <span>U$ {userData ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO) : '0'}</span>
                 <D.SaldoPlataformaDivs>
                   <div>
                     <h3>VALOR INVESTIMENTO</h3>
-                    <span>U$ {userData ? ULLT(userData.TOTAL_SPENT, 0) : '0'}</span>
+                    <span>U$ {userData ? formatNumber(userData.TOTAL_SPENT) : '0'}</span>
                   </div>
                   <div>
                     <h3>VALOR LUCRO</h3>
-                    <span>U$ {userData ? ULLT(userData.LUCRO_CONTRATOS, 0) : '0'}</span>
+                    <span>U$ {userData ? formatNumber(userData.LUCRO_CONTRATOS) : '0'}</span>
                   </div>
                   <div>
                     <h3>SALDO DE INDICAÇÃO</h3>
@@ -85,7 +91,7 @@ export default function Dashboard() {
             </D.SaldoCorrente>
           </D.FirstRow>
           <D.SecondRow>
-            <h1>DISPONÍVEL PARA SAQUE | U$  {userData ? ULLT(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) : '0'}</h1>
+            <h1>DISPONÍVEL PARA SAQUE | U$  {userData ? formatNumber(userData.DISPONIVEL_SAQUE) : '0'}</h1>
             <D.SaldoDisponivelParaSaque>
               <D.ProgressBar>
                 <D.ProgressFill percentage={userData ? (ULLTNUMBER(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />
@@ -94,7 +100,7 @@ export default function Dashboard() {
             </D.SaldoDisponivelParaSaque>
           </D.SecondRow>
           <D.IndiqueEGanha>
-          <p>INDIQUE E GANHE 10% DA PRIMEIRA COMPRA DO INDICADO, <span onClick={copyLink}>COPIAR LINK</span></p>
+            <p>INDIQUE E GANHE 10% DA PRIMEIRA COMPRA DO INDICADO, <span onClick={copyLink}>COPIAR LINK</span></p>
           </D.IndiqueEGanha>
           <D.GrapthContainer>
             <GrapthLikeBinance />

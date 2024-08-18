@@ -45,7 +45,7 @@ function App() {
             <Route path="/ContaDeDeposito" element={<Pagina />} />
           </Routes>
         </Router>
-      </LoadProvider> {/* Atualizar provider */}
+      </LoadProvider> 
     </AuthProvider>
   );
 }

@@ -70,6 +70,25 @@ export const SaldacoesUsuario = styled.div`
     }
 `;
 
+export const ReloadWeb = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    box-sizing: border-box;
+    padding-right: 20px;
+
+    span{
+        cursor: pointer;
+        font-weight: 500;
+        transition: .3s;
+
+        &:hover{
+            color: rgba(0,0,0,0.4);
+        }
+    }
+`;
+
 export const ContainerContent = styled.div`
     width: 100%;
     height: 100%;
@@ -258,6 +277,7 @@ export const ProgressBar = styled.div`
     height: 10px;
     background-color: #ffff; 
     overflow: hidden;
+    box-shadow: 3px 3px 2px rgba(0,0,0,0.2)
 `;
 
 export const ProgressFill = styled.div`
@@ -307,15 +327,20 @@ export const SecondRow = styled.div`
     @media (max-width: 1000px) {
         flex-direction: column;
         margin-top: 20px;
+
         h1{
             font-size: 18px;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0);
+            text-shadow: 1px 2px 1px rgba(0,0,0,0.4);
         }
     }
 `;
 
 export const SaldoDisponivelParaSaque = styled.div`
     position: relative;
+
+    @media(max-width: 1000px){
+        margin-top: 10px;
+    }
 `;
 
 export const IndiqueEGanha = styled.div`
@@ -351,7 +376,16 @@ export const IndiqueEGanha = styled.div`
     }
 
     @media (max-width: 1000px){
-    
+        background: linear-gradient(to right, #fcc602, #ffe285);
+
+        p{
+            color: rgba(40,0 240, 1);
+            font-weight: 500;
+        }
+
+        span{
+            color: rgba(100,0 255, 1);
+        }
     }
 `;
 
@@ -379,6 +413,10 @@ export const TabelaContainer = styled.div`
 export const GrapthContainer = styled.div`
     height: 450px;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.4);
+
+    @media(max-width: 1000px){
+        height: 300px;
+    }
 `;
 
 

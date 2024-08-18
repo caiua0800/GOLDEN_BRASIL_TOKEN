@@ -14,9 +14,10 @@ export const Container = styled.div`
     z-index: 99999;
     padding: 20px 0;
     box-sizing: border-box;
-    @media (max-width: 800px) {
-        height: 80vh;
-        top: 100px;
+
+    @media (max-width: 1000px) {
+        height: 100vh;
+        top: 0px;
     }
 `;
 
@@ -27,10 +28,19 @@ export const ProfileCard = styled.div`
     border-radius: 8px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
     width: 800px;   
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 90vh;
     padding: 20px;
     position: relative;
+    box-sizing: border-box;
+
+    @media (max-width: 1000px){
+        width: 100%;
+        padding: 40px 20px;
+        height:  90vh;
+        margin-top: 120px;
+        border-radius: 0;
+    }
 `;
 
 export const BackIcon = styled(FaArrowLeft)`
@@ -44,6 +54,12 @@ export const BackIcon = styled(FaArrowLeft)`
     &:hover {
         transform: scale(0.95);
     }
+
+    @media (max-width: 1000px){
+        z-index: 99999;
+        font-size: 28px;
+    }
+
 `;
 
 export const TabContainer = styled.div`
@@ -183,6 +199,20 @@ export const InfoBox = styled.div`
         box-shadow: 3px 3px 2px rgba(0,0,0,0.2); 
         box-sizing: border-box;
         padding-left: 10px
+    }
+
+    @media (max-width: 1000px){
+        width: 100%;
+
+        h3{
+            font-size: 12px;
+        }
+
+        input, select{
+            height: 30px;
+            flex: 1;
+            font-size: 12px;
+        }
     }
 `;
 

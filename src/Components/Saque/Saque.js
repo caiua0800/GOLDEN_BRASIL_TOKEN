@@ -96,7 +96,7 @@ export default function Saque() {
 
                         <S.SaqueBox>
                             <S.WalletIcon>
-                                <img src={assets.carteiraAberta} />
+                                <img src='wallet.png' />
                             </S.WalletIcon>
                             <S.SaqueBoxTitle>CARTEIRA</S.SaqueBoxTitle>
                         </S.SaqueBox>

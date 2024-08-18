@@ -24,8 +24,14 @@ export const ModalBox = styled.div`
   padding: 20px 30px;
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow: auto;
   position: relative;
+
+    @media (max-width: 1000px) {
+      width: 100%;
+      height: 100%;
+      padding: 10px 20px;
+    }
 `;
 
 export const FecharModalBtn = styled.div`
@@ -42,6 +48,8 @@ export const FecharModalBtn = styled.div`
       transform: scale(0.95);
     }
   }
+
+
 `;
 
 export const ModalPDFContainer = styled.div`
@@ -86,7 +94,8 @@ export const ConfirmacaoDeCadastro = styled.div`
     align-items: center;
     margin-top: 10px;
     flex-direction: column;
-
+    text-align: center;
+    font-weight: 500;
     button{
         width: 100%;
         margin-top: 20px;

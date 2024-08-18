@@ -71,7 +71,7 @@ export default function CadastroPage() {
                     Seja bem vindo(a) a Golden Brasil
                 </S.CadastroTitle>
                 <S.LogoBox>
-                    <img src={assets.imageBrandPlatform} alt="Brand Logo" />
+                    <img src='logo-golden.png' alt="Brand Logo" />
                 </S.LogoBox>
             </S.CadastroBox>
 

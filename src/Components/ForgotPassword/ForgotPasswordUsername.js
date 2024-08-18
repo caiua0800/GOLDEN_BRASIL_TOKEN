@@ -86,7 +86,7 @@ export default function ForgotPasswordUsername() {
 
     return (
         <S.Container>
-            <S.GetBack onClick={() => {window.location.href = '/recover'}}>VOLTAR</S.GetBack>
+            <S.GetBack onClick={() => {window.location.href = '/'}}>VOLTAR</S.GetBack>
             <S.BoxCenter>
                 <h4>QUAL O SEU USERNAME?</h4>
                 <input

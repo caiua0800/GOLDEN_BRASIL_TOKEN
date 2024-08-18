@@ -17,28 +17,42 @@ const TabelaExtrato = ({ startDate, endDate }) => {
     const saques = userData?.SAQUES || [];
     const indicacoes = userData?.INDICACAO || [];
 
+    console.log(indicacoes)
+
     const transactions = [
-        ...contratos.map(c => ({
-            date: formatDateSystem(c.PURCHASEDATE) || '',
-            description: `Compra de ${c.COINS || 'N/A'} contratos`,
-            value: c.TOTALSPENT || 0,
-            status: retornaResposta(c),
-            type: 'contrato'
-        })),
-        ...saques.map(s => ({
-            date: formatDateSystem(s.DATASOLICITACAO) || '',
-            description: `Saque de ${s.VALORSOLICITADO || 'N/A'}`,
-            value: s.VALORSOLICITADO || 0,
-            status: s.STATUS,
-            type: 'saque'
-        })),
+        // Filtra e mapeia os contratos com status diferente de 4
+        ...contratos
+            .filter(c => c.STATUS !== 4) // Filtra contratos com status diferente de 4
+            .map(c => ({
+                date: formatDateSystem(c.PURCHASEDATE) || '',
+                description: `Compra de ${c.COINS || 'N/A'} contratos`,
+                value: c.TOTALSPENT || 0,
+                status: retornaResposta(c),
+                type: 'contrato'
+            })),
+    
+        // Filtra e mapeia os saques com status igual a 2
+        ...saques
+            .filter(s => s.STATUS === 2) // Filtra saques com status igual a 2
+            .map(s => ({
+                date: formatDateSystem(s.DATASOLICITACAO) || '',
+                description: `Saque de ${s.VALORSOLICITADO || 'N/A'}`,
+                value: s.VALORSOLICITADO || 0,
+                status: s.STATUS,
+                type: 'saque'
+            })),
+    
+        // Mapeia as indicações sem filtrar
         ...indicacoes.map(i => ({
-            date: formatDateSystem(i.DATACRIACAO) || '',
-            description: `Indicação ID ${i.ID_EXTRACT || 'N/A'}: ${i.DESCRIPTION || 'Sem descrição'}`,
-            value: i.VALUE || 0,
+            date: formatDateSystem(i.TIMESTAMP) || '',
+            description: `Indicação Cliente ${i.NAME || 'N/A'}: U$${formatNumber(i.VALOR*10) || 'Sem descrição'}`,
+            value: (i.VALOR) || 0,
+            status: 'ADICIONADO',
             type: 'indicacao'
         }))
     ];
+    
+    
 
     // Remova transações com dados inválidos e fora do intervalo de datas
     const validTransactions = transactions.filter(t => {
@@ -62,6 +76,7 @@ const TabelaExtrato = ({ startDate, endDate }) => {
                 return '';
         }
     };
+
 
     return (
         <T.TabelaContainer>

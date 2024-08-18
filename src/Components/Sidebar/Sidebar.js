@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import * as S from './SidebarStyles';
 import assets from "../../assets/assets";
-import { UserContext } from '../../context/UserContext';
 import { AuthContext } from "../../context/AuthContext";
 import ProfilePage from "../UserPage/UserPage";
 
@@ -29,7 +28,7 @@ export const Sidebar = ({ isOpen }) => {
 
             <S.Container className={isOpen ? "open" : "closed"}>
                 <S.LogoBox>
-                    <img src={assets.pulseImage} alt="Diamond Icon" />
+                    <img src='logo-golden.png' alt="Diamond Icon" />
                     <span>GOLDEN BRASIL</span>
                 </S.LogoBox>
                 <S.Mapper>

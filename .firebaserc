@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "golden-clients",
+    "prod": "golden-clients"
+  },
+  "targets": {
+    "golden-clients": {
+      "hosting": {
+        "clientes-golden": [
+          "clientes-golden"
+        ]
+      }
+    }
+  },
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}

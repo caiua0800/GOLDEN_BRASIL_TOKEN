@@ -127,17 +127,17 @@ export default function Compra() {
 
                     <S.CarteiraContainer>
                         <S.CarteiraIcon>
-                            <img onClick={handleCarteiraState} src={carteiraState ? assets.carteiraFechada : assets.carteiraAberta} alt="Carteira" />
+                            <img onClick={handleCarteiraState} src={carteiraState ? 'wallet.png' : 'wallet-close.png'} alt="Carteira" />
                         </S.CarteiraIcon>
 
                         <S.CarteiraInfo isVisible={carteiraState}>
                             <S.CarteiraInfoBox>
                                 <h1>SALDO DE DISPONÍVEL</h1>
-                                <span>U${userData && formatNumber(userData.DISPONIVEL_SAQUE)}</span>
+                                <span>U${userData && (userData.DISPONIVEL_SAQUE.toFixed(2))}</span>
                             </S.CarteiraInfoBox>
                             <S.CarteiraInfoBox>
                                 <h1>SALDO PLATAFORMA</h1>
-                                <span>U$ {userData && formatNumber(userData.TOTAL_PLATAFORMA)}</span>
+                                <span>U$ {userData && formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO)}</span>
                             </S.CarteiraInfoBox>
 
                         </S.CarteiraInfo>

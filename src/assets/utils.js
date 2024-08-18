@@ -6,15 +6,17 @@ import CryptoJS from 'crypto-js'
 
 export const formatNumber = (number) => {
     // Verifica se o valor é uma string e tenta convertê-lo para um número
-    const numericValue = typeof number === 'string' ? parseFloat(number) : number;
+    // const numericValue = typeof number === 'string' ? parseFloat(number) : number;
+  
 
-    if (isNaN(numericValue)) {
-        console.error('O valor fornecido não é um número válido.');
-        return null; // Ou algum valor padrão, conforme necessário
-    }
+    // if (isNaN(numericValue)) {
+    //     console.log(number, numericValue)
+    //     console.error('O valor fornecido não é um número válido.');
+    //     return null; 
+    // }
 
     // Formata o número com separador de milhares e duas casas decimais
-    const formattedNumber = numericValue.toLocaleString('pt-BR', {
+    const formattedNumber = number.toLocaleString('pt-BR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
@@ -329,12 +331,6 @@ export const removeFormatting = (type, value) => {
 
 export const GeneratePIX_MP = async (body) => {
     return await axios.post(`${process.env.REACT_APP_GERAR_PIX}`, body)
-
-    // .then(response => {
-    //     response
-    // }).catch((error) => {
-    //     console.log("Erro ao gerar PIX: ", error)
-    // })
 }
 
 const SECRET_KEY = process.env.REACT_APP_SECRET_KEY_CRYPT;

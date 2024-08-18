@@ -30,12 +30,13 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
         try {
             const response = await GeneratePIX_MP(data);
             const ticket = response.data.point_of_interaction.transaction_data.ticket_url;
+            console.log(response.data)
             console.log(ticket);
             setTicketURL(ticket);
-            return ticket; // Certifique-se de retornar o ticket
+            return ticket; 
         } catch (error) {
             console.log("Erro ao gerar PIX: ", error);
-            return null; // Em caso de erro, retorna null para que possamos tratar no `handleConfirmarCompra`
+            return null; 
         }
     }
 
@@ -53,21 +54,21 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                 transaction_amount: parseFloat(((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)) * 5.5).toFixed(2)),
                 description: `Compra de ${modalData.qttContratos} para ${userData.CPF}`,
                 paymentMethodId: "pix",
-                email: "randomcaiuaemail@gmail.com",
-                // email: userData.EMAIL,
+                email: userData.EMAIL,
                 identificationType: "CPF",
-                number: formatCPF(userData.CPF)
+                number: '075.411.521-61'
             }
-
+            console.log("mp_data")
+            console.log(mp_data)
             var ticket_pay = await handlePostPIX(mp_data)
 
             const requestData = {
                 USERNAME: usuario,
-                CPF: senha,
+                CPF: userData.CPF,
                 docId: userData.CPF,
                 contratoData: {
-                    COINS: modalData.qttContratos,
-                    COINVALUE: modalData.qttContratos,
+                    COINS: parseFloat(modalData.qttContratos),
+                    COINVALUE: parseFloat(modalData.valorPorContrato),
                     CURRENTINCOME: "0",
                     IDCOMPRA: gerarStringAleatoria(),
                     MAXIMUMNUMBEROFDAYSTOYIELD: "36",

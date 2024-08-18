@@ -45,7 +45,7 @@ export default function Modal({ handleModalSaque }) {
             docId: userData.CPF,
             saqueData: {
                 CODCLI: userData.CPF,
-                STATUS: 2,
+                STATUS: 1,
                 VALORSOLICITADO: parseFloat(valorSolicitado)
             }
         }

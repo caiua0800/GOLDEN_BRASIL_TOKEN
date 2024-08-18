@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import * as S from './CadastroPageStyleIndicacao';
-import assets from "../../assets/assets";
 import { formatCPF, formatCEP, formatTelefone, removeFormatting } from "../../assets/utils";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
@@ -86,7 +85,7 @@ export default function CadastroPageIndicacao() {
                     Seja bem vindo(a) a Golden Brasil
                 </S.CadastroTitle>
                 <S.LogoBox>
-                    <img src={assets.imageBrandPlatform} alt="Brand Logo" />
+                    <img src='logo-golden.png' alt="Brand Logo" />
                 </S.LogoBox>
             </S.CadastroBox>
 

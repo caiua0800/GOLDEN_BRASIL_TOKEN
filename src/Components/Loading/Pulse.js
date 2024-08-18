@@ -66,7 +66,6 @@ const CenterImage = styled.img`
   z-index: 1;
 `;
 
-const imageSrc = 'https://firebasestorage.googleapis.com/v0/b/wldata.appspot.com/o/logoGoldenToken-removebg-preview.png?alt=media&token=5109abf4-41b8-4c9a-8803-4b4adbab0cb2';
 
 const PulseAnimation = () => {
   const { isPulseVisible } = usePulse();
@@ -80,7 +79,7 @@ const PulseAnimation = () => {
   return (
     <Body>
       <Pulse>
-        <CenterImage src={assets.pulseImage} alt="Center Image" />
+        <CenterImage src='logo-golden.png' alt="Center Image" />
         {spans}
       </Pulse>
     </Body>

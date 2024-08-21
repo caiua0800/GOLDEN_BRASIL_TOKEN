@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import * as M from './ModalStyle';
 import PDFGenerator from "./PDFGenerator";
 import { AuthContext } from "../../../context/AuthContext";
-import { formatCPF, gerarStringAleatoria, GeneratePIX_MP } from "../../../assets/utils";
+import { formatCPF, gerarStringAleatoria, GeneratePIX_MP, separarNome, GenerateBOLETO_MP } from "../../../assets/utils";
 import axios from "axios";
 import Loading from "../../Loading/Loader";
 
@@ -16,7 +16,8 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
     const [senha, setSenha] = useState('');
     const [loading, setLoading] = useState(false);
     const { userData } = useContext(AuthContext);
-    const [ticketURL, setTicketURL] = useState('');
+    const [paymentMethod, setPaymentMethod] = useState('PIX'); // Estado para método de pagamento
+
 
     const handleCheckboxChange = (event) => {
         if (event.target.checked) {
@@ -30,9 +31,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
         try {
             const response = await GeneratePIX_MP(data);
             const ticket = response.data.point_of_interaction.transaction_data.ticket_url;
-            console.log(response.data)
             console.log(ticket);
-            setTicketURL(ticket);
             return ticket; 
         } catch (error) {
             console.log("Erro ao gerar PIX: ", error);
@@ -40,6 +39,16 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
         }
     }
 
+    const handlePostBOLETO = async (data) => {
+        try {
+            const response = await GenerateBOLETO_MP(data);
+            const ticket = response.data.transaction_details.external_resource_url;
+            return ticket; 
+        } catch (error) {
+            console.log("Erro ao gerar BOLETO: ", error);
+            return null; 
+        }
+    }
 
     const handleConfirmarCompra = async () => {
         if (assinatura !== 'assinado') {
@@ -50,17 +59,42 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
         if (userData) {
             setLoading(true)
 
-            const mp_data = {
+            const mp_data_pix = {
                 transaction_amount: parseFloat(((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)) * 5.5).toFixed(2)),
                 description: `Compra de ${modalData.qttContratos} para ${userData.CPF}`,
-                paymentMethodId: "pix",
+                paymentMethodId: paymentMethod.toLowerCase(), // Use o valor do estado paymentMethod
                 email: userData.EMAIL,
                 identificationType: "CPF",
                 number: '075.411.521-61'
             }
-            console.log("mp_data")
-            console.log(mp_data)
-            var ticket_pay = await handlePostPIX(mp_data)
+
+            const separeted_name = separarNome(userData.NAME);
+
+            const mp_data_boleto = {
+                transaction_amount: parseFloat(((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)) * 5.5).toFixed(2)),
+                description: `Compra de ${modalData.qttContratos} para ${userData.CPF}`,
+                paymentMethodId: paymentMethod.toLowerCase(), // Use o valor do estado paymentMethod
+                email: userData.EMAIL,
+                first_name:separeted_name[0],
+                last_name:separeted_name[1],
+                identificationType: "CPF",
+                number: '075.411.521-61'
+            }
+
+            var ticket = null;
+
+            switch(paymentMethod){
+                case "PIX":
+                    ticket = await handlePostPIX(mp_data_pix);
+                    break;
+                case "DEPOSITO":
+                    break;
+                case "BOLETO":
+                    ticket = await handlePostBOLETO(mp_data_boleto)
+                default:
+                    break;
+            }
+
 
             const requestData = {
                 USERNAME: usuario,
@@ -77,7 +111,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                     STATUS: 4,
                     TOTALINCOME: "0",
                     TOTALSPENT: (parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)).toFixed(2),
-                    TICKET: ticket_pay
+                    TICKET: ticket
                 }
             };
 
@@ -88,18 +122,22 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                 setPopUpMessage(response.data);
                 handleOpenPopUp(type);
                 handleModalCompra();
-                reloadUserData()
-                setLoading(false)
+                reloadUserData();
+                setLoading(false);
 
             } catch (error) {
                 console.error("Erro ao adicionar contrato:", error);
                 setPopUpMessage('Ocorreu um erro ao processar sua compra. Por favor, tente novamente.');
-                setLoading(false)
+                setLoading(false);
                 handleOpenPopUp('error');
             }
         }
-        setLoading(false)
+        setLoading(false);
+    };
 
+    const handlePaymentMethodChange = (event) => {
+        setPaymentMethod(event.target.value); 
+        console.log(event.target.value)
     };
 
     return (
@@ -130,9 +168,10 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                 </M.CheckboxContainer>
 
                 <M.PayFormDiv>
-                    <select>
+                    <select value={paymentMethod} onChange={handlePaymentMethodChange}> {/* Aqui você liga o onChange */}
                         <option value="PIX">PIX</option>
                         <option value="DEPOSITO">DEPOSITO</option>
+                        <option value="BOLETO">BOLETO</option>
                     </select>
                 </M.PayFormDiv>
 
@@ -154,8 +193,6 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                     <button onClick={handleConfirmarCompra}>CONFIRMAR E COMPRAR</button>
                 </M.ConfirmacaoDeCadastro>
             </M.ModalBox>
-
-
         </M.ModalContainer>
     );
 }

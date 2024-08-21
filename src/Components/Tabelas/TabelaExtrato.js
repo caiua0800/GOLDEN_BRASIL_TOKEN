@@ -10,6 +10,19 @@ const parseDate = (dateString) => {
     return new Date(`${year}-${month}-${day}`);
 };
 
+const returnSaquesResponse = (str) => {
+    switch (str) {
+        case 1:
+            return 'PENDENTE';
+        case 2:
+            return 'PAGO';
+        case 3:
+            return 'RECUSADO';
+        default:
+            return 'INDEFINIDO';
+    }
+}
+
 const TabelaExtrato = ({ startDate, endDate }) => {
     const { userData } = useContext(AuthContext);
 
@@ -38,7 +51,7 @@ const TabelaExtrato = ({ startDate, endDate }) => {
                 date: formatDateSystem(s.DATASOLICITACAO) || '',
                 description: `Saque de ${s.VALORSOLICITADO || 'N/A'}`,
                 value: s.VALORSOLICITADO || 0,
-                status: s.STATUS,
+                status: returnSaquesResponse(s.STATUS),
                 type: 'saque'
             })),
     
@@ -57,7 +70,7 @@ const TabelaExtrato = ({ startDate, endDate }) => {
     // Remova transações com dados inválidos e fora do intervalo de datas
     const validTransactions = transactions.filter(t => {
         const date = parseDate(t.date);
-        return date >= new Date(startDate) && date <= new Date(endDate) && t.value >= 0;
+        return date >= parseDate(startDate) && date <= parseDate(endDate) && t.value >= 0;
     });
 
     // Ordene as transações por data do mais recente para o mais antigo

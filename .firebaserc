@@ -1,10 +1,18 @@
 {
   "projects": {
     "default": "golden-clients",
-    "prod": "golden-clients"
+    "prod": "golden-clients",
+    "clientes-golden": "golden-token-62a99"
   },
   "targets": {
     "golden-clients": {
+      "hosting": {
+        "clientes-golden": [
+          "clientes-golden"
+        ]
+      }
+    },
+    "golden-token-62a99": {
       "hosting": {
         "clientes-golden": [
           "clientes-golden"

@@ -55,7 +55,8 @@ export const Table = styled.table`
         }
 
         &.saque {
-            color: #fe5f55; /* vermelho escuro para saque */
+            color: rgba(255, 0, 100, 1); 
+            font-weight: 600;
         }
 
         &.indicacao {

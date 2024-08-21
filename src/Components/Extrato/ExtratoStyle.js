@@ -11,6 +11,7 @@ export const ExtratoContainer = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
+    
     @media (max-width: 800px){
         flex-direction: column;
         justify-content: center;

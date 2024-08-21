@@ -3,16 +3,21 @@ import TabelaDeContratos from '../Tabelas/TabelaContratos';
 import TwoBars from '../TwoBars/TwoBars';
 import * as D from './DashboardStyle';
 import { AuthContext } from '../../context/AuthContext';
-import { abreviarNome, formatNumber, ULLT, ULLTNUMBER } from '../../assets/utils';
+import { abreviarNome, decrypt, formatNumber, ULLT, ULLTNUMBER } from '../../assets/utils';
 import GrapthLikeBinance from '../GoldGrapth/GrapthLikeBinance';
 import { usePulse } from '../../context/LoadContext';
 import SideBarBox from '../Sidebar/SideBarBox';
 import { encrypt } from '../../assets/utils';
+import { db } from '../../database/firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
+import MensagemSchema from '../Mensagem/MensagemSchema';
+
 
 export default function Dashboard() {
   const { userData, reloadUserData } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const { showPulse, hidePulse } = usePulse();
+  const [messageExists, setMessageExists] = useState(null);
 
   const loadUserData = async () => {
     showPulse();
@@ -38,7 +43,18 @@ export default function Dashboard() {
   const copyLink = () => {
     if (userData?.CPF) {
       const encryptedCPF = encrypt(userData.CPF);
-      const link = `https://golden-clients.web.app/cadastroIndicacao?id=${encryptedCPF}`;
+      
+      // Obtém a URL atual
+      const currentUrl = window.location.href;
+      
+      // Remove '/dashboard' do final, se existir
+      const baseUrl = currentUrl.endsWith('/dashboard')
+        ? currentUrl.slice(0, -('dashboard'.length))
+        : currentUrl;
+      
+      // Constrói o link final
+      const link = `${baseUrl}cadastroIndicacao?id=${encryptedCPF}`;
+
       navigator.clipboard.writeText(link).then(
         () => alert('Link copiado para a área de transferência!'),
         (err) => console.error('Falha ao copiar o link: ', err)
@@ -48,11 +64,45 @@ export default function Dashboard() {
     }
   };
 
+  
+  
+
+
+  useEffect(() => {
+    const fetchMensagens = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'MENSAGENS'));
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const enviarPara = data.ENVIAR_PARA || [];
+          
+          enviarPara.forEach((item) => {
+            if (item.CPF === userData?.CPF || item.CPF === '*') {
+              setMessageExists(data);
+              console.log(`Mensagem encontrado no documento ${doc.id}:`, data);
+            }
+          });
+        });
+      } catch (error) {
+        console.error("Erro ao buscar mensagens: ", error);
+      }
+    };
+
+    fetchMensagens();
+  }, [userData]);
+
+
   if (loading) return null;
+
 
   return (
     <SideBarBox>
       <D.DashboardContainer>
+
+        {messageExists && (
+          <MensagemSchema data={messageExists} />
+        )
+        }
         <D.ContainerTitle>
           <p>DASHBOARD</p>
         </D.ContainerTitle>

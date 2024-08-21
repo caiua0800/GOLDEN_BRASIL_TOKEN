@@ -328,9 +328,30 @@ export const removeFormatting = (type, value) => {
     }
 };
 
+const url_base = process.env.REACT_APP_BASE_ROUTE;
+const url_gerar_pix = process.env.REACT_APP_GERAR_PIX;
+const url_gerar_boleto = process.env.REACT_APP_GERAR_BOLETO;
 
 export const GeneratePIX_MP = async (body) => {
-    return await axios.post(`${process.env.REACT_APP_GERAR_PIX}`, body)
+    return await axios.post(`${url_base}${url_gerar_pix}`, body)
+}
+
+export const GenerateBOLETO_MP = async (body) => {
+    return await axios.post(`${url_base}${url_gerar_boleto}`, body)
+}
+
+export function separarNome(nomeCompleto) {
+    // Dividir o nome completo em partes usando espaço como delimitador
+    const partes = nomeCompleto.trim().split(" ");
+    
+    // O primeiro nome é a primeira parte
+    const primeiroNome = partes[0];
+    
+    // O restante do nome é o restante da array, juntando com um espaço
+    const restoDoNome = partes.slice(1).join(" ") || ''; // Se não houver resto, retorna uma string vazia
+
+    // Retornar um array com o primeiro nome e o resto do nome
+    return [primeiroNome, restoDoNome];
 }
 
 const SECRET_KEY = process.env.REACT_APP_SECRET_KEY_CRYPT;
@@ -340,6 +361,23 @@ export function encrypt(text) {
         return CryptoJS.AES.encrypt(text, SECRET_KEY).toString();
     } catch (error) {
         console.error('Erro ao criptografar:', error);
+        return null;
+    }
+}
+
+
+export function decrypt(text) {
+    try{
+        const bytes = CryptoJS.AES.decrypt(text, SECRET_KEY);
+        const originalText = bytes.toString(CryptoJS.enc.Utf8);
+
+        if(originalText){
+            return originalText
+        }else{
+            throw new Error('Texto descriptografado vazio');
+        }
+    }catch(error){
+        console.log(error)
         return null;
     }
 }

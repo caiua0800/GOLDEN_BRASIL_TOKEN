@@ -31,7 +31,7 @@ export default function CadastroPageIndicacao() {
         // Extrair o parâmetro da URL
         const queryParams = new URLSearchParams(location.search);
         const indicadorParam = queryParams.get('id');
-        
+        console.log('aaa')
         if (indicadorParam) {
             setIndicador(indicadorParam);
         }
@@ -65,6 +65,7 @@ export default function CadastroPageIndicacao() {
                 CONTACT: removeFormatting('telefone', telefone)
             }
         }
+      
 
         try {
             const response = await axios.post(`${BASE_ROUTE}${CRIAR_CLIENTE_INDICACAO}`, data);
@@ -77,6 +78,7 @@ export default function CadastroPageIndicacao() {
         }
     };
 
+    
     return (
         <S.CadastroContainer>
             <S.GetBackButton onClick={() => { window.location.href = '/' }}>Voltar</S.GetBackButton>

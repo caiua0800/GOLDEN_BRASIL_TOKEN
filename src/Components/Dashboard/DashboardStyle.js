@@ -5,7 +5,7 @@ export const DashboardContainer = styled.div`
     min-height: 100vh;
     overflow: hidden;
     background: linear-gradient(to right, #d4fcff, #d4fcff, #d4fcff, #d4fcff);
-
+    position: relative;
     box-sizing: border-box;
     padding: 50px 30px 200px 30px;
     display: flex;

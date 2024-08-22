@@ -82,6 +82,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
             }
 
             var ticket = null;
+            var indicacao = false;
 
             switch(paymentMethod){
                 case "PIX":
@@ -91,6 +92,8 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                     break;
                 case "BOLETO":
                     ticket = await handlePostBOLETO(mp_data_boleto)
+                case "INDICACAO":
+                    indicacao = true;
                 default:
                     break;
             }
@@ -108,6 +111,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                     MAXIMUMNUMBEROFDAYSTOYIELD: "36",
                     MAXIMUMQUOTAYIELD: "150",
                     RENDIMENTO_ATUAL: 0,
+                    INDICACAO: indicacao,
                     STATUS: 4,
                     TOTALINCOME: "0",
                     TOTALSPENT: (parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)).toFixed(2),
@@ -172,6 +176,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                         <option value="PIX">PIX</option>
                         <option value="DEPOSITO">DEPOSITO</option>
                         <option value="BOLETO">BOLETO</option>
+                        <option value="INDICACAO">SALDO DE INDICAÇÃO</option>
                     </select>
                 </M.PayFormDiv>
 

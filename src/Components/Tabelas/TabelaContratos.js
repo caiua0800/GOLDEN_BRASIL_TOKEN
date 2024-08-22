@@ -82,7 +82,7 @@ const TabelaDeContratos = () => {
                                 <Style.TabelaData>{dado.COINS}</Style.TabelaData>
                                 <Style.TabelaData>{formatarMoedaDollar(dado.TOTALSPENT)}</Style.TabelaData>
                                 <Style.TabelaData>
-                                    {dado.RENDIMENTO_ATUAL.toFixed(4)}%
+                                    {dado.RENDIMENTO_ATUAL ? dado.RENDIMENTO_ATUAL.toFixed(4) : dado.RENDIMENTO_ATUAL}%
                                 </Style.TabelaData>
                                 <Style.TabelaData>{dado.MAXIMUMQUOTAYIELD}%</Style.TabelaData>
                                 <Style.TabelaData>

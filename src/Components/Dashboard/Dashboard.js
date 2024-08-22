@@ -91,7 +91,7 @@ export default function Dashboard() {
     fetchMensagens();
   }, [userData]);
 
-
+  console.log(userData)
   if (loading) return null;
 
 

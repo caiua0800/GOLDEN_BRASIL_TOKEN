@@ -98,8 +98,10 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                     break;
                 case "BOLETO":
                     ticket = await handlePostBOLETO(mp_data_boleto)
+                    break;
                 case "INDICACAO":
                     indicacao = true;
+                    break;
                 default:
                     break;
             }

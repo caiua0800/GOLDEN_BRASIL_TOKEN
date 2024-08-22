@@ -59,6 +59,12 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
         if (userData) {
             setLoading(true)
 
+            if((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)) > userData.TOTAL_INDICACAO && paymentMethod === "INDICACAO"){
+                setLoading(false)
+                alert("VOCÊ NÃO TEM DINHEIRO DE INDICAÇÃO O SUFICIENTE");
+                return;
+            }
+
             const mp_data_pix = {
                 transaction_amount: parseFloat(((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)) * 5.5).toFixed(2)),
                 description: `Compra de ${modalData.qttContratos} para ${userData.CPF}`,
@@ -112,6 +118,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                     MAXIMUMQUOTAYIELD: "150",
                     RENDIMENTO_ATUAL: 0,
                     INDICACAO: indicacao,
+                    PAYMETHOD: paymentMethod,
                     STATUS: 4,
                     TOTALINCOME: "0",
                     TOTALSPENT: (parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)).toFixed(2),

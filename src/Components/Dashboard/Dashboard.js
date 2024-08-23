@@ -43,22 +43,31 @@ export default function Dashboard() {
   const copyLink = () => {
     if (userData?.CPF) {
       const encryptedCPF = encrypt(userData.CPF);
-      
-      // Obtém a URL atual
-      const currentUrl = window.location.href;
-      
-      // Remove '/dashboard' do final, se existir
-      const baseUrl = currentUrl.endsWith('/dashboard')
-        ? currentUrl.slice(0, -('dashboard'.length))
-        : currentUrl;
-      
+  
+      // Define a base URL
+      const baseUrl = 'https://clientes-golden.web.app/';
+  
       // Constrói o link final
       const link = `${baseUrl}cadastroIndicacao?id=${encryptedCPF}`;
-
-      navigator.clipboard.writeText(link).then(
-        () => alert('Link copiado para a área de transferência!'),
-        (err) => console.error('Falha ao copiar o link: ', err)
-      );
+  
+      // Cria um elemento de input temporário para copiar o texto
+      const tempInput = document.createElement('input');
+      tempInput.value = link;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      
+      try {
+        // Tenta copiar o texto
+        const successful = document.execCommand('copy');
+        const msg = successful ? 'Link copiado para a área de transferência!' : 'Falha ao copiar o link.';
+        alert(msg);
+      } catch (err) {
+        console.error('Erro ao copiar o link: ', err);
+        alert('Erro ao copiar o link.');
+      }
+  
+      // Remove o elemento temporário
+      document.body.removeChild(tempInput);
     } else {
       alert('CPF do usuário não encontrado.');
     }

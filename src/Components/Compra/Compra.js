@@ -72,10 +72,22 @@ export default function Compra() {
     }
 
     const handleValueSubmit = (valor) => { if (valor) setQttContratos(parseInt(valor)); }
-    const handleModalCompra = () => { setModalCompra(!modalCompra); }
+
     const handleCarteiraState = () => { setCarteiraState(!carteiraState); }
     const handleImageLoad = () => { hidePulse(); };
 
+    const handleModalCompra = () => {
+
+        if(!userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS){
+            alert("ENVIE OS DOCUMENTOS PARA VERIFICAÇÃO");
+            return;
+        }else if(userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS){
+            alert("AGUARDE A VERIFICAÇÃO DOS SEUS DOCUMENTOS");
+            return;
+        }
+
+        setModalCompra(!modalCompra);
+    }
 
     useEffect(() => {
         const imageLoadPromises = [
@@ -120,7 +132,7 @@ export default function Compra() {
             <S.CompraContainer>
                 <>
                     {popUpActive && (
-                        <PopUp message={popUpMessage} closePopUp={handleClosePopUp} type={popUpType}  />
+                        <PopUp message={popUpMessage} closePopUp={handleClosePopUp} type={popUpType} />
                     )}
 
                     <S.CompraTitle><h1>Compra de Contratos</h1></S.CompraTitle>

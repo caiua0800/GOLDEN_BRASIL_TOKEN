@@ -381,3 +381,18 @@ export function decrypt(text) {
         return null;
     }
 }
+
+export function decrypt2(ciphertext) {
+    try {
+        const bytes = CryptoJS.AES.decrypt(ciphertext, "GoldenBrasil");
+        const originalText = bytes.toString(CryptoJS.enc.Utf8);
+        if (originalText) {
+            return originalText;
+        } else {
+            throw new Error('Texto descriptografado vazio');
+        }
+    } catch (error) {
+        console.error('Erro ao descriptografar:', error);
+        return null;
+    }
+}

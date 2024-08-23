@@ -23,6 +23,15 @@ export default function Saque() {
     }
 
     const handleModalSaque = () => {
+
+        if(!userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS){
+            alert("ENVIE OS DOCUMENTOS PARA VERIFICAÇÃO");
+            return;
+        }else if(userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS){
+            alert("AGUARDE A VERIFICAÇÃO DOS SEUS DOCUMENTOS");
+            return;
+        }
+        
         setModalSaque(!modalSaque);
     }
 

@@ -17,9 +17,8 @@ export const AuthProvider = ({ children }) => {
 
 
   const login = async (username, password) => {
-
     try {
-
+      // Passo 1: Obter o email associado ao username
       const response = await axios.post(`${BASE_ROUTE}${OBTER_EMAIL}`, { USERNAME: username });
       const email = response.data.EMAIL;
       const cpf = response.data.CPF;
@@ -31,33 +30,48 @@ export const AuthProvider = ({ children }) => {
       // Passo 2: Fazer login no Firebase com o email e senha
       await signInWithEmailAndPassword(auth, email, password);
 
+      // Passo 3: Obter dados adicionais do cliente após autenticação
       const userResponse = await axios.post(`${BASE_ROUTE}${PESQUISAR_CLIENTE}`, { clientId: cpf });
       const data = userResponse.data;
       setUserData(data);
-      console.log(data)
       localStorage.setItem('userData', JSON.stringify(data));
-      console.log('Usuário autenticado com sucesso');
-      setError(null);
+      setError(null); // Limpa qualquer erro anterior
     } catch (error) {
       if (error.response) {
-        if (error.response.status === 404) {
-          setError('Usuário não encontrado.');
-        } else if (error.response.status === 401) {
-          setError('Senha inválida.');
-        } else if (error.response.status === 400) {
-          setError('Usuário e senha são obrigatórios.');
-        } else if (error.response.status === 500) {
-          setError('Erro interno no servidor. Tente novamente mais tarde.');
-        } else {
-          setError('Erro desconhecido. Por favor, tente novamente.');
+        // Tratamento de erros específicos da API
+        switch (error.response.status) {
+          case 404:
+            setError('Usuário não encontrado.');
+            break;
+          case 400:
+            setError('Usuário e senha são obrigatórios.');
+            break;
+          case 500:
+            setError('Erro interno no servidor. Tente novamente mais tarde.');
+            break;
+          default:
+            setError('Erro desconhecido. Por favor, tente novamente.');
+        }
+      } else if (error.code) {
+        // Tratamento de erros específicos do Firebase
+        switch (error.code) {
+          case 'auth/wrong-password':
+            setError('Senha inválida.');
+            break;
+          case 'auth/user-not-found':
+            setError('Usuário não encontrado.');
+            break;
+          case 'auth/too-many-requests':
+            setError('Muitas tentativas falhadas. Tente novamente mais tarde.');
+            break;
+          default:
+            setError('Erro de autenticação. Por favor, tente novamente.');
         }
       } else {
         setError('Erro na conexão com o servidor.');
       }
-      console.log('Erro ao fazer a requisição para API:', error);
+      console.error('Erro ao fazer a requisição para API:', error);
     }
-
-
   };
 
   const logout = () => {

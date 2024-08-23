@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as S from './CadastroPageStyleIndicacao';
-import { formatCPF, formatCEP, formatTelefone, removeFormatting } from "../../assets/utils";
+import { formatCPF, formatCEP, formatTelefone, removeFormatting, decrypt2 } from "../../assets/utils";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
 
@@ -51,7 +51,7 @@ export default function CadastroPageIndicacao() {
         const data = {
             clientData: {
                 CPF: removeFormatting('cpf', cpf),
-                INDICADOR: indicador,
+                INDICADOR: decrypt2(indicador),
                 ADRESS: endereco.toUpperCase(),
                 CITY: cidade.toUpperCase(),
                 COUNTRY: pais.toUpperCase(),
@@ -65,20 +65,21 @@ export default function CadastroPageIndicacao() {
                 CONTACT: removeFormatting('telefone', telefone)
             }
         }
-      
+
 
         try {
             const response = await axios.post(`${BASE_ROUTE}${CRIAR_CLIENTE_INDICACAO}`, data);
-            setResposta(response.data); 
-            alert(`Resposta do Servidor: ${response.data}`); 
+            setResposta(response.data);
+            alert(`Resposta do Servidor: ${response.data}`);
+            console.log(response.data)
             window.location.href = "/"
         } catch (error) {
-            setResposta(`Erro ao criar cadastro: ${error.response.data}`); 
+            setResposta(`Erro ao criar cadastro: ${error.response.data}`);
             alert(`Erro ao criar cadastro: ${error.response.data.error}`);
         }
     };
 
-    
+
     return (
         <S.CadastroContainer>
             <S.GetBackButton onClick={() => { window.location.href = '/' }}>Voltar</S.GetBackButton>
@@ -96,7 +97,7 @@ export default function CadastroPageIndicacao() {
                     <h2>Nome Completo</h2>
                     <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
                 </S.CaixaDeInformacao>
-                
+
                 <S.CaixaDeInformacao>
                     <h2>CPF</h2>
                     <input type="text" value={formatCPF(cpf)} onChange={(e) => setCpf(removeFormatting('cpf', e.target.value))} />

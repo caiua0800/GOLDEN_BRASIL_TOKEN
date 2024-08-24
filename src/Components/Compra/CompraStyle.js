@@ -16,7 +16,9 @@ export const CompraContainer = styled.div`
     height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
-    background: linear-gradient(to right, #d4fcff, #d4fcff, #d4fcff, #d4fcff);
+    // background: linear-gradient(to right, #d4fcff, #d4fcff, #d4fcff, #d4fcff);
+    background: linear-gradient(to right, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF);
+
     box-sizing: border-box;
     padding: 50px 30px 40px 30px;
     display: flex;
@@ -100,14 +102,20 @@ export const SimularCompra = styled.div`
     display: flex;
     justify-content: center;
     margin-top: 20px;
+
     button {
         height: 40px;
         width: 400px;
         cursor: pointer;
-        background: linear-gradient(to right, #b5c806, #e3e902);
+        // background: linear-gradient(to right, #b5c806, #e3e902);
+        background: linear-gradient(-60deg, #B17D2A, #E6AA3A, #E6AA3A, #B17D2A, #B17D2A);
+        
         border: 0;
         box-shadow: 3px 3px 2px rgba(0,0,0,0.3);
         transition: .3s;
+        color: white;
+        font-weight: 600;
+        text-shadow: 2px 2px 1px rgba(0,0,0,0.3);
         &:hover {
             transform: scale(1.05);
         }
@@ -197,15 +205,17 @@ export const BotoesDeValorBox = styled.div`
     display: flex;
     gap: 10px;
     justify-content: center;
+
     button {
         width: 100px;
         height: 40px;
         font-size: 16px;
-        color: rgba(0,0,0,0.8);
+        color: white;
         cursor: pointer;
         font-weight: 600;
         border: 0;
-        background: linear-gradient(to right, #a2d6f9, #a2d6f9);
+        // background: linear-gradient(to right, #a2d6f9, #a2d6f9);
+        background: linear-gradient(-60deg, #000000, #2b2d2e, #000000);
         box-shadow: 3px 3px 2px rgba(0,0,0,0.3);
         transition: .3s;
         &:hover {
@@ -218,6 +228,7 @@ export const InputQtt = styled.div`
     display: flex;
     gap: 5px;
     box-sizing: border-box;
+
     input {
         width: 200px;
         height: 80px;
@@ -226,14 +237,18 @@ export const InputQtt = styled.div`
         box-shadow: 3px 3px 2px rgba(0,0,0,0.3);
         border: 0;
         font-size: 28px;
+        border: 2px solid rgba(0,0,0,0.2);
     }
+
     button {
         width: 50px;
         box-shadow: 3px 3px 2px rgba(0,0,0,0.3);
         cursor: pointer;
         border: 2px solid transparent;
-        background-color: rgba(69, 162, 255, 0.8);
+        // background-color: rgba(69, 162, 255, 0.8);
+        background: linear-gradient(-60deg, #000000, #2b2d2e, #000000);
         transition: .3s;
+        color: white;
         &:hover {
             background-color: rgba(69, 150, 60, 0.8);
             border: 2px solid black;
@@ -248,7 +263,6 @@ export const InputQtt = styled.div`
             display: flex;
             align-items: center;
             justify-content: center;
-            color: black;
             font-weight: 800;
         }
     }

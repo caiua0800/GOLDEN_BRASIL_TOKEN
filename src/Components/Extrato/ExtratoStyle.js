@@ -4,7 +4,7 @@ export const ExtratoContainer = styled.div`
     width: 100%;
     min-height: 100vh;
     overflow: hidden;
-    background: linear-gradient(to right, #d4fcff, #d4fcff, #d4fcff, #d4fcff);
+    background: linear-gradient(to right, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF);
 
     box-sizing: border-box;
     padding: 50px 30px 200px 30px;
@@ -94,7 +94,8 @@ export const FilterButton = styled.button`
     font-size: 16px;
     font-weight: bold;
     color: #fff;
-    background-color: #007bff;
+    // background-color: #007bff;
+    background: linear-gradient(-60deg, #000000, #333336, #333336, #000000, #000000);
     border: none;
     border-radius: 5px;
     cursor: pointer;

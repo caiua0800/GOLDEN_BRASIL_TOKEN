@@ -4,7 +4,7 @@ export const SaqueContainer = styled.div`
     width: 100%;
     min-height: 100vh;
     overflow: hidden;
-    background: linear-gradient(to right, #d4fcff, #d4fcff, #d4fcff, #d4fcff);
+    background: linear-gradient(to right, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF);
     box-sizing: border-box;
     padding: 50px 30px 200px 30px;
     display: flex;
@@ -69,12 +69,15 @@ export const WalletIcon = styled.div`
     justify-content: center;
     box-sizing: border-box;
     padding: 10px;
-    background-color: rgba(0,0,0,0.05);
+    // background-color: rgba(0,0,0,0.05);
+    background: linear-gradient(-60deg, #B17D2A, #B17D2A, #E6AA3A, #B17D2A, #B17D2A);
+
     transition: .3s;
     img {
         width: 90%;
         transition: .3s;
     }
+
     &:hover {
         background-color: rgba(0,0,0,0.1);
         img {
@@ -87,7 +90,7 @@ export const SaqueBoxTitle = styled.p`
     margin: 0;
     margin-top: 10px;
     font-size: 28px;
-    color: rgba(0,0,0,0.6);
+    color: r#000000;
     text-shadow: 3px 3px 1px rgba(0,0,0,0.1);
 `;
 

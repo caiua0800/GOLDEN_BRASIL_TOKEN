@@ -26,7 +26,8 @@ const Body = styled.div`
   align-items: center;
   min-height: 100vh;
   min-width: 100%;
-  background: #0a3643;
+  // background: #0a3643;
+  background: linear-gradient(-60deg, #000000, #000000, #111112, #2b2d2e, #000000, #000000, #000000);
   position: fixed;
   top: 0;
   z-index: 999999;
@@ -37,9 +38,9 @@ const Pulse = styled.div`
   position: relative;
   width: 200px;
   height: 200px;
-  box-shadow: inset 0 0 40px #12b9ff, 0 0 50px #12b9ff;
+  box-shadow: inset 0 0 40px #FFFFFF, 0 0 50px #FFFFFF;
   border-radius: 50%;
-  border: 1px solid #12b9ff;
+  border: 1px solid #FFFFFF;
   background: url();
 `;
 
@@ -49,7 +50,7 @@ const PulseSpan = styled.span`
   left: 50%;
   transform: translate(-50%, -50%);
   background: transparent;
-  border: 1px solid #12b9ff;
+  border: 1px solid #E6AA3A;
   animation: ${animate} 6s linear infinite;
   border-radius: 50%;
   animation-delay: ${({ delay }) => `calc(${delay} * -1s)`};

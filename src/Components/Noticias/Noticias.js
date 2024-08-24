@@ -38,7 +38,7 @@ export default function Noticias() {
 
     // Função para verificar se todas as imagens foram carregadas
     const handleImageLoad = () => {
-        hidePulse(); // Define como falso quando todas as imagens forem carregadas
+        hidePulse();
     };
 
     useEffect(() => {

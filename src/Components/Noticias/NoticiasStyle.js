@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const NewsContainer = styled.div`
     width: 100%;
     min-height: 100vh;
-    background: linear-gradient(to right, #f0f4f8, #d9e2ec, #f0f4f8);  // Fundo claro
+    background: linear-gradient(to right, #FFFFFF, #FFFFFF, #FFFFFF);  // Fundo claro
     box-sizing: border-box;
     padding: 50px 30px 200px 40px;
     display: flex;
@@ -28,8 +28,8 @@ export const NewsBoxes = styled.div`
 export const NewsCard = styled.div`
     width: 80%;
     margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
     overflow: hidden;
     background: #ffffff;  // Fundo do card branco
 

@@ -4,7 +4,8 @@ export const Tabela = styled.table`
     width: 100%;
     border-collapse: collapse;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background: linear-gradient(-60deg, #3d4763, #3288be, #31d0e3);
+    background: linear-gradient(-60deg, #000000, #2b2d2e, #2b2d2e, #2b2d2e, #000000);
+    // background: linear-gradient(-60deg, #3d4763, #3288be, #31d0e3);
     margin-top: 20px;
     box-shadow: 2px 3px 4px rgba(0,0,0,0.7);
 `;

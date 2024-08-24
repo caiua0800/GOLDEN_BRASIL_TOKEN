@@ -4,7 +4,8 @@ export const DashboardContainer = styled.div`
     width: 100%;
     min-height: 100vh;
     overflow: hidden;
-    background: linear-gradient(to right, #d4fcff, #d4fcff, #d4fcff, #d4fcff);
+    // background: linear-gradient(to right, #d4fcff, #d4fcff, #d4fcff, #d4fcff);
+    background: linear-gradient(to right, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF);
     position: relative;
     box-sizing: border-box;
     padding: 50px 30px 200px 30px;
@@ -54,7 +55,7 @@ export const SaldacoesUsuario = styled.div`
     margin-top: 20px;
 
     span{
-        color: #1e96fc;
+        color: #000000;
         text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
         font-weight: 600;
         font-size: 22px;
@@ -148,8 +149,8 @@ export const FirstRowBox = styled.div`
 
 export const ContratosAtivos = styled(FirstRowBox)`
 
-    background: linear-gradient(-60deg, #3d4763, #3288be, #31d0e3);
-
+    // background: linear-gradient(-60deg, #3d4763, #3288be, #31d0e3);
+    background: linear-gradient(-60deg, #B17D2A, #B17D2A, #B17D2A, #E6AA11, #B17D2A, #B17D2A);
     span{
         margin-top: 20px;
         font-size: 72px;
@@ -158,7 +159,7 @@ export const ContratosAtivos = styled(FirstRowBox)`
         cursor: pointer;
         
         &:hover{
-            color: #EEF5FF;
+            color: #B17D2A;
             text-shadow: 2px 2px 1px rgba(0,0,0,0.3);
         }
     }
@@ -172,8 +173,8 @@ export const ContratosAtivos = styled(FirstRowBox)`
 `;
 
 export const SaldoCorrente = styled(FirstRowBox)`
-    // background: linear-gradient(to right, #8AC926, #8AC926);
-    background: linear-gradient(-60deg, #3fa34d, #72ce27, #72ce27);
+    
+    background: linear-gradient(-60deg, #000000, #2b2d2e, #000000, #2b2d2e, #000000);
 
 `;
 
@@ -185,7 +186,7 @@ export const SaldoNaPlataforma = styled.div`
 
     h2{
         margin: 0;
-        color: rgba(0,0,0,0.7);
+        color: #FFFFFF;
     }
 
     span{
@@ -201,7 +202,7 @@ export const SaldoNaPlataforma = styled.div`
             margin: 0;
             font-size: 22px;
             font-weight: 500;
-            text-shadow: 2px 2px 1px rgba(255, 255, 255, 0.4);
+            text-shadow: 2px 2px 1px rgba(255, 255, 255, 0.2);
         }
 
         span{
@@ -276,6 +277,7 @@ export const ProgressBar = styled.div`
     right: 20px;
     height: 10px;
     background-color: #ffff; 
+    border: 1px solid rgba(0,0,0,0.2);
     overflow: hidden;
     box-shadow: 3px 3px 2px rgba(0,0,0,0.2)
 `;
@@ -289,15 +291,17 @@ export const ProgressFill = styled.div`
 
 export const PercentageCount = styled.div`
     position: absolute;
-    bottom: 30px;
-    left: 50px;
+    bottom: 25px;
+    left: 25px;
     color: white;
     cursor: pointer;
     width: 60px;
     text-align: center;
     border-radius: 20px;
     font-weight: 600;
+    padding: 2px;
     background-color: rgba(99, 253, 15, 0.8);
+    border: 1px solid rgba(0,0,0,0.1);
 
     @media (max-width: 1000px){
         width: 60px;
@@ -315,13 +319,11 @@ export const SecondRow = styled.div`
     gap: 40px;
     margin-top: 40px;
 
-
-
     h1 {
         text-align: center;
         margin: 0;
-        color: #72ce27;
-        text-shadow: 2px 2px 2px rgba(0,0,0,0.4)
+        color: #000000;
+        text-shadow: 1px 1px 5px rgba(0,0,0,0.1)
     }
 
     @media (max-width: 1000px) {
@@ -358,6 +360,7 @@ export const IndiqueEGanha = styled.div`
         margin: 0;
         text-align: center;
     }
+
     span{
         color: #31d0e3;
         cursor: pointer;
@@ -376,15 +379,16 @@ export const IndiqueEGanha = styled.div`
     }
 
     @media (max-width: 1000px){
-        background: linear-gradient(to right, #fcc602, #ffe285);
+        background: linear-gradient(-60deg, #B17D2A, #B17D2A, #E6AA3A, #B17D2A, #B17D2A);
 
         p{
-            color: rgba(40,0 240, 1);
+            color: #000000;
             font-weight: 500;
         }
 
         span{
-            color: rgba(100,0 255, 1);
+            color: #FFFFFF;
+            cursor: pointer;
         }
     }
 `;

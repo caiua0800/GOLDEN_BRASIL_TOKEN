@@ -3,6 +3,8 @@ import * as S from './CadastroPageStyle';
 import assets from "../../assets/assets";
 import { formatCPF, formatCEP, formatTelefone, removeFormatting } from "../../assets/utils";
 import axios from "axios";
+import MessageBox from "./MessageBox";
+
 
 const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE;
 const CRIAR_CLIENTE = process.env.REACT_APP_CRIAR_CLIENTE;
@@ -23,17 +25,17 @@ export default function CadastroPage() {
     const [usuario, setUsuario] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('');
-    const [resposta, setResposta] = useState(''); // Estado para a resposta do servidor
+    const [resposta, setResposta] = useState(null); // Estado para a resposta do servidor
 
     // Função para verificar se todos os campos foram preenchidos e senhas coincidem
     const handleCadastro = async () => {
         if (!nome || !cpf || !dataNascimento || !telefone || !pais || !endereco || !bairro || !cidade || !cep || !usuario || !senha || !confirmarSenha || !email) {
-            alert('Por favor, preencha todos os campos.');
+            setResposta({ message: 'Por favor, preencha todos os campos.', type: 'error' });
             return;
         }
 
         if (senha !== confirmarSenha) {
-            alert('As senhas não coincidem.');
+            setResposta({ message: 'As senhas não coincidem.', type: 'error' });
             return;
         }
 
@@ -54,12 +56,10 @@ export default function CadastroPage() {
 
         try {
             const response = await axios.post(`${BASE_ROUTE}${CRIAR_CLIENTE}`, clientData);
-            setResposta(response.data); // Atualiza o estado com a resposta do servidor
-            alert(`Resposta do Servidor: ${response.data}`); // Mostra a resposta em um alerta
-            window.location.href="/"
+            setResposta({ message: response.data.message || 'Usuário criado com sucesso!', type: 'success' });
+            setTimeout(() => { window.location.href = "/"; }, 2000); // Redireciona após 2 segundos
         } catch (error) {
-            setResposta(`Erro ao criar cadastro: ${error.message}`); // Atualiza o estado com a mensagem de erro
-            alert(`Erro ao criar cadastro: ${error.message}`); // Mostra a mensagem de erro em um alerta
+            setResposta({ message: error.response?.data?.error || 'Erro ao criar cadastro. Por favor, tente novamente mais tarde.', type: 'error' });
         }
     };
 
@@ -170,7 +170,7 @@ export default function CadastroPage() {
                     <button onClick={handleCadastro}>CRIAR CONTA</button>
                 </S.CriarCadastro>
             </S.CaixaDeCadastro>
-
+            {resposta && <MessageBox message={resposta.message} type={resposta.type} />}
         </S.CadastroContainer>
     );
 }

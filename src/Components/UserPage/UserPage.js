@@ -61,8 +61,8 @@ const ProfilePage = ({ setProfilePage }) => {
 
     const [inputIcons, setInputIcons] = useState({
         nome: <FaPencilAlt />,
-        usuario: <FaPencilAlt />,
-        email: <FaPencilAlt />,
+        // usuario: <FaPencilAlt />,
+        // email: <FaPencilAlt />,
         contato: <FaPencilAlt />,
         endereco: <FaPencilAlt />,
         bairro: <FaPencilAlt />,

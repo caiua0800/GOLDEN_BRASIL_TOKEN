@@ -4,6 +4,10 @@ import Loading from "../Loading/Loader";
 import SideBarBox from "../Sidebar/SideBarBox";
 import { AuthContext } from "../../context/AuthContext";
 import { uploadFile, updateUserDocument } from '../../database/firebaseService'; 
+import axios from "axios";
+
+const BASE_URL = process.env.REACT_APP_BASE_ROUTE
+const DESTIN_URL = process.env.REACT_APP_UPDATE_CACHE
 
 export default function Validacao() {
     const { userData, reloadUserData } = useContext(AuthContext);
@@ -42,6 +46,14 @@ export default function Validacao() {
                 }, reloadUserData);
 
                 setUploadSuccess(true);
+
+                const responseUpdateCache = await axios.get(`${BASE_URL}${DESTIN_URL}`);
+
+                if((await responseUpdateCache).status == 200){
+                    console.log(responseUpdateCache.data)
+                }else{
+                    console.log("Erro ao atualizar cache no servidor")
+                }
             } catch (error) {
                 console.error("Error uploading files and updating user document: ", error);
                 alert("Ocorreu um erro ao enviar os documentos. Por favor, tente novamente.");

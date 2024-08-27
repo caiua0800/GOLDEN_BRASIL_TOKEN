@@ -3,6 +3,7 @@ import * as S from './CadastroPageStyleIndicacao';
 import { formatCPF, formatCEP, formatTelefone, removeFormatting, decrypt2 } from "../../assets/utils";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
+import { usePulse } from "../../context/LoadContext";
 
 const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE;
 const CRIAR_CLIENTE_INDICACAO = process.env.REACT_APP_CRIAR_CLIENTE_INDICACAO;
@@ -24,18 +25,18 @@ export default function CadastroPageIndicacao() {
     const [senha, setSenha] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('');
     const [resposta, setResposta] = useState('');
-
+    const { showPulse, hidePulse } = usePulse()
     const location = useLocation();
 
     useEffect(() => {
-        // Extrair o parâmetro da URL
         const queryParams = new URLSearchParams(location.search);
         const indicadorParam = queryParams.get('id');
-        console.log('aaa')
         if (indicadorParam) {
-            setIndicador(indicadorParam);
+            const fixedParam = indicadorParam.replace(/ /g, '+');
+            setIndicador(decrypt2(fixedParam));
         }
     }, [location.search]);
+
 
     const handleCadastro = async () => {
         if (!nome || !cpf || !dataNascimento || !telefone || !indicador || !pais || !endereco || !bairro || !cidade || !cep || !usuario || !senha || !confirmarSenha || !email) {
@@ -48,10 +49,12 @@ export default function CadastroPageIndicacao() {
             return;
         }
 
+        showPulse()
+
         const data = {
             clientData: {
                 CPF: removeFormatting('cpf', cpf),
-                INDICADOR: decrypt2(indicador),
+                INDICADOR: (indicador),
                 ADRESS: endereco.toUpperCase(),
                 CITY: cidade.toUpperCase(),
                 COUNTRY: pais.toUpperCase(),
@@ -66,16 +69,20 @@ export default function CadastroPageIndicacao() {
             }
         }
 
-
         try {
             const response = await axios.post(`${BASE_ROUTE}${CRIAR_CLIENTE_INDICACAO}`, data);
             setResposta(response.data);
             alert(`Resposta do Servidor: ${response.data}`);
             console.log(response.data)
+            hidePulse()
             window.location.href = "/"
+            console.log(data)
         } catch (error) {
             setResposta(`Erro ao criar cadastro: ${error.response.data}`);
             alert(`Erro ao criar cadastro: ${error.response.data.error}`);
+            console.log(data)
+            hidePulse()
+
         }
     };
 

@@ -5,17 +5,7 @@ import axios from 'axios';
 import CryptoJS from 'crypto-js'
 
 export const formatNumber = (number) => {
-    // Verifica se o valor é uma string e tenta convertê-lo para um número
-    // const numericValue = typeof number === 'string' ? parseFloat(number) : number;
-  
 
-    // if (isNaN(numericValue)) {
-    //     console.log(number, numericValue)
-    //     console.error('O valor fornecido não é um número válido.');
-    //     return null; 
-    // }
-
-    // Formata o número com separador de milhares e duas casas decimais
     const formattedNumber = number.toLocaleString('pt-BR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
@@ -26,8 +16,6 @@ export const formatNumber = (number) => {
 
 export const parseDateBrazilianFormat = (dateString) => {
     return false;
-    // const [day, month, year] = dateString.split('/');
-    // return new Date(year, month - 1, day);
 };
 
 
@@ -389,9 +377,11 @@ export function decrypt2(ciphertext) {
         if (originalText) {
             return originalText;
         } else {
+            console.log(originalText)
             throw new Error('Texto descriptografado vazio');
         }
     } catch (error) {
+        
         console.error('Erro ao descriptografar:', error);
         return null;
     }

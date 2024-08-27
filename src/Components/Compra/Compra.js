@@ -145,17 +145,17 @@ export default function Compra() {
                         <S.CarteiraInfo isVisible={carteiraState}>
                             <S.CarteiraInfoBox>
                                 <h1>SALDO DE DISPONÍVEL</h1>
-                                <span>U${userData && (userData.DISPONIVEL_SAQUE.toFixed(2))}</span>
+                                <span>R${userData && (userData.DISPONIVEL_SAQUE.toFixed(2))}</span>
                             </S.CarteiraInfoBox>
                             <S.CarteiraInfoBox>
                                 <h1>SALDO PLATAFORMA</h1>
-                                <span>U$ {userData && formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO)}</span>
+                                <span>R$ {userData && formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO)}</span>
                             </S.CarteiraInfoBox>
 
                         </S.CarteiraInfo>
                     </S.CarteiraContainer>
 
-                    <S.ValorContrato><p>1 CONTRATO (3 ANOS): <span>U$ {valorContratoUni.toFixed(2)}</span></p></S.ValorContrato>
+                    <S.ValorContrato><p>1 CONTRATO (3 ANOS): <span>R$ {valorContratoUni.toFixed(2)}</span></p></S.ValorContrato>
 
                     <S.SelecionarQuantidade>
                         <h2>Quantos contratos deseja?</h2>
@@ -176,7 +176,7 @@ export default function Compra() {
 
                         <S.CustoSemTaxa>
                             <h4>CUSTO DO INVESTIMENTO SEM TAXAS: </h4>
-                            <p>U$ <span>{formatNumber(qttContratos * valorContratoUni)}</span></p>
+                            <p>R$ <span>{formatNumber(qttContratos * valorContratoUni)}</span></p>
                         </S.CustoSemTaxa>
                     </S.SelecionarQuantidade>
 
@@ -205,11 +205,11 @@ export default function Compra() {
                                     </S.SimulacaoBox>
                                     <S.SimulacaoBox>
                                         <p>LUCRO DIÁRIO</p>
-                                        <span>U$ {simulado && formatNumber(resultadoSimulacao.dailyProfit)}</span>
+                                        <span>R$ {simulado && formatNumber(resultadoSimulacao.dailyProfit)}</span>
                                     </S.SimulacaoBox>
                                     <S.SimulacaoBox>
                                         <p>LUCRO TOTAL</p>
-                                        <span>U$ {simulado && formatNumber(resultadoSimulacao.totalProfit)}</span>
+                                        <span>R$ {simulado && formatNumber(resultadoSimulacao.totalProfit)}</span>
                                     </S.SimulacaoBox>
                                 </S.ResultadoSimulacaoContainer>
 

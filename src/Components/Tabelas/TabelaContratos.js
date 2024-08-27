@@ -80,7 +80,7 @@ const TabelaDeContratos = () => {
                                 <Style.TabelaData>{formatDateSystem(dado.PURCHASEDATE)}</Style.TabelaData>
                                 <Style.TabelaData>{formatDateSystem(dado.YIELDTERM)}</Style.TabelaData>
                                 <Style.TabelaData>{dado.COINS}</Style.TabelaData>
-                                <Style.TabelaData>U$ {parseFloat(dado.TOTALSPENT).toFixed(2) ? (parseFloat(dado.TOTALSPENT).toFixed(2)) : dado.TOTALSPENT}</Style.TabelaData>
+                                <Style.TabelaData>R$ {parseFloat(dado.TOTALSPENT).toFixed(2) ? (parseFloat(dado.TOTALSPENT).toFixed(2)) : dado.TOTALSPENT}</Style.TabelaData>
                                 <Style.TabelaData>
                                     {dado.RENDIMENTO_ATUAL ? dado.RENDIMENTO_ATUAL.toFixed(4) : dado.RENDIMENTO_ATUAL}%
                                 </Style.TabelaData>

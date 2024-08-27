@@ -38,10 +38,10 @@ const PDFGenerator = React.forwardRef(({ modalData }, ref) => {
         });
       };
 
-      addText(`Eu, ${userData.NAME}, inscrito(a) no CPF sob o número ${userData.CPF}, doravante denominado(a) como Comprador(a), declaro que adquiri um total de ${qttContratos} contratos, cada um no valor de U$${formatNumber(valorPorContrato)}.`);
+      addText(`Eu, ${userData.NAME}, inscrito(a) no CPF sob o número ${userData.CPF}, doravante denominado(a) como Comprador(a), declaro que adquiri um total de ${qttContratos} contratos, cada um no valor de R$${formatNumber(valorPorContrato)}.`);
       y += lineHeight;
 
-      addText(`O presente contrato terá uma duração de ${meses} meses e ${dias} dias, durante os quais o Comprador(a) terá direito a um lucro diário estimado em U$${formatNumber(lucroDiario)}, totalizando um lucro final de U$${formatNumber(lucroTotal)}.`);
+      addText(`O presente contrato terá uma duração de ${meses} meses e ${dias} dias, durante os quais o Comprador(a) terá direito a um lucro diário estimado em R$${formatNumber(lucroDiario)}, totalizando um lucro final de R$${formatNumber(lucroTotal)}.`);
       y += lineHeight;
 
       addText(`A porcentagem total de lucro ao final do contrato será de ${porcentagemLucro}%, conforme estipulado nas cláusulas do contrato firmado entre as partes.`);
@@ -101,7 +101,7 @@ const PDFGenerator = React.forwardRef(({ modalData }, ref) => {
       y += lineHeight * 2;
 
       // Texto adicional após a tabela
-      addText(`Total Final a ser pago pela Golden Token Brasil: U$${formatNumber((porcentagemLucro / 100) * (parseFloat(qttContratos) * parseFloat(valorPorContrato)))}`);
+      addText(`Total Final a ser pago pela Golden Token Brasil: R$${formatNumber((porcentagemLucro / 100) * (parseFloat(qttContratos) * parseFloat(valorPorContrato)))}`);
       y += lineHeight;
 
       addText(`Cada unidade de GOLDEN TOKEN BRASIL corresponde, alternativamente, a seguinte fração de minérios:`);

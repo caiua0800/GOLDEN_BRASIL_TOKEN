@@ -115,24 +115,24 @@ export default function Saque() {
                                 <S.WalletValue>
                                     <h2>SALDO PLATAFORMA</h2>
                                     <h6>(investido + lucro + indicação)</h6>
-                                    <span>U$ {userData && (userData.TOTAL_PLATAFORMA ? formatNumber(userData.TOTAL_PLATAFORMA) : 0)}</span>
+                                    <span>R$ {userData && (userData.TOTAL_PLATAFORMA ? formatNumber(userData.TOTAL_PLATAFORMA) : 0)}</span>
                                 </S.WalletValue>
                                 <S.WalletValue>
                                     <h2>SALDO DISPONÍVEL</h2>
                                     <h6>(lucro + contr. vencidos)</h6>
-                                    <span>U$ {userData && (userData.DISPONIVEL_SAQUE ? formatNumber(userData.DISPONIVEL_SAQUE) : 0)}</span>
+                                    <span>R$ {userData && (userData.DISPONIVEL_SAQUE ? formatNumber(userData.DISPONIVEL_SAQUE) : 0)}</span>
                                 </S.WalletValue>
                                 <S.WalletValue>
                                     <h2>SALDO DE INDICAÇÃO</h2>
-                                    <span>U$ {userData && (userData.TOTAL_INDICACAO ? formatNumber(userData.TOTAL_INDICACAO) : formatNumber(0))}</span>
+                                    <span>R$ {userData && (userData.TOTAL_INDICACAO ? formatNumber(userData.TOTAL_INDICACAO) : formatNumber(0))}</span>
                                 </S.WalletValue>
                                 <S.WalletValue>
                                     <h2>LUCRO RECEBIDO</h2>
-                                    <span>U$ {userData && (userData.LUCRO_CONTRATOS ? formatNumber(userData.LUCRO_CONTRATOS) : 0)}</span>
+                                    <span>R$ {userData && (userData.LUCRO_CONTRATOS ? formatNumber(userData.LUCRO_CONTRATOS) : 0)}</span>
                                 </S.WalletValue>
                                 <S.WalletValue>
                                     <h2>LUCRO À RECEBER</h2>
-                                    <span>U$ {userData && (userData.VALOR_A_RECEBER ? formatNumber(userData.VALOR_A_RECEBER) : 0)}</span>
+                                    <span>R$ {userData && (userData.VALOR_A_RECEBER ? formatNumber(userData.VALOR_A_RECEBER) : 0)}</span>
                                 </S.WalletValue>
                                 {diasDeSaque.length > 0 && (
                                     <S.DiasDeSaque>

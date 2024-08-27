@@ -87,7 +87,9 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
             }
 
             const mp_data_pix = {
-                transaction_amount: parseFloat(((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)) * dolarValue).toFixed(2)),
+                // transaction_amount: parseFloat(((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)) * dolarValue).toFixed(2)),
+                transaction_amount: parseFloat(((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos))).toFixed(2)),
+
                 description: `Compra de ${modalData.qttContratos} para ${userData.CPF}`,
                 paymentMethodId: paymentMethod.toLowerCase(), // Use o valor do estado paymentMethod
                 email: userData.EMAIL,
@@ -98,7 +100,8 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
             const separeted_name = separarNome(userData.NAME);
 
             const mp_data_boleto = {
-                transaction_amount: parseFloat(((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)) * dolarValue).toFixed(2)),
+                transaction_amount: parseFloat(((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos))).toFixed(2)),
+                // transaction_amount: parseFloat(((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)) * dolarValue).toFixed(2)),
                 description: `Compra de ${modalData.qttContratos} para ${userData.CPF}`,
                 paymentMethodId: paymentMethod.toLowerCase(), // Use o valor do estado paymentMethod
                 email: userData.EMAIL,

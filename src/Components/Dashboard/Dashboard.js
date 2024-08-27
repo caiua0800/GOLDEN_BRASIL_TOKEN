@@ -131,26 +131,26 @@ export default function Dashboard() {
             <D.SaldoCorrente>
               <D.SaldoNaPlataforma>
                 <h2>SALDO NA PLATAFORMA</h2>
-                <span>U$ {userData ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO) : '0'}</span>
+                <span>R$ {userData ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO) : '0'}</span>
                 <D.SaldoPlataformaDivs>
                   <div>
                     <h3>VALOR INVESTIMENTO</h3>
-                    <span>U$ {userData ? formatNumber(userData.TOTAL_SPENT) : '0'}</span>
+                    <span>R$ {userData ? formatNumber(userData.TOTAL_SPENT) : '0'}</span>
                   </div>
                   <div>
                     <h3>VALOR LUCRO</h3>
-                    <span>U$ {userData ? formatNumber(userData.LUCRO_CONTRATOS) : '0'}</span>
+                    <span>R$ {userData ? formatNumber(userData.LUCRO_CONTRATOS) : '0'}</span>
                   </div>
                   <div>
                     <h3>SALDO DE INDICAÇÃO</h3>
-                    <span>U$ {userData && userData.TOTAL_INDICACAO ? formatNumber(userData.TOTAL_INDICACAO) : formatNumber(0)}</span>
+                    <span>R$ {userData && userData.TOTAL_INDICACAO ? formatNumber(userData.TOTAL_INDICACAO) : formatNumber(0)}</span>
                   </div>
                 </D.SaldoPlataformaDivs>
               </D.SaldoNaPlataforma>
             </D.SaldoCorrente>
           </D.FirstRow>
           <D.SecondRow>
-            <h1>DISPONÍVEL PARA SAQUE | U$  {userData ? formatNumber(userData.DISPONIVEL_SAQUE) : '0'}</h1>
+            <h1>DISPONÍVEL PARA SAQUE | R$  {userData ? formatNumber(userData.DISPONIVEL_SAQUE) : '0'}</h1>
             <D.SaldoDisponivelParaSaque>
               <D.ProgressBar>
                 <D.ProgressFill percentage={userData ? (ULLTNUMBER(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />

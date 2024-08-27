@@ -115,7 +115,7 @@ const PDFGenerator = ({ ContratoData, assinatura }) => {
         </p>
 
         <p>
-          O presente contrato terá uma duração de <strong>{meses} meses</strong> e <strong>{dias} dias</strong>, durante os quais o <strong>USUÁRIO</strong> terá direito a um lucro diário estimado em <strong>U${formatNumber(lucroDiario)}</strong>, totalizando um lucro final de <strong>U${formatNumber(lucroTotal)}</strong>.
+          O presente contrato terá uma duração de <strong>{meses} meses</strong> e <strong>{dias} dias</strong>, durante os quais o <strong>USUÁRIO</strong> terá direito a um lucro diário estimado em <strong>R${formatNumber(lucroDiario)}</strong>, totalizando um lucro final de <strong>R${formatNumber(lucroTotal)}</strong>.
         </p>
         <p>
           A porcentagem total de lucro ao final do contrato será de <strong>{porcentagemLucro}%</strong>, conforme estipulado nas cláusulas do contrato firmado entre as partes.
@@ -149,7 +149,7 @@ const PDFGenerator = ({ ContratoData, assinatura }) => {
             </tr>
           </tbody>
         </table>
-        <p><strong>Total Final a ser pago pela Golden Token Brasil:</strong> U$ {formatNumber((porcentagemLucro/100)*(parseFloat(qttContratos)*parseFloat(valorPorContrato)))}</p>
+        <p><strong>Total Final a ser pago pela Golden Token Brasil:</strong> R$ {formatNumber((porcentagemLucro/100)*(parseFloat(qttContratos)*parseFloat(valorPorContrato)))}</p>
 
         <p>Cada unidade de GOLDEN TOKEN BRASIL corresponde, alternativamente, a seguinte fração de minérios:</p>
         <p>

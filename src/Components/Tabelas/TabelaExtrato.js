@@ -58,7 +58,7 @@ const TabelaExtrato = ({ startDate, endDate }) => {
         // Mapeia as indicações sem filtrar
         ...indicacoes.map(i => ({
             date: formatDateSystem(i.TIMESTAMP) || '',
-            description: `Indicação Cliente ${i.NAME || 'N/A'}: U$${formatNumber(i.VALOR*10) || 'Sem descrição'}`,
+            description: `Indicação Cliente ${i.NAME || 'N/A'}: R$${formatNumber(i.VALOR*10) || 'Sem descrição'}`,
             value: (i.VALOR) || 0,
             status: 'ADICIONADO',
             type: 'indicacao'
@@ -98,7 +98,7 @@ const TabelaExtrato = ({ startDate, endDate }) => {
                     <tr>
                         <th>Data</th>
                         <th>Descrição</th>
-                        <th>Valor (U$)</th>
+                        <th>Valor (R$)</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -109,7 +109,7 @@ const TabelaExtrato = ({ startDate, endDate }) => {
                                 <td>{transaction.date || 'Data não disponível'}</td>
                                 <td>{transaction.description || 'Descrição não disponível'}</td>
                                 <td className={`value-cell ${transaction.type}`}>
-                                    {transaction.value !== undefined ? `${getSign(transaction.type)} ${formatNumber(transaction.value)}` : 'Valor inválido'}
+                                    {transaction.value !== undefined ? `${getSign(transaction.type)} R$${formatNumber(transaction.value)}` : 'Valor inválido'}
                                 </td>
                                 <td>{transaction.status || 'Status não disponível'}</td>
                             </tr>

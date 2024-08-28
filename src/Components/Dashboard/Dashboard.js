@@ -100,7 +100,15 @@ export default function Dashboard() {
     fetchMensagens();
   }, [userData]);
 
-  console.log(userData)
+  const handle0AtNumberString = (numberSting) => {
+    if(typeof numberSting === 'string'){
+      return parseFloat(numberSting)
+    }else{
+      return numberSting ? numberSting : 0
+    }
+  }
+
+
   if (loading) return null;
 
 
@@ -135,7 +143,7 @@ export default function Dashboard() {
                 <D.SaldoPlataformaDivs>
                   <div>
                     <h3>VALOR INVESTIMENTO</h3>
-                    <span>R$ {userData ? formatNumber(userData.TOTAL_SPENT) : '0'}</span>
+                    <span>R$ {formatNumber(handle0AtNumberString(userData.TOTAL_SPENT))}</span>
                   </div>
                   <div>
                     <h3>VALOR LUCRO</h3>

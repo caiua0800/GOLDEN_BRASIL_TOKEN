@@ -19,6 +19,7 @@ import useImagePreloader from './hooks/useImagePreloader';
 import Pagina from './Components/ContaDeposito/Pagina';
 import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
 import ForgotPasswordUsername from './Components/ForgotPassword/ForgotPasswordUsername';
+import Ajuda from './Components/Ajuda/Ajuda';
 
 function App() {
   // Use the hook to preload images
@@ -42,6 +43,7 @@ function App() {
             <Route path="/user" element={<PrivateRoute element={ProfilePage} />} />
             <Route path="/noticias" element={<PrivateRoute element={Noticias} />} />
             <Route path="/extrato" element={<PrivateRoute element={Extrato} />} />
+            <Route path="/ajuda" element={<PrivateRoute element={Ajuda} />} />
             <Route path="/ContaDeDeposito" element={<Pagina />} />
           </Routes>
         </Router>

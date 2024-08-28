@@ -19,6 +19,7 @@ export default function Modal({ handleModalSaque }) {
     const valorSolicitadoNumber = parseFloat(valorSolicitado.replace(',', '.')) || 0;
     const valorRestante = Math.max(disponivelSaque - valorSolicitadoNumber, 0); 
     const { showPulse, hidePulse } = usePulse()
+    const [valorMinimo, serValorMinimo] = useState(25)
 
     let corSolicitado;
     if (valorSolicitadoNumber < disponivelSaque) {
@@ -37,6 +38,18 @@ export default function Modal({ handleModalSaque }) {
     };
 
     const handleSolicitarSaque = async () => {
+
+
+        if(parseFloat(userData.DISPONIVEL_SAQUE) < parseFloat(valorSolicitado)){
+            alert(`Valor insuficiente.`)
+            return;
+        }
+
+        if(parseFloat(valorSolicitado) < 25){
+            alert(`O valor mínimo para saque é de R$${valorMinimo}`)
+            return;
+        }
+
         showPulse();
 
         const requestData = {

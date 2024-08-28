@@ -20,6 +20,21 @@ import Pagina from './Components/ContaDeposito/Pagina';
 import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
 import ForgotPasswordUsername from './Components/ForgotPassword/ForgotPasswordUsername';
 import Ajuda from './Components/Ajuda/Ajuda';
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  ::-webkit-scrollbar {
+    width: 10px;
+    // border: 1px solid rgb(200,200,200);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #000000, #B17D2A, #E6AA3A);
+    border-radius: 6px;
+    border: 1px solid white;
+  }
+`;
+
 
 function App() {
   // Use the hook to preload images
@@ -29,6 +44,7 @@ function App() {
     <AuthProvider>
       <LoadProvider> {/* Atualizar provider */}
         <PulseAnimation />
+        <GlobalStyle />
         <Router>
           <Routes>
             <Route path="/" element={<LoginPage />} />

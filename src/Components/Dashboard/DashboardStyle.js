@@ -4,8 +4,10 @@ export const DashboardContainer = styled.div`
     width: 100%;
     min-height: 100vh;
     overflow: hidden;
-    // background: linear-gradient(to right, #d4fcff, #d4fcff, #d4fcff, #d4fcff);
-    background: linear-gradient(to right, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF);
+    // background: linear-gradient(to right, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF);
+    background-image: url('textura.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
     position: relative;
     box-sizing: border-box;
     padding: 50px 30px 200px 30px;
@@ -18,6 +20,21 @@ export const DashboardContainer = styled.div`
         padding: 40px 20px 100px 20px;
     }
 `;
+
+export const LoginBehind = styled.img`
+    position: fixed;
+    width: 350px;
+    top: 30%; /* Você pode ajustar ou remover esta linha se quiser posicionar verticalmente de outra forma */
+    z-index: 1;
+    left: 50%;
+    opacity: 0.5;
+    transform: translateX(-50%); /* Isso centraliza a imagem horizontalmente */
+`;
+
+export const PrincipalContent = styled.div`
+    z-index: 2;
+`;
+
 
 export const ContainerTitle = styled.div`
     width: 100%;

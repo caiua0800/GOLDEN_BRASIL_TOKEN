@@ -3,7 +3,9 @@ import styled from "styled-components";
 export const ValidacaoContainer = styled.div`
     width: 100%;
     min-height: 100vh;
-    background-color: aliceblue;
+    background-image: url('textura.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
     box-sizing: border-box;
     padding: 50px 30px 50px 40px;
     display: flex;
@@ -11,7 +13,7 @@ export const ValidacaoContainer = styled.div`
     justify-content: start;
     flex-direction: column;
     gap: 20px;
-    // position: relative;
+    position: relative;
 
     @media (max-width: 800px){
         flex-direction: column;
@@ -19,6 +21,22 @@ export const ValidacaoContainer = styled.div`
         padding: 20px 10px 50px 10px;
     }
 `;
+
+
+export const LoginBehind = styled.img`
+    position: fixed;
+    width: 350px;
+    top: 30%; /* Você pode ajustar ou remover esta linha se quiser posicionar verticalmente de outra forma */
+    z-index: 1;
+    left: 50%;
+    opacity: 0.5;
+    transform: translateX(-50%); /* Isso centraliza a imagem horizontalmente */
+`;
+
+export const PrincipalContent = styled.div`
+    z-index: 2;
+`;
+
 
 export const ValidacaoCenter = styled.div`
     width: 100%;

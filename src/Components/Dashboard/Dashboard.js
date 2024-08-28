@@ -43,19 +43,19 @@ export default function Dashboard() {
   const copyLink = () => {
     if (userData?.CPF) {
       const encryptedCPF = encrypt(userData.CPF);
-  
+
       // Define a base URL
       const baseUrl = 'https://clientes-golden.web.app/';
-  
+
       // Constrói o link final
       const link = `${baseUrl}cadastroIndicacao?id=${encryptedCPF}`;
-  
+
       // Cria um elemento de input temporário para copiar o texto
       const tempInput = document.createElement('input');
       tempInput.value = link;
       document.body.appendChild(tempInput);
       tempInput.select();
-      
+
       try {
         // Tenta copiar o texto
         const successful = document.execCommand('copy');
@@ -65,7 +65,7 @@ export default function Dashboard() {
         console.error('Erro ao copiar o link: ', err);
         alert('Erro ao copiar o link.');
       }
-  
+
       // Remove o elemento temporário
       document.body.removeChild(tempInput);
     } else {
@@ -73,8 +73,8 @@ export default function Dashboard() {
     }
   };
 
-  
-  
+
+
 
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function Dashboard() {
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           const enviarPara = data.ENVIAR_PARA || [];
-          
+
           enviarPara.forEach((item) => {
             if (item.CPF === userData?.CPF || item.CPF === '*') {
               setMessageExists(data);
@@ -101,9 +101,9 @@ export default function Dashboard() {
   }, [userData]);
 
   const handle0AtNumberString = (numberSting) => {
-    if(typeof numberSting === 'string'){
+    if (typeof numberSting === 'string') {
       return parseFloat(numberSting)
-    }else{
+    } else {
       return numberSting ? numberSting : 0
     }
   }
@@ -116,69 +116,74 @@ export default function Dashboard() {
     <SideBarBox>
       <D.DashboardContainer>
 
-        {messageExists && (
-          <MensagemSchema data={messageExists} />
-        )
-        }
-        <D.ContainerTitle>
-          <p>DASHBOARD</p>
-        </D.ContainerTitle>
-        <D.SaldacoesUsuario>
-          <span>OLÁ {abreviarNome((userData?.NAME || '').toUpperCase())}</span>
-        </D.SaldacoesUsuario>
+        <D.LoginBehind src='logo-golden.png' />
 
-        <D.ReloadWeb><span onClick={handleReloadWeb}>atualizar</span></D.ReloadWeb>
+        <D.PrincipalContent>
+          {messageExists && (
+            <MensagemSchema data={messageExists} />
+          )
+          }
+          <D.ContainerTitle>
+            <p>DASHBOARD</p>
+          </D.ContainerTitle>
+          <D.SaldacoesUsuario>
+            <span>OLÁ {abreviarNome((userData?.NAME || '').toUpperCase())}</span>
+          </D.SaldacoesUsuario>
 
-        <D.ContainerContent>
-          <D.FirstRow>
-            <D.ContratosAtivos>
-              <h1>CONTRATOS ATIVOS</h1>
-              <span>{userData && userData.TOTAL_COINS}</span>
-              <TwoBars totalSpent={userData ? ULLTNUMBER(userData.TOTAL_SPENT, userData.VALOR_SACADO) : 0} totalValue={userData ? ULLTNUMBER(userData.TOTAL_PLATAFORMA, userData.VALOR_SACADO) : 0} />
-            </D.ContratosAtivos>
-            <D.SaldoCorrente>
-              <D.SaldoNaPlataforma>
-                <h2>SALDO NA PLATAFORMA</h2>
-                <span>R$ {userData ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO) : '0'}</span>
-                <D.SaldoPlataformaDivs>
-                  <div>
-                    <h3>VALOR INVESTIMENTO</h3>
-                    <span>R$ {formatNumber(handle0AtNumberString(userData.TOTAL_SPENT))}</span>
-                  </div>
-                  <div>
-                    <h3>VALOR LUCRO</h3>
-                    <span>R$ {userData ? formatNumber(userData.LUCRO_CONTRATOS) : '0'}</span>
-                  </div>
-                  <div>
-                    <h3>SALDO DE INDICAÇÃO</h3>
-                    <span>R$ {userData && userData.TOTAL_INDICACAO ? formatNumber(userData.TOTAL_INDICACAO) : formatNumber(0)}</span>
-                  </div>
-                </D.SaldoPlataformaDivs>
-              </D.SaldoNaPlataforma>
-            </D.SaldoCorrente>
-          </D.FirstRow>
-          <D.SecondRow>
-            <h1>DISPONÍVEL PARA SAQUE | R$  {userData ? formatNumber(userData.DISPONIVEL_SAQUE) : '0'}</h1>
-            <D.SaldoDisponivelParaSaque>
-              <D.ProgressBar>
-                <D.ProgressFill percentage={userData ? (ULLTNUMBER(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />
-              </D.ProgressBar>
-              <D.PercentageCount>{userData ? ((ULLTNUMBER(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100).toFixed(2) : 0}%</D.PercentageCount>
-            </D.SaldoDisponivelParaSaque>
-          </D.SecondRow>
-          <D.IndiqueEGanha>
-            <p>INDIQUE E GANHE 10% DA PRIMEIRA COMPRA DO INDICADO, <span onClick={copyLink}>COPIAR LINK</span></p>
-          </D.IndiqueEGanha>
-          <D.GrapthContainer>
-            <GrapthLikeBinance />
-          </D.GrapthContainer>
-          <D.ThirdRow>
-            <h2>TABELA DE CONTRATOS</h2>
-          </D.ThirdRow>
-          <D.TabelaContainer>
-            <TabelaDeContratos dados={userData ? userData.CONTRATOS : []} />
-          </D.TabelaContainer>
-        </D.ContainerContent>
+          <D.ReloadWeb><span onClick={handleReloadWeb}>atualizar</span></D.ReloadWeb>
+
+          <D.ContainerContent>
+            <D.FirstRow>
+              <D.ContratosAtivos>
+                <h1>CONTRATOS ATIVOS</h1>
+                <span>{userData && userData.TOTAL_COINS}</span>
+                <TwoBars totalSpent={userData ? ULLTNUMBER(userData.TOTAL_SPENT, userData.VALOR_SACADO) : 0} totalValue={userData ? ULLTNUMBER(userData.TOTAL_PLATAFORMA, userData.VALOR_SACADO) : 0} />
+              </D.ContratosAtivos>
+              <D.SaldoCorrente>
+                <D.SaldoNaPlataforma>
+                  <h2>SALDO NA PLATAFORMA</h2>
+                  <span>R$ {userData ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO) : '0'}</span>
+                  <D.SaldoPlataformaDivs>
+                    <div>
+                      <h3>VALOR INVESTIMENTO</h3>
+                      <span>R$ {formatNumber(handle0AtNumberString(userData.TOTAL_SPENT))}</span>
+                    </div>
+                    <div>
+                      <h3>VALOR LUCRO</h3>
+                      <span>R$ {userData ? formatNumber(userData.LUCRO_CONTRATOS) : '0'}</span>
+                    </div>
+                    <div>
+                      <h3>SALDO DE INDICAÇÃO</h3>
+                      <span>R$ {userData && userData.TOTAL_INDICACAO ? formatNumber(userData.TOTAL_INDICACAO) : formatNumber(0)}</span>
+                    </div>
+                  </D.SaldoPlataformaDivs>
+                </D.SaldoNaPlataforma>
+              </D.SaldoCorrente>
+            </D.FirstRow>
+            <D.SecondRow>
+              <h1>DISPONÍVEL PARA SAQUE | R$  {userData ? formatNumber(userData.DISPONIVEL_SAQUE) : '0'}</h1>
+              <D.SaldoDisponivelParaSaque>
+                <D.ProgressBar>
+                  <D.ProgressFill percentage={userData ? (ULLTNUMBER(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />
+                </D.ProgressBar>
+                <D.PercentageCount>{userData ? ((ULLTNUMBER(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100).toFixed(2) : 0}%</D.PercentageCount>
+              </D.SaldoDisponivelParaSaque>
+            </D.SecondRow>
+            <D.IndiqueEGanha>
+              <p>INDIQUE E GANHE 10% DA PRIMEIRA COMPRA DO INDICADO, <span onClick={copyLink}>COPIAR LINK</span></p>
+            </D.IndiqueEGanha>
+            <D.GrapthContainer>
+              <GrapthLikeBinance />
+            </D.GrapthContainer>
+            <D.ThirdRow>
+              <h2>TABELA DE CONTRATOS</h2>
+            </D.ThirdRow>
+            <D.TabelaContainer>
+              <TabelaDeContratos dados={userData ? userData.CONTRATOS : []} />
+            </D.TabelaContainer>
+          </D.ContainerContent>
+        </D.PrincipalContent>
+
       </D.DashboardContainer>
     </SideBarBox>
   );

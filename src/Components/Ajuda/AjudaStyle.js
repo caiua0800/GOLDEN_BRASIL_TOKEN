@@ -5,7 +5,10 @@ export const AjudaContainer = styled.div`
     width: 100%;
     min-height: 100vh;
     overflow: hidden;
-    background: linear-gradient(to right, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF);
+    // background: linear-gradient(to right, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF);
+    background-image: url('textura.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
     position: relative;
     box-sizing: border-box;
     padding: 50px 30px 200px 30px;

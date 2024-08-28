@@ -130,7 +130,9 @@ export default function Compra() {
     return (
         <SideBarBox>
             <S.CompraContainer>
-                <>
+                <S.LoginBehind src='logo-golden.png' />
+
+                <S.PrincipalContent>
                     {popUpActive && (
                         <PopUp message={popUpMessage} closePopUp={handleClosePopUp} type={popUpType} />
                     )}
@@ -235,7 +237,7 @@ export default function Compra() {
                             lucroTotal: resultadoSimulacao.totalProfit
                         }} />
                     )}
-                </>
+                </S.PrincipalContent>
             </S.CompraContainer>
         </SideBarBox>
 

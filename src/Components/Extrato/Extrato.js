@@ -74,17 +74,20 @@ export default function Extrato() {
     return (
         <SideBarBox>
             <E.ExtratoContainer>
+                <E.LoginBehind src="logo-golden.png" />
+                <E.PrincipalContent>
+                    <E.ContainerTitle>
+                        <p>EXTRATO DA CONTA</p>
+                    </E.ContainerTitle>
+                    <E.ButtonContainer>
+                        <E.FilterButton onClick={() => handleFilterChange('Desde o Início')}>Desde o Início</E.FilterButton>
+                        <E.FilterButton onClick={() => handleFilterChange('7 Dias')}>7 Dias</E.FilterButton>
+                        <E.FilterButton onClick={() => handleFilterChange('15 Dias')}>15 Dias</E.FilterButton>
+                        <E.FilterButton onClick={() => handleFilterChange('1 Mês')}>1 Mês</E.FilterButton>
+                    </E.ButtonContainer>
+                    <TabelaExtrato startDate={dateRange.startDate} endDate={dateRange.endDate} />
+                </E.PrincipalContent>
 
-                <E.ContainerTitle>
-                    <p>EXTRATO DA CONTA</p>
-                </E.ContainerTitle>
-                <E.ButtonContainer>
-                    <E.FilterButton onClick={() => handleFilterChange('Desde o Início')}>Desde o Início</E.FilterButton>
-                    <E.FilterButton onClick={() => handleFilterChange('7 Dias')}>7 Dias</E.FilterButton>
-                    <E.FilterButton onClick={() => handleFilterChange('15 Dias')}>15 Dias</E.FilterButton>
-                    <E.FilterButton onClick={() => handleFilterChange('1 Mês')}>1 Mês</E.FilterButton>
-                </E.ButtonContainer>
-                <TabelaExtrato startDate={dateRange.startDate} endDate={dateRange.endDate} />
             </E.ExtratoContainer>
         </SideBarBox>
 

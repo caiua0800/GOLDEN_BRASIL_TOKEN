@@ -24,14 +24,14 @@ export default function Saque() {
 
     const handleModalSaque = () => {
 
-        if(!userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS){
+        if (!userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS) {
             alert("ENVIE OS DOCUMENTOS PARA VERIFICAÇÃO");
             return;
-        }else if(userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS){
+        } else if (userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS) {
             alert("AGUARDE A VERIFICAÇÃO DOS SEUS DOCUMENTOS");
             return;
         }
-        
+
         setModalSaque(!modalSaque);
     }
 
@@ -93,11 +93,12 @@ export default function Saque() {
     return (
         <SideBarBox>
             <S.SaqueContainer>
+                <S.LoginBehind src='logo-golden.png' />
+
                 {loading ? (
                     <Loading />
                 ) : (
-                    <>
-
+                    <S.PrincipalContent>
 
                         <S.SaqueTitle>
                             <h1>Saque</h1>
@@ -157,7 +158,7 @@ export default function Saque() {
                         {modalSaque && (
                             <Modal handleModalSaque={handleModalSaque} />
                         )}
-                    </>
+                    </S.PrincipalContent>
                 )}
             </S.SaqueContainer>
         </SideBarBox>

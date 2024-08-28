@@ -74,7 +74,7 @@ const BarText = styled.p`
     font-weight: 500;
     color: black;
     z-index: 1; // Garante que o texto fique sobre a barra
-
+    
     @media (max-width: 1000px){
         font-size: 12px;
     }

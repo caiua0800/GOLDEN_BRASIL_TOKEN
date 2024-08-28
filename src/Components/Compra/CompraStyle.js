@@ -16,17 +16,33 @@ export const CompraContainer = styled.div`
     height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
-    // background: linear-gradient(to right, #d4fcff, #d4fcff, #d4fcff, #d4fcff);
-    background: linear-gradient(to right, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF);
-
+    background-image: url('textura.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
     box-sizing: border-box;
     padding: 50px 30px 40px 30px;
     display: flex;
     flex-direction: column;
     position: relative;
 
- 
+
 `;
+
+
+export const LoginBehind = styled.img`
+    position: fixed;
+    width: 350px;
+    top: 30%; /* Você pode ajustar ou remover esta linha se quiser posicionar verticalmente de outra forma */
+    z-index: 1;
+    left: 50%;
+    opacity: 0.5;
+    transform: translateX(-50%); /* Isso centraliza a imagem horizontalmente */
+`;
+
+export const PrincipalContent = styled.div`
+    z-index: 2;
+`;
+
 
 export const CompraTitle = styled.div`
     font-size: 18px;

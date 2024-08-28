@@ -3,7 +3,9 @@ import styled from "styled-components";
 export const NewsContainer = styled.div`
     width: 100%;
     min-height: 100vh;
-    background: linear-gradient(to right, #FFFFFF, #FFFFFF, #FFFFFF);  // Fundo claro
+    background-image: url('textura.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
     box-sizing: border-box;
     padding: 50px 30px 200px 40px;
     display: flex;
@@ -15,6 +17,20 @@ export const NewsContainer = styled.div`
         justify-content: center;
         padding: 20px 10px 100px 10px;
     }
+`;
+
+export const LoginBehind = styled.img`
+    position: fixed;
+    width: 350px;
+    top: 30%; /* Você pode ajustar ou remover esta linha se quiser posicionar verticalmente de outra forma */
+    z-index: 1;
+    left: 50%;
+    opacity: 0.5;
+    transform: translateX(-50%); /* Isso centraliza a imagem horizontalmente */
+`;
+
+export const PrincipalContent = styled.div`
+    z-index: 2;
 `;
 
 export const NewsBoxes = styled.div`
@@ -31,7 +47,8 @@ export const NewsCard = styled.div`
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     border-radius: 12px;
     overflow: hidden;
-    background: #ffffff;  // Fundo do card branco
+    // background: #ffffff; 
+    background: linear-gradient(-60deg, #000000, #000000, #000022, #000000 , #000000);
 
     @media (max-width: 800px){
         width: 90%;
@@ -59,7 +76,7 @@ export const NewsImage = styled.img`
 export const NewsTitle = styled.h2`
     font-size: 24px;
     font-weight: bold;
-    color: #333333;  // Cor do texto escura
+    color: #FFFFFF;  // Cor do texto escura
     margin: 20px 10px 10px 10px;
     text-align: center;
 
@@ -72,7 +89,7 @@ export const NewsTitle = styled.h2`
 
 export const NewsBody = styled.div`
     font-size: 18px;
-    color: #333333;  // Cor do texto escura
+    color: #FFFFFF;  
     margin: 10px;
     padding: 10px 20px;
     box-sizing: border-box;
@@ -85,7 +102,7 @@ export const NewsBody = styled.div`
 
 export const Text = styled.p`
     font-size: 18px;
-    color: #666666;  // Cor do texto mais clara
+    color: #FFFFFF;  // Cor do texto mais clara
 
     @media (max-width: 800px){
         font-size: 16px;

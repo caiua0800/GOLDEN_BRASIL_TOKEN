@@ -21,6 +21,7 @@ import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
 import ForgotPasswordUsername from './Components/ForgotPassword/ForgotPasswordUsername';
 import Ajuda from './Components/Ajuda/Ajuda';
 import { createGlobalStyle } from 'styled-components';
+import Relatorio from './Components/Relatorio/Relatorio';
 
 const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar {
@@ -59,6 +60,7 @@ function App() {
             <Route path="/user" element={<PrivateRoute element={ProfilePage} />} />
             <Route path="/noticias" element={<PrivateRoute element={Noticias} />} />
             <Route path="/extrato" element={<PrivateRoute element={Extrato} />} />
+            <Route path="/relatorio" element={<PrivateRoute element={Relatorio} />} />
             <Route path="/ajuda" element={<PrivateRoute element={Ajuda} />} />
             <Route path="/ContaDeDeposito" element={<Pagina />} />
           </Routes>

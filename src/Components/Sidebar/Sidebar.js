@@ -59,6 +59,11 @@ export const Sidebar = ({ isOpen }) => {
                             <S.NavLink>EXTRATO</S.NavLink>
                         </S.NavItem>
                     </Link>
+                    <Link to="/relatorio">
+                        <S.NavItem>
+                            <S.NavLink>RELATÓRIO DE VAL.</S.NavLink>
+                        </S.NavItem>
+                    </Link>
                     <Link to="/validacao">
                         <S.NavItem>
                             <S.NavLink>VALIDAR CONTA</S.NavLink>

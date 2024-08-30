@@ -120,9 +120,10 @@ const ProfilePage = ({ setProfilePage }) => {
     }, [userData]);
 
     const toggleInput = async (inputName) => {
-        showPulse()
+
         if (inputsEnabled[inputName]) {
             try {
+                showPulse()
                 const firebaseFieldName = mapFieldNameToFirebase(inputName);
                 const response = await axios.post(`${BASE_ROUTE}${EDITAR_CLIENTE_INFO}`, {
                     docId: userData.CPF,

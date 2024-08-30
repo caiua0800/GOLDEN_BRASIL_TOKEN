@@ -273,7 +273,8 @@ export const mapFieldNameToFirebase = (fieldName) => {
         bairro: 'NEIGHBORHOOD',
         cep: 'POSTALCODE',
         cidade: 'CITY',
-        estado: 'STATE'
+        estado: 'STATE',
+        profissao: "JOBTITLE"
     };
 
     return fieldMapping[fieldName] || fieldName;
@@ -384,5 +385,23 @@ export function decrypt2(ciphertext) {
         
         console.error('Erro ao descriptografar:', error);
         return null;
+    }
+}
+
+export const handleGetNewInfo = async (data, reloadUserData) => {
+
+    try {
+        const response = axios.post(`${process.env.REACT_APP_BASE_ROUTE}${process.env.REACT_APP_EDITAR_CLIENTE_MAIS_CAMPOS_INFO}`, {
+            docId: data.docId,
+            updates: data.updates
+        }).then(res => {
+            console.log(res);
+            reloadUserData();
+        }).catch(err => {
+            console.log(err)
+        });
+
+    } catch (error) {
+        console.log(error.message);
     }
 }

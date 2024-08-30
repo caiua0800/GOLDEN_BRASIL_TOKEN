@@ -11,7 +11,7 @@ import { encrypt } from '../../assets/utils';
 import { db } from '../../database/firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
 import MensagemSchema from '../Mensagem/MensagemSchema';
-
+import Modal from '../CompletarCadastroModal/Modal'
 
 export default function Dashboard() {
   const { userData, reloadUserData } = useContext(AuthContext);
@@ -117,6 +117,8 @@ export default function Dashboard() {
       <D.DashboardContainer>
 
         <D.LoginBehind src='logo-golden.png' />
+
+        <Modal />
 
         <D.PrincipalContent>
           {messageExists && (

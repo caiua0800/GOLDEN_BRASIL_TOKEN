@@ -20,6 +20,7 @@ const ProfilePage = ({ setProfilePage }) => {
         nome: false,
         usuario: false,
         email: false,
+        profissao: false,
         contato: false,
         endereco: false,
         bairro: false,
@@ -66,6 +67,7 @@ const ProfilePage = ({ setProfilePage }) => {
         contato: <FaPencilAlt />,
         endereco: <FaPencilAlt />,
         bairro: <FaPencilAlt />,
+        profissao: <FaPencilAlt />,
         cep: <FaPencilAlt />,
         cidade: <FaPencilAlt />,
         estado: <FaPencilAlt />,
@@ -82,6 +84,7 @@ const ProfilePage = ({ setProfilePage }) => {
         email: "",
         contato: "",
         endereco: "",
+        profissao: "",
         bairro: "",
         cep: "",
         cidade: "",
@@ -93,7 +96,7 @@ const ProfilePage = ({ setProfilePage }) => {
         accountType: "",
     });
 
-    const [activeTab, setActiveTab] = useState('profile'); // Novo estado para gerenciar a aba ativa
+    const [activeTab, setActiveTab] = useState('profile'); 
 
     useEffect(() => {
         if (userData) {
@@ -103,6 +106,7 @@ const ProfilePage = ({ setProfilePage }) => {
                 email: userData.EMAIL || "",
                 contato: userData.CONTACT || "indefinido",
                 endereco: userData.ADRESS || "",
+                profissao: userData.JOBTITLE || "",
                 bairro: userData.NEIGHBORHOOD || "",
                 cep: userData.POSTALCODE || "",
                 cidade: userData.CITY || "",

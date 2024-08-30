@@ -147,7 +147,18 @@ export const LoginBehind = styled.img`
 `;
 
 
-// export const styleName = styled.div``;
+export const WhatsAppIcon = styled.img`
+    width: 80px;
+    position: fixed;
+    bottom: 50px;
+    right: 40px;
+    transition: .3s;
+    cursor: pointer;
+    
+    &:hover{
+        transform: scale(1.05);
+    }
+`;
 
 // export const styleName = styled.div``;
 

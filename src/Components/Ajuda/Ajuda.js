@@ -52,15 +52,21 @@ export default function Ajuda() {
             alert(err.message);
             console.log(err);
             hidePulse();
-
         }
-
-  
     }
+
+    const handleOpenWhatsapp = () => {
+        const phoneNumber = '5517992562727'; // Número de telefone no formato internacional
+        const message = 'Olá, estou precisando de ajuda com a plataforma!'; // Mensagem pré-definida (opcional)
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank'); 
+    };
+    
 
     return (
         <SideBarBox>
             <S.AjudaContainer>
+                <S.WhatsAppIcon onClick={handleOpenWhatsapp} src="whatsapp-icon.svg"/>
                 <S.LoginBehind src="logo-golden.png" />
                 <S.AjudaTitle>ATENDIMENTO DE DÚVIDAS</S.AjudaTitle>
 

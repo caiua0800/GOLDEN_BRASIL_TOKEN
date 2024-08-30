@@ -120,6 +120,7 @@ const ProfilePage = ({ setProfilePage }) => {
     }, [userData]);
 
     const toggleInput = async (inputName) => {
+        showPulse()
         if (inputsEnabled[inputName]) {
             try {
                 const firebaseFieldName = mapFieldNameToFirebase(inputName);
@@ -130,8 +131,11 @@ const ProfilePage = ({ setProfilePage }) => {
                 });
                 reloadUserData();
                 console.log('Campo atualizado:', response.data);
+                hidePulse()
             } catch (error) {
                 console.error('Erro ao atualizar campo:', error);
+                hidePulse()
+
             }
         }
 

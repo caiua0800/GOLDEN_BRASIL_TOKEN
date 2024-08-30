@@ -3,6 +3,7 @@ import * as S from './ModalStyle';
 import { AuthContext } from "../../context/AuthContext";
 import { professions, salarium } from './arrays'; // Importe o array de profissões
 import { handleGetNewInfo } from "../../assets/utils";
+import { usePulse } from "../../context/LoadContext";
 
 export default function Modal() {
     const { userData, reloadUserData } = useContext(AuthContext);
@@ -10,7 +11,7 @@ export default function Modal() {
     const [inputValue, setInputValue] = useState('');
     const [filteredProfessions, setFilteredProfessions] = useState([]);
     const [salario, setSalario] = useState("Selecione");
-
+    const { showPulse, hidePulse } = usePulse();
     const [newName, setNewName] = useState("");
     const [newContact, setNewContact] = useState("");
     const [newAdress, setNewAdress] = useState("");
@@ -54,6 +55,8 @@ export default function Modal() {
     };
 
     const handleVerifyComplete = async () => {
+
+        
         if (
             inputValue.trim() === "" ||
             salario === "Selecione" ||
@@ -68,7 +71,7 @@ export default function Modal() {
         ) {
             alert("Por favor, preencha todos os campos.");
         } else {
-
+            showPulse();
             var data = {
                 docId: userData.CPF,
                 updates: [
@@ -85,6 +88,7 @@ export default function Modal() {
             await handleGetNewInfo(data, reloadUserData);
             setShow(false);
             alert("Informações atualizadas com sucesso!");
+            hidePulse()
         }
     };
 

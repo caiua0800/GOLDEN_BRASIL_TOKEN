@@ -157,7 +157,7 @@ const ProfilePage = ({ setProfilePage }) => {
         }));
     };
 
-    const handleFileChange = (event) => {
+    const handleFileChange = async (event) => {
         const file = event.target.files[0];
         console.log('Arquivo selecionado:', file);
         showPulse();
@@ -168,32 +168,21 @@ const ProfilePage = ({ setProfilePage }) => {
             uploadBytes(storageRef, file)
                 .then(() => getDownloadURL(storageRef))
                 .then((downloadURL) => {
-                    // Atualiza a URL da foto no backend
-                    axios.post('http://localhost:4000/clientes/editarInfoClient', {
+                    axios.post(`${BASE_ROUTE}${REACT_APP_EDITAR_CLIENTE_MAIS_CAMPOS_INFO}`, {
                         docId: userData.CPF,
-                        field: 'URLFOTOPERFIL',
-                        newValue: downloadURL
+                        updates: [
+                            {field: "URLFOTOPERFIL", fieldNewValue: downloadURL},
+                            {field: "CONTEMFOTOPERFIL", fieldNewValue: true}
+                        ]
+                    }).then(res => {
+                        console.log(res);
+                        hidePulse();
+                        reloadUserData();
+                    }).catch(err => {
+                        console.log(err);
+                        hidePulse();
+                        reloadUserData();
                     })
-                        .then(() => {
-                            return axios.post('http://localhost:4000/clientes/editarInfoClient', {
-                                docId: userData.CPF,
-                                field: 'CONTEMFOTOPERFIL',
-                                newValue: true
-                            });
-                        })
-                        .then(() => {
-                            setInputValues(prev => ({
-                                ...prev,
-                                perfilPictureUrl: downloadURL
-                            }));
-                            hidePulse();
-                            reloadUserData();
-                            console.log('Foto de perfil atualizada com sucesso!');
-                        })
-                        .catch(error => {
-                            hidePulse();
-                            console.error('Erro ao atualizar informações do cliente:', error);
-                        });
                 })
                 .catch(error => {
                     hidePulse();

@@ -108,7 +108,6 @@ export default function Dashboard() {
     }
   }
 
-
   if (loading) return null;
 
 
@@ -168,7 +167,7 @@ export default function Dashboard() {
                 <D.ProgressBar>
                   <D.ProgressFill percentage={userData ? (ULLTNUMBER(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />
                 </D.ProgressBar>
-                <D.PercentageCount>{userData ? ((ULLTNUMBER(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100).toFixed(2) : 0}%</D.PercentageCount>
+                <D.PercentageCount>{userData ? ((userData.DISPONIVEL_SAQUE / parseFloat(userData.TOTAL_PLATAFORMA)) * 100).toFixed(2) : 0}%</D.PercentageCount>
               </D.SaldoDisponivelParaSaque>
             </D.SecondRow>
             <D.IndiqueEGanha>

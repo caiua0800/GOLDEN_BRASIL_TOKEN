@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import * as S from './CadastroPageStyle';
-import assets from "../../assets/assets";
 import { formatCPF, formatCEP, formatTelefone, removeFormatting } from "../../assets/utils";
 import axios from "axios";
 import MessageBox from "./MessageBox";
-
+import { usePulse } from "../../context/LoadContext";
 
 const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE;
 const CRIAR_CLIENTE = process.env.REACT_APP_CRIAR_CLIENTE;
@@ -26,9 +25,12 @@ export default function CadastroPage() {
     const [senha, setSenha] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('');
     const [resposta, setResposta] = useState(null); // Estado para a resposta do servidor
+    const { showPulse, hidePulse } = usePulse()
+
 
     // Função para verificar se todos os campos foram preenchidos e senhas coincidem
     const handleCadastro = async () => {
+        
         if (!nome || !cpf || !dataNascimento || !telefone || !pais || !endereco || !bairro || !cidade || !cep || !usuario || !senha || !confirmarSenha || !email) {
             setResposta({ message: 'Por favor, preencha todos os campos.', type: 'error' });
             return;
@@ -38,6 +40,8 @@ export default function CadastroPage() {
             setResposta({ message: 'As senhas não coincidem.', type: 'error' });
             return;
         }
+
+        showPulse();
 
         const clientData = {
             CPF: removeFormatting('cpf', cpf),
@@ -57,8 +61,10 @@ export default function CadastroPage() {
         try {
             const response = await axios.post(`${BASE_ROUTE}${CRIAR_CLIENTE}`, clientData);
             setResposta({ message: response.data.message || 'Usuário criado com sucesso!', type: 'success' });
+            hidePulse()
             setTimeout(() => { window.location.href = "/"; }, 2000); // Redireciona após 2 segundos
         } catch (error) {
+            hidePulse()
             setResposta({ message: error.response?.data?.error || 'Erro ao criar cadastro. Por favor, tente novamente mais tarde.', type: 'error' });
         }
     };
@@ -97,7 +103,7 @@ export default function CadastroPage() {
                 </S.CaixaDeInformacao>
 
                 <S.CaixaDeInformacao>
-                    <h2>Sua telefone de contato</h2>
+                    <h2>Seu telefone de contato</h2>
                     <input
                         type="text"
                         placeholder="(00) 99999-9999"

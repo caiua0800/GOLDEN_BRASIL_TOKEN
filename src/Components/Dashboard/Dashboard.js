@@ -27,7 +27,6 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-
     if (userData) {
       setLoading(false);
     } else {
@@ -35,27 +34,20 @@ export default function Dashboard() {
     }
   }, [userData, reloadUserData, showPulse, hidePulse]);
 
-  const handleReloadWeb = () => {
-    loadUserData();
-  }
-
+  const handleReloadWeb = () => { loadUserData(); }
 
   const copyLink = () => {
     if (userData?.CPF) {
       const encryptedCPF = encrypt(userData.CPF);
-
       // Define a base URL
       const baseUrl = 'https://clientes-golden.web.app/';
-
       // Constrói o link final
       const link = `${baseUrl}cadastroIndicacao?id=${encryptedCPF}`;
-
       // Cria um elemento de input temporário para copiar o texto
       const tempInput = document.createElement('input');
       tempInput.value = link;
       document.body.appendChild(tempInput);
       tempInput.select();
-
       try {
         // Tenta copiar o texto
         const successful = document.execCommand('copy');
@@ -65,18 +57,13 @@ export default function Dashboard() {
         console.error('Erro ao copiar o link: ', err);
         alert('Erro ao copiar o link.');
       }
-
       // Remove o elemento temporário
       document.body.removeChild(tempInput);
     } else {
       alert('CPF do usuário não encontrado.');
     }
   };
-
-
-
-
-
+  //quando quiseres uma maçã, não a peças, cultive e a colha, pois se pedires...
   useEffect(() => {
     const fetchMensagens = async () => {
       try {
@@ -84,7 +71,6 @@ export default function Dashboard() {
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           const enviarPara = data.ENVIAR_PARA || [];
-
           enviarPara.forEach((item) => {
             if (item.CPF === userData?.CPF || item.CPF === '*') {
               setMessageExists(data);
@@ -96,7 +82,6 @@ export default function Dashboard() {
         console.error("Erro ao buscar mensagens: ", error);
       }
     };
-
     fetchMensagens();
   }, [userData]);
 
@@ -110,15 +95,11 @@ export default function Dashboard() {
 
   if (loading) return null;
 
-
   return (
     <SideBarBox>
       <D.DashboardContainer>
-
         <D.LoginBehind src='logo-golden.png' />
-
         <Modal />
-
         <D.PrincipalContent>
           {messageExists && (
             <MensagemSchema data={messageExists} />
@@ -130,9 +111,7 @@ export default function Dashboard() {
           <D.SaldacoesUsuario>
             <span>OLÁ {abreviarNome((userData?.NAME || '').toUpperCase())}</span>
           </D.SaldacoesUsuario>
-
           <D.ReloadWeb><span onClick={handleReloadWeb}>atualizar</span></D.ReloadWeb>
-
           <D.ContainerContent>
             <D.FirstRow>
               <D.ContratosAtivos>
@@ -184,7 +163,6 @@ export default function Dashboard() {
             </D.TabelaContainer>
           </D.ContainerContent>
         </D.PrincipalContent>
-
       </D.DashboardContainer>
     </SideBarBox>
   );

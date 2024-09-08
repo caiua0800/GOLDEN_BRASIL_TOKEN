@@ -17,7 +17,8 @@ export const ModalContainer = styled.div`
 export const ModalBox = styled.div`
   width: 80%;
   box-sizing: border-box;
-  background-color: rgba(255,255, 255, 0.9);
+  // background-color: rgba(255,255, 255, 1);
+  background: linear-gradient(-70deg, #B17D2A, #B17D2A, #B17D2A, #E6AA3A, #B17D2A, #B17D2A, #B17D2A);
   position: relative;
   box-shadow: 3px 3px 2px rgba(0,0,0,0.7);
   padding: 20px 30px;
@@ -73,6 +74,11 @@ export const ConfirmacaoDeCadastro = styled.div`
     margin-top: 40px;
     flex-direction: column;
 
+    span{
+      color: white;
+      font-weight: 600;
+    }
+
     button{
         width: 100%;
         margin-top: 20px;
@@ -113,6 +119,7 @@ export const ModalTitle = styled.div`
   h1{
     margin: 0;
     font-weight: 500;
+    color: #FFFFFF;
     font-size: 22px;
   }
 `;
@@ -131,19 +138,27 @@ export const ValorASerSacado = styled.div`
     border: 0;
     box-shadow: 3px 3px 2px rgba(0,0,0,0.3);
     box-sizing: border-box;
-    padding-left: 20px;
+    text-align: center;
+    color: white;
+    font-weight: 800;
+    font-size: 20px;
+    background: linear-gradient(-70deg, #000000, #000000, #000000, #262323, #000000, #000000, #000000);
   }
 
   h2,h3, h4{
     margin: 0;
-    font-weight: 500;
-    text-shadow: 2px 2px 1px rgba(0,0,0,0.2);
+    font-weight: 600;
     font-size: 18px;
+
   }
 
   h2{
     margin-top: 20px;
-    color: #003566;
+    color: #FFFFFF;
+  }
+
+  h3{
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
   }
 
   h4{

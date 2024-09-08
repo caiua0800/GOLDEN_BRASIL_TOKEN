@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import * as S from './SaqueStyle';
-import { Sidebar } from "../Sidebar/Sidebar";
 import assets from "../../assets/assets";
 import { formatNumber } from "../../assets/utils";
 import Modal from "./SaqueModal/Modal";
@@ -9,20 +8,22 @@ import { AuthContext } from "../../context/AuthContext";
 import { db } from "../../database/firebaseConfig"; // Importe a configuração do Firebase
 import { doc, getDoc } from 'firebase/firestore';
 import SideBarBox from "../Sidebar/SideBarBox";
+import { passou365Dias } from "../../assets/utils";
 
 export default function Saque() {
-    const [sideBarState, setSideBarState] = useState(false);
+
     const [modalSaque, setModalSaque] = useState(false);
     const [loading, setLoading] = useState(true); // Estado de carregamento
     const [diasDeSaque, setDiasDeSaque] = useState([]);
     const [mostrarBotaoSaque, setMostrarBotaoSaque] = useState(false);
     const { userData } = useContext(AuthContext);
 
-    const handleSidebar = () => {
-        setSideBarState(!sideBarState);
-    }
-
     const handleModalSaque = () => {
+
+        if (!mostrarBotaoSaque) {
+            alert("Saque indisponível");
+            return;
+        }
 
         if (!userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS) {
             alert("ENVIE OS DOCUMENTOS PARA VERIFICAÇÃO");
@@ -94,12 +95,10 @@ export default function Saque() {
         <SideBarBox>
             <S.SaqueContainer>
                 <S.LoginBehind src='logo-golden.png' />
-
                 {loading ? (
                     <Loading />
                 ) : (
                     <S.PrincipalContent>
-
                         <S.SaqueTitle>
                             <h1>Saque</h1>
                         </S.SaqueTitle>
@@ -135,26 +134,23 @@ export default function Saque() {
                                     <h2>LUCRO À RECEBER</h2>
                                     <span>R$ {userData && (userData.VALOR_A_RECEBER ? formatNumber(userData.VALOR_A_RECEBER) : 0)}</span>
                                 </S.WalletValue>
-                                {diasDeSaque.length > 0 && (
-                                    <S.DiasDeSaque>
-                                        <h2>DIAS PARA REALIZAR SAQUE</h2>
-                                        <div className="diasContainer">
-                                            {diasDeSaque.map(dia => (
-                                                <S.Dia key={dia}>
-                                                    <span>{dia < 10 ? `0${dia}` : dia}</span>
-                                                </S.Dia>
-                                            ))}
-                                        </div>
-                                    </S.DiasDeSaque>
-                                )}
-                                {mostrarBotaoSaque && (
-                                    <S.RealizarSaqueBtn>
-                                        <button onClick={handleModalSaque}>REALIZAR SAQUE</button>
-                                    </S.RealizarSaqueBtn>
-                                )}
+                                <S.RealizarSaqueBtn>
+                                    <button onClick={handleModalSaque}>REALIZAR SAQUE</button>
+                                </S.RealizarSaqueBtn>
+                                <S.InformacoesSobreSaque>
+                                    <p>
+                                        As solicitações de saques são feitas no <span>aniversário de 3 meses </span>
+                                        da primeira valorização de cada compra, nessa data se abrirá
+                                        uma janela de solicitação saque por <span>48 horas</span> onde o USUÁRIO
+                                        definirá se efetua a solicitação de saque ou não, para concluir
+                                        a solicitação da compra você deve ter acumulado <span>R$ 150,00.</span>
+                                        Os pagamentos das solicitações feitas serão efetuadas a partir
+                                        do  <span>dia 01 do mês subsequente</span>, caso não seja dia útil será efetuado
+                                        nos próximos dias úteis subsequentes.
+                                    </p>
+                                </S.InformacoesSobreSaque>
                             </S.WalletValues>
                         </S.CentralizeWallet>
-
                         {modalSaque && (
                             <Modal handleModalSaque={handleModalSaque} />
                         )}
@@ -162,6 +158,5 @@ export default function Saque() {
                 )}
             </S.SaqueContainer>
         </SideBarBox>
-
     );
 }

@@ -224,5 +224,36 @@ export const Dia = styled.div`
     }
 `;
 
+export const InformacoesSobreSaque = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    box-sizing: border-box;
+    padding: 15px;
+    opacity: 0.7;
+    background: linear-gradient(-70deg, #ffc300, #ffdd00, #ffc300);
+    box-shadow: 8px 8px 1px rgba(0,0,0,0.5);
+    transition: .3s;
+
+    &:hover{
+        opacity: 0.9;
+    }
+
+    p{
+        margin: 0;
+        text-align: justify;
+        color: rgba(0,0,0,0.6);
+    }
+
+    span{
+        font-weight: 600;
+    }
+`;
+
 // export const nome = styled.div``;
+
+// export const nome = styled.div``;
+
 

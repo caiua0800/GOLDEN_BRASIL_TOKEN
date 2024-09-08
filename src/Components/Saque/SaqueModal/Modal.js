@@ -7,6 +7,7 @@ import { usePulse } from "../../../context/LoadContext";
 import axios from "axios";
 
 
+
 const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE
 const CRIAR_SAQUE = process.env.REACT_APP_CRIAR_SAQUE
 
@@ -17,13 +18,14 @@ export default function Modal({ handleModalSaque }) {
     const [senha, setSenha] = useState('');
     const disponivelSaque = userData && userData.DISPONIVEL_SAQUE ? parseFloat(userData.DISPONIVEL_SAQUE) : 0;
     const valorSolicitadoNumber = parseFloat(valorSolicitado.replace(',', '.')) || 0;
-    const valorRestante = Math.max(disponivelSaque - valorSolicitadoNumber, 0); 
+    const valorRestante = Math.max(disponivelSaque - valorSolicitadoNumber, 0);
     const { showPulse, hidePulse } = usePulse()
     const [valorMinimo, serValorMinimo] = useState(25)
+    const taxa = 0.04;
 
     let corSolicitado;
     if (valorSolicitadoNumber < disponivelSaque) {
-        corSolicitado = 'green';
+        corSolicitado = '#4dff00';
     } else if (valorSolicitadoNumber === disponivelSaque) {
         corSolicitado = 'blue';
     } else {
@@ -40,12 +42,12 @@ export default function Modal({ handleModalSaque }) {
     const handleSolicitarSaque = async () => {
 
 
-        if(parseFloat(userData.DISPONIVEL_SAQUE) < parseFloat(valorSolicitado)){
+        if (parseFloat(userData.DISPONIVEL_SAQUE) < parseFloat(valorSolicitado)) {
             alert(`Valor insuficiente.`)
             return;
         }
 
-        if(parseFloat(valorSolicitado) < 25){
+        if (parseFloat(valorSolicitado) < 25) {
             alert(`O valor mínimo para saque é de R$${valorMinimo}`)
             return;
         }
@@ -64,10 +66,10 @@ export default function Modal({ handleModalSaque }) {
         }
         try {
             const response = await axios.post(`${BASE_ROUTE}${CRIAR_SAQUE}`, requestData);
-            console.log('solicitação de saque feita', response)        
+            console.log('solicitação de saque feita', response)
             hidePulse()
             reloadUserData();
-            setTimeout(()=> {alert('solicitação de saque feita!');},1000);
+            setTimeout(() => { alert('solicitação de saque feita!'); }, 1000);
         } catch (error) {
             hidePulse()
             alert("Erro ao atualizar saque: ", error);
@@ -94,17 +96,17 @@ export default function Modal({ handleModalSaque }) {
                         value={valorSolicitado}
                         onChange={handleInputChange}
                     />
-                    <h2>DISPONÍVEL: U${formatNumber(disponivelSaque)}</h2>
+                    <h2>DISPONÍVEL: {(disponivelSaque).toFixed(2)}</h2>
                     <h3 style={{ color: corSolicitado }}>
-                        SOLICITADO: U${formatNumber(valorSolicitadoNumber)}
+                        SOLICITADO: R${formatNumber(valorSolicitadoNumber)}
                     </h3>
-                    <h4>
-                        RESTANTE: U${formatNumber(valorRestante)}
-                    </h4>
+                    <h3 style={{ color: corSolicitado }}>
+                        VALOR A RECEBER: R${formatNumber((valorSolicitadoNumber - valorSolicitadoNumber*taxa))}
+                    </h3>
                 </M.ValorASerSacado>
 
                 <M.ConfirmacaoDeCadastro>
-                    <span>CONFIRME SEU LOGIN PARA REALIZAR O SAQUE</span>
+                    <span>CONFIRME SEU CADASTRO PARA REALIZAR O SAQUE</span>
                     <M.LoginBox>
                         <input
                             placeholder="usuario"

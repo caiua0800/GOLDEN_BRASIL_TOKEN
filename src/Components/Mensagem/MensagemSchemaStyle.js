@@ -109,6 +109,26 @@ export const MensagemVerBox = styled.div`
         padding-bottom: 20px;
         transform: scale(1.05);
     }
+
+    @media (max-width: 1000px){
+        width: 90%;
+        right: 10px;
+        bottom: 10px;
+
+        h1{
+            font-size: 16px;
+        }
+
+        p{
+            font-size: 14px;
+        }
+
+        div{
+            h5{
+                font-size: 10px;
+            }
+        }
+    }
 `;
 
 

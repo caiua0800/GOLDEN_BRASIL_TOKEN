@@ -26,13 +26,12 @@ import Relatorio from './Components/Relatorio/Relatorio';
 const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar {
     width: 10px;
-    // border: 1px solid rgb(200,200,200);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #000000, #B17D2A, #E6AA3A);
-    border-radius: 6px;
-    border: 1px solid white;
+    background: linear-gradient(to bottom, #d7dbe0, #c5cdd6, #b3bec9);
+    border-radius: 0px;
+    // border: 1px solid white;
   }
 `;
 

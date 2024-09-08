@@ -30,14 +30,14 @@ export const ModalBox = styled.div`
     @media (max-width: 1000px) {
       width: 100%;
       height: 100%;
-      padding: 10px 20px;
+      padding: 10px 20px 120px 20px;
     }
 `;
 
 export const FecharModalBtn = styled.div`
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
 
   span {
     cursor: pointer;

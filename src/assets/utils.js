@@ -405,3 +405,13 @@ export const handleGetNewInfo = async (data, reloadUserData) => {
         console.log(error.message);
     }
 }
+
+export function passou365Dias(dataString) {
+    const [data, hora] = dataString.split(" ");
+    const [dia, mes, ano] = data.split("-");
+    const dataInicial = new Date(`${ano}-${mes}-${dia}T${hora}`);
+    const dataAtual = new Date();
+    const diferençaMilliseconds = dataAtual - dataInicial;
+    const diferençaDias = diferençaMilliseconds / (1000 * 60 * 60 * 24);
+    return diferençaDias >= 365;
+}

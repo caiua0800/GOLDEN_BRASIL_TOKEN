@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 export const ModalContainer = styled.div`
     width: 100%;
-    z-index: 9999999999999;
-    height: 100%;
+    z-index: 99999999;
+    height: 100vh;
     position: fixed;
     background-color: rgba(0,0,0,0.6);
     display: flex;
@@ -12,6 +12,7 @@ export const ModalContainer = styled.div`
     align-items: center;
     top: 0;
     left: 0;
+    box-sizing: border-box;
 `;
 
 export const ModalContent = styled.div`
@@ -42,7 +43,16 @@ export const ModalContent = styled.div`
         text-align: center;
         color: #FFFFFF;
         font-size: 28px;
+    }
 
+    @media (max-width: 1000px){
+        overflow-x: hidden;
+        width: 100%; 
+        border-radius: 0;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 80px 40px;
+        justify-content: start;
     }
 `;
 
@@ -77,6 +87,8 @@ export const JobSelectorDiv = styled.div`
     display: flex;
     flex-direction: column;
     gap: 5px;
+    box-sizing: border-box;
+    overflow-x: hidden;
 
     p{
         margin: 0;
@@ -90,6 +102,14 @@ export const JobSelectorDiv = styled.div`
         height: 30px;
         border: 0;
         padding-left: 20px;
+    }
+
+    @media (max-width: 1000px){
+
+        align-items: center;
+        input, select{
+            width: 250px;
+        }
     }
 `;
 

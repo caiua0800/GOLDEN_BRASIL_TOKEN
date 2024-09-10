@@ -6,7 +6,7 @@ import { formatCPF, gerarStringAleatoria, GeneratePIX_MP, separarNome, GenerateB
 import axios from "axios";
 import Loading from "../../Loading/Loader";
 import { db } from "../../../database/firebaseConfig";
-import { doc, getDoc } from "../../../database/firebaseConfig";
+import { doc, getDoc, updateDoc } from "../../../database/firebaseConfig";
 const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE;
 const CRIAR_CONTRATO = process.env.REACT_APP_CRIAR_CONTRATO;
 const GERAR_PIX = process.env.REACT_APP_GERAR_PIX;
@@ -40,23 +40,37 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-            
+
             const lastIdDoc = docSnap.data().VALOR;
             if (lastIdDoc) {
-            
                 setLastId(parseFloat(lastIdDoc)); // Atualiza o valor do dólar
             }
-        
+
         } else {
             console.log("Documento não encontrado!");
         }
     };
 
+    const updateLastDoc = async () => {
+        const docRef = doc(db, "SYSTEM_VARIABLES", "CONTRATOID");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const lastDocId = docSnap.data().VALOR;
+            const newValue = (parseInt(lastDocId) + 1).toString();
+            await updateDoc(docRef, { VALOR: newValue });
+
+            console.log("VALOR atualizado para:", newValue);
+        } else {
+            console.log("O documento não existe.");
+        }
+    }
+
     // UseEffect para buscar o valor do dólar quando o componente for montado
     useEffect(() => {
         fetchDolarValue();
         fetchLastId();
-        
+
     }, []);
 
 
@@ -73,10 +87,10 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
             const response = await GeneratePIX_MP(data);
             const ticket = response.data.point_of_interaction.transaction_data.ticket_url;
             console.log(ticket);
-            return ticket; 
+            return ticket;
         } catch (error) {
             console.log("Erro ao gerar PIX: ", error);
-            return null; 
+            return null;
         }
     }
 
@@ -84,10 +98,10 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
         try {
             const response = await GenerateBOLETO_MP(data);
             const ticket = response.data.transaction_details.external_resource_url;
-            return ticket; 
+            return ticket;
         } catch (error) {
             console.log("Erro ao gerar BOLETO: ", error);
-            return null; 
+            return null;
         }
     }
 
@@ -100,7 +114,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
         if (userData) {
             setLoading(true)
 
-            if((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)) > userData.TOTAL_INDICACAO && paymentMethod === "INDICACAO"){
+            if ((parseFloat(modalData.valorPorContrato) * parseFloat(modalData.qttContratos)) > userData.TOTAL_INDICACAO && paymentMethod === "INDICACAO") {
                 setLoading(false)
                 alert("VOCÊ NÃO TEM DINHEIRO DE INDICAÇÃO O SUFICIENTE");
                 return;
@@ -125,8 +139,8 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                 description: `Compra de ${modalData.qttContratos} para ${userData.CPF}`,
                 paymentMethodId: paymentMethod.toLowerCase(), // Use o valor do estado paymentMethod
                 email: userData.EMAIL,
-                first_name:separeted_name[0],
-                last_name:separeted_name[1],
+                first_name: separeted_name[0],
+                last_name: separeted_name[1],
                 identificationType: "CPF",
                 number: '075.411.521-61'
             }
@@ -134,7 +148,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
             var ticket = null;
             var indicacao = false;
 
-            switch(paymentMethod){
+            switch (paymentMethod) {
                 case "PIX":
                     ticket = await handlePostPIX(mp_data_pix);
                     break;
@@ -159,7 +173,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                     COINS: parseFloat(modalData.qttContratos),
                     COINVALUE: parseFloat(modalData.valorPorContrato),
                     CURRENTINCOME: "0",
-                    IDCOMPRA: lastId ? (lastId+1).toString() : gerarStringAleatoria(),
+                    IDCOMPRA: lastId ? (lastId + 1).toString() : gerarStringAleatoria(),
                     MAXIMUMNUMBEROFDAYSTOYIELD: "36",
                     MAXIMUMQUOTAYIELD: "150",
                     RENDIMENTO_ATUAL: 0,
@@ -181,6 +195,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                 handleModalCompra();
                 reloadUserData();
                 setLoading(false);
+                await updateLastDoc();
 
             } catch (error) {
                 console.error("Erro ao adicionar contrato:", error);
@@ -193,7 +208,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
     };
 
     const handlePaymentMethodChange = (event) => {
-        setPaymentMethod(event.target.value); 
+        setPaymentMethod(event.target.value);
         console.log(event.target.value)
     };
 

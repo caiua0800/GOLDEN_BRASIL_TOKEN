@@ -69,11 +69,11 @@ export const Sidebar = ({ isOpen }) => {
                             <S.NavLink>VALIDAR CONTA</S.NavLink>
                         </S.NavItem>
                     </Link> */}
-                    <Link to="/ajuda">
+                    {/* <Link to="/ajuda">
                         <S.NavItem>
                             <S.NavLink>AJUDA</S.NavLink>
                         </S.NavItem>
-                    </Link>
+                    </Link> */}
 
                 </S.Mapper>
 

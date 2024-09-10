@@ -60,7 +60,7 @@ function App() {
             <Route path="/noticias" element={<PrivateRoute element={Noticias} />} />
             <Route path="/extrato" element={<PrivateRoute element={Extrato} />} />
             <Route path="/relatorio" element={<PrivateRoute element={Relatorio} />} />
-            <Route path="/ajuda" element={<PrivateRoute element={Ajuda} />} />
+            {/* <Route path="/ajuda" element={<PrivateRoute element={Ajuda} />} /> */}
             <Route path="/ContaDeDeposito" element={<Pagina />} />
           </Routes>
         </Router>

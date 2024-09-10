@@ -30,6 +30,7 @@ const ProfilePage = ({ setProfilePage }) => {
         agency: false,
         account: false,
         beneficiario: false,
+        bank: false,
         keyPix: false,
         accountType: false,
     });
@@ -41,6 +42,7 @@ const ProfilePage = ({ setProfilePage }) => {
             account: true,
             beneficiario: true,
             keyPix: true,
+            bank: true,
             accountType: true,
         })
         setAccountInputEnebled(false)
@@ -52,6 +54,7 @@ const ProfilePage = ({ setProfilePage }) => {
             account: false,
             beneficiario: false,
             keyPix: false,
+            bank: false,
             accountType: false,
         })
         setAccountInputEnebled(true)
@@ -73,6 +76,7 @@ const ProfilePage = ({ setProfilePage }) => {
         estado: <FaPencilAlt />,
         agency: <FaPencilAlt />,
         account: <FaPencilAlt />,
+        bank: <FaPencilAlt />,
         beneficiario: <FaPencilAlt />,
         keyPix: <FaPencilAlt />,
         accountType: <FaPencilAlt />,
@@ -90,6 +94,7 @@ const ProfilePage = ({ setProfilePage }) => {
         cidade: "",
         estado: "",
         agency: "",
+        bank: "",
         account: "",
         beneficiario: "",
         keyPix: "",
@@ -111,6 +116,7 @@ const ProfilePage = ({ setProfilePage }) => {
                 cep: userData.POSTALCODE || "",
                 cidade: userData.CITY || "",
                 agency: userData.AGENCY || "",
+                bank: userData.BANK || "",
                 account: userData.ACCOUNT || "",
                 beneficiario: userData.BENEFICIARIO || "",
                 keyPix: userData.KEYPIX || "",
@@ -228,6 +234,11 @@ const ProfilePage = ({ setProfilePage }) => {
                         field: "ACCOUNTTYPE",
                         fieldNewValue: inputValues["accountType"]
                     }
+                    ,
+                    {
+                        field: "BANK",
+                        fieldNewValue: inputValues["bank"]
+                    }
                 ]
             })
 
@@ -278,7 +289,7 @@ const ProfilePage = ({ setProfilePage }) => {
                             <h4>Informações do Perfil</h4>
                             <U.Info>
                                 {Object.keys(inputValues)
-                                    .filter(key => !['agency', 'account', 'beneficiario', 'keyPix', 'accountType'].includes(key))
+                                    .filter(key => !['agency', 'account', 'beneficiario', 'keyPix', 'accountType', 'bank'].includes(key))
                                     .map(key => (
                                         <U.InfoBox key={key}>
                                             <h3>{key.charAt(0).toUpperCase() + key.slice(1)}: </h3>
@@ -306,6 +317,16 @@ const ProfilePage = ({ setProfilePage }) => {
                             ) : (
                                 <U.SaveAccountHandler onClick={handleAccountInputDisable}>SALVAR</U.SaveAccountHandler>
                             )}
+                            <U.InfoBox>
+                                <h3>Banco:</h3>
+                                <input
+                                    placeholder='Banco'
+                                    disabled={!inputsEnabled["bank"]}
+                                    value={inputValues["bank"]}
+                                    onChange={(e) => handleInputChange("bank", e.target.value)}
+                                />
+                            </U.InfoBox>
+
                             <U.InfoBox>
                                 <h3>Agência:</h3>
                                 <input

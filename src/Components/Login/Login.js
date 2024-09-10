@@ -12,6 +12,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showError, setShowError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { login, error, userData, setUserData } = useContext(AuthContext);
   const { showPulse, hidePulse } = usePulse();
@@ -28,7 +29,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     const storedUserData = localStorage.getItem('userData');
-    if(storedUserData){
+    if (storedUserData) {
       setUserData(JSON.parse(storedUserData))
     }
   }, [])
@@ -66,12 +67,16 @@ const LoginPage = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <Styles.Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <Styles.InputPass>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button type='button' onClick={() => { setShowPassword(!showPassword) }}>{showPassword ? <img src='opened-eye.svg' /> :<img src='closed-eye.svg' /> }</button>
+          </Styles.InputPass>
+
           <Styles.forgotPassLinky onClick={() => { window.location.href = "/recover" }}>Esqueceu a senha?</Styles.forgotPassLinky>
           <Styles.SubmitButton type="submit">Login</Styles.SubmitButton>
           <Styles.singUpLink>Não possui cadastro? <a onClick={() => { window.location.href = "/cadastro" }}>cadastre-se já</a> </Styles.singUpLink>

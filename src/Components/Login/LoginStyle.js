@@ -58,6 +58,46 @@ export const Input = styled.input`
   }
 `;
 
+export const InputPass = styled.div`
+  background-color: #444444;
+  display: flex;
+  height: 40px;
+  box-sizing: border-box;
+  align-items: center;
+  position:relative;
+
+  button{
+    height: 20px;
+    border: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+
+    img{
+      width: 20px;
+    }
+  }
+
+  input{
+    background-color: #444444;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    color: #ffffff;
+    font-size: 16px;
+    width: 100%;
+
+    &::placeholder {
+      color: #bbbbbb;
+    }
+  }
+`;
+
 export const SubmitButton = styled.button`
   background-color: #6e6eff;
   border: none;
@@ -73,14 +113,6 @@ export const SubmitButton = styled.button`
   }
 `;
 
-// export const SignUpLink = styled(Link)`
-//   color: #ffffff;
-//   font-size: 14px;
-//   text-decoration: underline;
-//   cursor: pointer;
-//   margin-top: 20px;
-//   display: block;
-// `;
 
 export const SignUpText = styled.span`
   text-decoration: none;
@@ -150,7 +182,7 @@ export const singUpLink = styled.span`
 
 export const forgotPassLinky = styled.a`
   margin: 0;
-  margin-top: -10px;
+  margin-top: 10px;
   margin-bottom: 10px;
   font-size: 12px;
   color: rgba(255, 255, 255, 0.5);

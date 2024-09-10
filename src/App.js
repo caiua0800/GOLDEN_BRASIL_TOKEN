@@ -52,7 +52,7 @@ function App() {
             <Route path="/cadastroIndicacao" element={<CadastroPageIndicacao />} />
             <Route path="/recover" element={<ForgotPassword />} />
             <Route path="/recoverByUsername" element={<ForgotPasswordUsername />} />
-            <Route path="/validacao" element={<PrivateRoute element={Validacao} />} />
+            {/* <Route path="/validacao" element={<PrivateRoute element={Validacao} />} /> */}
             <Route path="/dashboard" element={<PrivateRoute element={Dashboard} />} />
             <Route path="/novacompra" element={<PrivateRoute element={Compra} />} />
             <Route path="/saque" element={<PrivateRoute element={Saque} />} />

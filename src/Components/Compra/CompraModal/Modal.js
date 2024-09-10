@@ -19,6 +19,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
     const [dolarValue, setDolarValue] = useState(5.30);
     const { userData } = useContext(AuthContext);
     const [paymentMethod, setPaymentMethod] = useState('PIX'); // Estado para método de pagamento
+    const [lastId, setLastId] = useState(null)
 
     const fetchDolarValue = async () => {
         const docRef = doc(db, "SYSTEM_VARIABLES", "TOKEN");
@@ -34,9 +35,28 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
         }
     };
 
+    const fetchLastId = async () => {
+        const docRef = doc(db, "SYSTEM_VARIABLES", "CONTRATOID");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            
+            const lastIdDoc = docSnap.data().VALOR;
+            if (lastIdDoc) {
+            
+                setLastId(parseFloat(lastIdDoc)); // Atualiza o valor do dólar
+            }
+        
+        } else {
+            console.log("Documento não encontrado!");
+        }
+    };
+
     // UseEffect para buscar o valor do dólar quando o componente for montado
     useEffect(() => {
         fetchDolarValue();
+        fetchLastId();
+        
     }, []);
 
 
@@ -139,7 +159,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                     COINS: parseFloat(modalData.qttContratos),
                     COINVALUE: parseFloat(modalData.valorPorContrato),
                     CURRENTINCOME: "0",
-                    IDCOMPRA: gerarStringAleatoria(),
+                    IDCOMPRA: lastId ? (lastId+1).toString() : gerarStringAleatoria(),
                     MAXIMUMNUMBEROFDAYSTOYIELD: "36",
                     MAXIMUMQUOTAYIELD: "150",
                     RENDIMENTO_ATUAL: 0,

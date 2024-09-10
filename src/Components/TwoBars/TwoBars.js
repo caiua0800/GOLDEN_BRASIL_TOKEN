@@ -12,13 +12,13 @@ const TwoBars = ({ totalSpent, totalValue }) => {
 
     return (
         <ParentContainer>
-            <h6>INVESTIMENTO</h6>
+            <h6>COMPRA</h6>
             <HorizontalProgressBar
                 percentage={spentPercentage}
                 color="#007bff"
                 hoverColor="#71c2ff"
             />
-            <h6>VALORIZAÇÃO</h6>
+            <h6>LUCRO</h6>
             <HorizontalProgressBar
                 percentage={profitPercentage}
                 color={profitColor}

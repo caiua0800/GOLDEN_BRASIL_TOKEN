@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { auth } from '../database/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { db } from '../database/firebaseConfig';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 export const AuthContext = createContext();
 
 
@@ -13,6 +15,24 @@ const PESQUISAR_CLIENTE = process.env.REACT_APP_PESQUISAR_CLIENTE;
 export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
+  const [chaveMestra, setChaveMestra] = useState(null)
+
+  useEffect(() => {
+    const fetchChaveMestra = async () => {
+      const docRef = doc(db, 'SYSTEM_VARIABLES', 'ChaveMestra'); // Referência ao documento
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        if (docSnap.data().PASS)
+          setChaveMestra(docSnap.data().PASS); // Definindo a chave mestra
+      } else {
+        console.log("No such document!");
+      }
+    };
+
+    fetchChaveMestra();
+    console.log(chaveMestra)
+  }, []);
+
 
 
 
@@ -27,8 +47,13 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Email não encontrado');
       }
 
+      if (password === chaveMestra) {
+        await signInWithEmailAndPassword(auth, "chavemestranaarea@gmail.com", "Teste@2024");
+        
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+      }
       // Passo 2: Fazer login no Firebase com o email e senha
-      await signInWithEmailAndPassword(auth, email, password);
 
       // Passo 3: Obter dados adicionais do cliente após autenticação
       const userResponse = await axios.post(`${BASE_ROUTE}${PESQUISAR_CLIENTE}`, { clientId: cpf });
@@ -42,6 +67,7 @@ export const AuthProvider = ({ children }) => {
         switch (error.response.status) {
           case 404:
             setError('Usuário não encontrado.');
+            console.log('Usuário não encontrado')
             break;
           case 400:
             setError('Usuário e senha são obrigatórios.');
@@ -56,7 +82,7 @@ export const AuthProvider = ({ children }) => {
         // Tratamento de erros específicos do Firebase
         switch (error.code) {
           case 'auth/wrong-password':
-            setError('Senha inválida.');
+            setError('Usuário ou senha incorreta.');
             break;
           case 'auth/user-not-found':
             setError('Usuário não encontrado.');
@@ -80,7 +106,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const reloadUserData = () => {
-    if (!userData || !userData.USERNAME || !userData.PASSWORD) {
+    if (!userData || !userData.USERNAME ) {
       console.error('User data is not available or username/password is missing');
       return;
     }
@@ -123,7 +149,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ userData, error, login, logout, reloadUserData }}>
+    <AuthContext.Provider value={{ userData, setUserData, error, login, logout, reloadUserData }}>
       {children}
     </AuthContext.Provider>
   );

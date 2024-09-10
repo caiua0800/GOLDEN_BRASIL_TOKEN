@@ -20,8 +20,10 @@ export default function Modal({ handleModalSaque }) {
     const valorSolicitadoNumber = parseFloat(valorSolicitado.replace(',', '.')) || 0;
     const valorRestante = Math.max(disponivelSaque - valorSolicitadoNumber, 0);
     const { showPulse, hidePulse } = usePulse()
-    const [valorMinimo, serValorMinimo] = useState(25)
+    const [valorMinimo, serValorMinimo] = useState(150)
     const taxa = 0.04;
+
+    const [selectedContract, setSelectedContract] = useState(null);
 
     let corSolicitado;
     if (valorSolicitadoNumber < disponivelSaque) {
@@ -41,13 +43,12 @@ export default function Modal({ handleModalSaque }) {
 
     const handleSolicitarSaque = async () => {
 
-
-        if (parseFloat(userData.DISPONIVEL_SAQUE) < parseFloat(valorSolicitado)) {
+        if (parseFloat(userData.DISPONIVEL_SAQUE) < (valorSolicitadoNumber)) {
             alert(`Valor insuficiente.`)
             return;
         }
 
-        if (parseFloat(valorSolicitado) < 25) {
+        if ((valorSolicitadoNumber) < valorMinimo) {
             alert(`O valor mínimo para saque é de R$${valorMinimo}`)
             return;
         }
@@ -61,7 +62,9 @@ export default function Modal({ handleModalSaque }) {
             saqueData: {
                 CODCLI: userData.CPF,
                 STATUS: 1,
-                VALORSOLICITADO: parseFloat(valorSolicitado)
+                VALORSOLICITADO: (valorSolicitadoNumber),
+                VALORSOLICITADOTAXA: valorSolicitadoNumber - (valorSolicitadoNumber * taxa),
+                IDCOMPRA: selectedContract.IDCOMPRA
             }
         }
         try {
@@ -79,49 +82,81 @@ export default function Modal({ handleModalSaque }) {
 
     }
 
+    const handleCloseModal = () => {
+        handleModalSaque();
+        setSelectedContract(null);
+    }
+
     return (
         <M.ModalContainer>
             <M.ModalBox>
                 <M.FecharModalBtn>
-                    <span onClick={handleModalSaque}>Fechar e Cancelar</span>
+                    <span onClick={handleCloseModal}>Fechar e Cancelar</span>
                 </M.FecharModalBtn>
 
                 <M.ModalTitle>
                     <h1>SOLICITAÇÃO DE SAQUE</h1>
                 </M.ModalTitle>
 
-                <M.ValorASerSacado>
-                    <input
-                        placeholder="DIGITE O VALOR DESEJADO"
-                        value={valorSolicitado}
-                        onChange={handleInputChange}
-                    />
-                    <h2>DISPONÍVEL: {(disponivelSaque).toFixed(2)}</h2>
-                    <h3 style={{ color: corSolicitado }}>
-                        SOLICITADO: R${formatNumber(valorSolicitadoNumber)}
-                    </h3>
-                    <h3 style={{ color: corSolicitado }}>
-                        VALOR A RECEBER: R${formatNumber((valorSolicitadoNumber - valorSolicitadoNumber*taxa))}
-                    </h3>
-                </M.ValorASerSacado>
 
-                <M.ConfirmacaoDeCadastro>
-                    <span>CONFIRME SEU CADASTRO PARA REALIZAR O SAQUE</span>
-                    <M.LoginBox>
-                        <input
-                            placeholder="usuario"
-                            value={usuario}
-                            onChange={(e) => setUsuario(e.target.value)}
-                        />
-                        <input
-                            placeholder="cpf"
-                            type="TEXT"
-                            value={senha}
-                            onChange={(e) => setSenha(e.target.value)}
-                        />
-                    </M.LoginBox>
-                    <button onClick={handleSolicitarSaque}>CONFIRMAR E SACAR</button>
-                </M.ConfirmacaoDeCadastro>
+                <M.ContratosDisponiveis>
+                    <p>SELECIONE O CONTRATO QUE DESEJA SACAR O LUCRO</p>
+                    <M.Nenhum>{userData.CONTRATOS_COM_SAQUE_DISPONIVEL.length === 0 ? "Nenhum contrato disponível para saque" : ""}</M.Nenhum>
+                    <ul>
+                        {userData.CONTRATOS_COM_SAQUE_DISPONIVEL.length > 0 && userData.CONTRATOS_COM_SAQUE_DISPONIVEL.map(c => (
+                            <li
+                                key={c.IDCOMPRA} // Sempre adicionar uma chave única quando mapear elementos
+                                onClick={() => { setSelectedContract(c) }}
+                                style={{ color: selectedContract === c ? 'green' : 'black' }} // Adicione esta linha
+                            >
+                                CONTRATO: <span>{c.IDCOMPRA}, VALOR DISPONÍVEL: R${c.DISPONIVEL_SAQUE.toFixed(2)}</span>
+                            </li>
+                        ))}
+                    </ul>
+
+                </M.ContratosDisponiveis>
+
+
+                {selectedContract && (
+
+                    <>
+
+                        <M.ValorASerSacado>
+                            <h2>Selecione o valor do saque</h2>
+                            <input value={valorSolicitado} onChange={handleInputChange} />
+                       
+                            {selectedContract.DISPONIVEL_SAQUE - valorSolicitadoNumber >= 0 ? (
+                                <>
+                                    <span>{valorSolicitado != "" ? "Valor disponível" : ""} </span>
+                                    <span>{valorSolicitado != "" ? "VALOR COM TAXA: R$" + (parseFloat(valorSolicitado) - (parseFloat(valorSolicitado) * taxa)) : ""}</span>
+                                </>
+                            ) : (
+                                <span>Saldo do contrato insuficiente.</span>
+                            ) }
+                        </M.ValorASerSacado>
+
+
+                        <M.ConfirmacaoDeCadastro>
+                            <span>CONFIRME SEU CADASTRO PARA REALIZAR O SAQUE</span>
+                            <M.LoginBox>
+                                <input
+                                    placeholder="usuario"
+                                    value={usuario}
+                                    onChange={(e) => setUsuario(e.target.value)}
+                                />
+                                <input
+                                    placeholder="cpf"
+                                    type="TEXT"
+                                    value={senha}
+                                    onChange={(e) => setSenha(e.target.value)}
+                                />
+                            </M.LoginBox>
+                            <button onClick={handleSolicitarSaque}>CONFIRMAR E SACAR</button>
+                        </M.ConfirmacaoDeCadastro>
+                    </>
+
+                )}
+
             </M.ModalBox>
         </M.ModalContainer>
     );

@@ -13,6 +13,9 @@ import { collection, getDocs } from 'firebase/firestore';
 import MensagemSchema from '../Mensagem/MensagemSchema';
 import Modal from '../CompletarCadastroModal/Modal'
 
+
+
+
 export default function Dashboard() {
   const { userData, reloadUserData } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
@@ -63,6 +66,7 @@ export default function Dashboard() {
       alert('CPF do usuário não encontrado.');
     }
   };
+
   //quando quiseres uma maçã, não a peças, cultive e a colha, pois se pedires...
   useEffect(() => {
     const fetchMensagens = async () => {
@@ -99,14 +103,14 @@ export default function Dashboard() {
     <SideBarBox>
       <D.DashboardContainer>
         <D.LoginBehind src='logo-golden.png' />
-        <Modal />
+        {/* <Modal /> */}
         <D.PrincipalContent>
           {messageExists && (
             <MensagemSchema data={messageExists} />
           )
           }
           <D.ContainerTitle>
-            <p>DASHBOARD</p>
+            {/* <p>DASHBOARD</p> */}
           </D.ContainerTitle>
           <D.SaldacoesUsuario>
             <span>OLÁ {abreviarNome((userData?.NAME || '').toUpperCase())}</span>
@@ -125,11 +129,11 @@ export default function Dashboard() {
                   <span>R$ {userData ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO) : '0'}</span>
                   <D.SaldoPlataformaDivs>
                     <div>
-                      <h3>VALOR INVESTIMENTO</h3>
+                      <h3>VALOR DE COMPRA</h3>
                       <span>R$ {formatNumber(handle0AtNumberString(userData.TOTAL_SPENT))}</span>
                     </div>
                     <div>
-                      <h3>VALOR LUCRO</h3>
+                      <h3>VALOR  DE LUCRO</h3>
                       <span>R$ {userData ? formatNumber(userData.LUCRO_CONTRATOS) : '0'}</span>
                     </div>
                     <div>
@@ -140,7 +144,7 @@ export default function Dashboard() {
                 </D.SaldoNaPlataforma>
               </D.SaldoCorrente>
             </D.FirstRow>
-            <D.SecondRow>
+            {/* <D.SecondRow>
               <h1>DISPONÍVEL PARA SAQUE | R$  {userData ? formatNumber(userData.DISPONIVEL_SAQUE) : '0'}</h1>
               <D.SaldoDisponivelParaSaque>
                 <D.ProgressBar>
@@ -148,7 +152,7 @@ export default function Dashboard() {
                 </D.ProgressBar>
                 <D.PercentageCount>{userData ? ((userData.DISPONIVEL_SAQUE / parseFloat(userData.TOTAL_PLATAFORMA)) * 100).toFixed(2) : 0}%</D.PercentageCount>
               </D.SaldoDisponivelParaSaque>
-            </D.SecondRow>
+            </D.SecondRow> */}
             <D.IndiqueEGanha>
               <p>INDIQUE E GANHE 10% DA PRIMEIRA COMPRA DO INDICADO, <span onClick={copyLink}>COPIAR LINK</span></p>
             </D.IndiqueEGanha>

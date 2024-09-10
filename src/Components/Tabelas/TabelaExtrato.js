@@ -23,14 +23,12 @@ const returnSaquesResponse = (str) => {
     }
 }
 
-const TabelaExtrato = ({ startDate, endDate }) => {
+const TabelaExtrato = ({ startDate, endDate, filter }) => {
     const { userData } = useContext(AuthContext);
 
     const contratos = userData?.CONTRATOS || [];
     const saques = userData?.SAQUES || [];
     const indicacoes = userData?.INDICACAO || [];
-
-    console.log(indicacoes)
 
     const transactions = [
         // Filtra e mapeia os contratos com status diferente de 4
@@ -62,11 +60,22 @@ const TabelaExtrato = ({ startDate, endDate }) => {
             value: (i.VALOR) || 0,
             status: 'ADICIONADO',
             type: 'indicacao'
-        }))
+        })),
+
+        // Se o filtro for "Valorização", adicione as valorizacões de cada contrato
+        ...(filter === 'Valorizacao' ? contratos.reduce((acc, contrato) => {
+            const historicoRendimentos = contrato.HISTORICO_RENDIMENTO || [];
+            const newTransactions = historicoRendimentos.map(rendimento => ({
+                date: formatDateSystem(rendimento.DATACRIACAO) || '',
+                description: `Valorização do contrato ${rendimento.IDCOMPRA}`,
+                value: rendimento.PERCENTUAL || 0,
+                status: 'Adicionado',
+                type: 'valorizacao'
+            }));
+            return [...acc, ...newTransactions];
+        }, []) : [])
     ];
     
-    
-
     // Remova transações com dados inválidos e fora do intervalo de datas
     const validTransactions = transactions.filter(t => {
         const date = parseDate(t.date);
@@ -76,7 +85,6 @@ const TabelaExtrato = ({ startDate, endDate }) => {
     // Ordene as transações por data do mais recente para o mais antigo
     validTransactions.sort((a, b) => parseDate(b.date) - parseDate(a.date));
 
-
     const getSign = (type) => {
         switch (type) {
             case 'contrato':
@@ -85,11 +93,12 @@ const TabelaExtrato = ({ startDate, endDate }) => {
                 return '-';
             case 'indicacao':
                 return '+';
+            case 'valorizacao':
+                return '+'; // ou outro sinal que você desejar
             default:
                 return '';
         }
     };
-
 
     return (
         <T.TabelaContainer>
@@ -109,7 +118,7 @@ const TabelaExtrato = ({ startDate, endDate }) => {
                                 <td>{transaction.date || 'Data não disponível'}</td>
                                 <td>{transaction.description || 'Descrição não disponível'}</td>
                                 <td className={`value-cell ${transaction.type}`}>
-                                    {transaction.value !== undefined ? `${getSign(transaction.type)} R$${formatNumber(transaction.value)}` : 'Valor inválido'}
+                                    {transaction.value !== undefined ? `${getSign(transaction.type)} ${formatNumber(transaction.value)}` : 'Valor inválido'}
                                 </td>
                                 <td>{transaction.status || 'Status não disponível'}</td>
                             </tr>

@@ -131,11 +131,14 @@ export const WalletValues = styled.div`
         grid-column: span 2; /* A quarta div ocupa a largura total na segunda linha */
     }
 
-    & > div:nth-child(6) {
+    & > div:nth-child(4) {
         grid-column: span 2; /* A quarta div ocupa a largura total na segunda linha */
     }
 
-    & > div:nth-child(7) {
+    & > div:nth-child(5) {
+        grid-column: span 2; /* A quarta div ocupa a largura total na segunda linha */
+    }
+    & > div:nth-child(8) {
         grid-column: span 2; /* A quarta div ocupa a largura total na segunda linha */
     }
 `;
@@ -177,12 +180,12 @@ export const RealizarSaqueBtn = styled.div`
         height: 40px;
         border: 0;
         box-shadow: 3px 3px 2px rgba(0,0,0,0.2);
-        background: linear-gradient(to right, #aacc00, #bfd200);
+        background: linear-gradient(to right, #95e214, #b8f500, #95e214);
         cursor: pointer;
         transition: .3s;
 
         &:hover{
-            background: linear-gradient(to right, #aacc00, #80b918);
+            background: linear-gradient(to right, #95e214, #b8f500, #95e214);
             transform: scale(0.97);
         }
     }
@@ -233,9 +236,10 @@ export const InformacoesSobreSaque = styled.div`
     box-sizing: border-box;
     padding: 15px;
     opacity: 0.7;
-    background: linear-gradient(-70deg, #ffc300, #ffdd00, #ffc300);
+    background: linear-gradient(-70deg, #1e96fc, #a2d6f9, #1e96fc);
     box-shadow: 8px 8px 1px rgba(0,0,0,0.5);
     transition: .3s;
+  
 
     &:hover{
         opacity: 0.9;
@@ -244,7 +248,7 @@ export const InformacoesSobreSaque = styled.div`
     p{
         margin: 0;
         text-align: justify;
-        color: rgba(0,0,0,0.6);
+        color: rgba(0,0,0,1);
     }
 
     span{
@@ -252,7 +256,42 @@ export const InformacoesSobreSaque = styled.div`
     }
 `;
 
-// export const nome = styled.div``;
+export const NaoSaque = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    button{
+        width: 100%;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        box-shadow: 3px 3px 2px rgba(0,0,0,0.2);
+        background: linear-gradient(to right, #B17D2A, #E6AA3A, #ffc300, #E6AA3A, #B17D2A);
+        cursor: pointer;
+        transition: .3s;
+        color: black;
+        font-weight: 800;
+        font-size: 22px;
+        text-shadow: 1px 1px 0px white;
+    
+
+        &:hover{
+             background: linear-gradient(-60deg, #ffd60a, #ffd60a, #ffee32, #B17D2A, #B17D2A);
+            transform: scale(0.97);
+            text-shadow: 1px 1px 0px black
+            color: white;
+
+        }
+
+        img{
+            width: 20px;
+        }
+    }
+`;
 
 // export const nome = styled.div``;
 

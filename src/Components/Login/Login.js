@@ -3,18 +3,23 @@ import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import InfoModal from './InfoModal';
 import * as Styles from './LoginStyle';
+
 import { usePulse } from '../../context/LoadContext';
+
+
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
-  const { login, error, userData } = useContext(AuthContext);
+  const { login, error, userData, setUserData } = useContext(AuthContext);
   const { showPulse, hidePulse } = usePulse();
   const [closeInfoModal, setCloseInfoModal] = useState(true);
 
+
   const handleLogin = async (e) => {
+
     e.preventDefault();
     showPulse();
     await login(username, password);
@@ -22,10 +27,18 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
+    const storedUserData = localStorage.getItem('userData');
+    if(storedUserData){
+      setUserData(JSON.parse(storedUserData))
+    }
+  }, [])
+
+  useEffect(() => {
     if (error) {
       setShowError(true);
       const timer = setTimeout(() => {
         setShowError(false);
+        window.location.reload();  //Adicionei isso pra aparecer a mensagem novamente
       }, 2000);
       return () => clearTimeout(timer);
     }
@@ -45,7 +58,7 @@ const LoginPage = () => {
       )}
       <Styles.LoginBox onSubmit={handleLogin}>
         <Styles.Logo src='logo-golden.png' alt="Logo" />
-        <Styles.Title>Welcome Back!</Styles.Title>
+        <Styles.Title>Bem vindo!</Styles.Title>
         <Styles.LoginForm>
           <Styles.Input
             type="text"

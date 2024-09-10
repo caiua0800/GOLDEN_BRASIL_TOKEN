@@ -7,7 +7,7 @@ import assets from "../../assets/assets";
 import TabelaExtrato from "../Tabelas/TabelaExtrato";
 import SideBarBox from "../Sidebar/SideBarBox";
 
-// Funções para calcular datas de início e fim baseadas no filtro
+// Função para calcular datas de início e fim baseadas no filtro
 const getDateRange = (filter) => {
     const now = new Date();
     let startDate = new Date();
@@ -69,8 +69,6 @@ export default function Extrato() {
 
     const dateRange = getDateRange(filter);
 
-
-
     return (
         <SideBarBox>
             <E.ExtratoContainer>
@@ -84,12 +82,11 @@ export default function Extrato() {
                         <E.FilterButton onClick={() => handleFilterChange('7 Dias')}>7 Dias</E.FilterButton>
                         <E.FilterButton onClick={() => handleFilterChange('15 Dias')}>15 Dias</E.FilterButton>
                         <E.FilterButton onClick={() => handleFilterChange('1 Mês')}>1 Mês</E.FilterButton>
+                        <E.FilterButton onClick={() => handleFilterChange('Valorizacao')}>Valorização</E.FilterButton>
                     </E.ButtonContainer>
-                    <TabelaExtrato startDate={dateRange.startDate} endDate={dateRange.endDate} />
+                    <TabelaExtrato startDate={dateRange.startDate} endDate={dateRange.endDate} filter={filter} />
                 </E.PrincipalContent>
-
             </E.ExtratoContainer>
         </SideBarBox>
-
     );
 }

@@ -14,7 +14,7 @@ import { getDoc, doc } from "../../database/firebaseConfig";
 
 export default function Compra() {
     const { userData, reloadUserData } = useContext(AuthContext);
-    const [qttContratos, setQttContratos] = useState(1);
+    const [qttContratos, setQttContratos] = useState(5);
     const [simulado, setSimulado] = useState(false);
     const [resultadoSimulacao, setResultadoSimulacao] = useState({});
     const [modalCompra, setModalCompra] = useState(false);
@@ -25,6 +25,7 @@ export default function Compra() {
     const { showPulse, hidePulse } = usePulse();
     const [loadingSimulation, setLoadigSimulation] = useState(false);
     const [valorContratoUni, setValorContratoUni] = useState(0);
+    const [minimum, setMinimum] = useState(null);
 
 
     useEffect(() => {
@@ -36,6 +37,8 @@ export default function Compra() {
                     const data = docSnap.data();
                     if (data && data.TOKEN_VALUE) {
                         setValorContratoUni(data.TOKEN_VALUE);
+                        setMinimum(data.MINIMUM);
+                        setQttContratos(data.MINIMUM)
                     }
                 } else {
                     console.log('Documento não encontrado!');
@@ -49,7 +52,6 @@ export default function Compra() {
     }, []);
 
 
-
     const handleIncreaseInputQtt = (tipo) => {
         tipo === '-' ? qttContratos <= 1 ? setQttContratos(1) : setQttContratos(parseInt(qttContratos) - 1) : setQttContratos(parseInt(qttContratos) + 1);
     }
@@ -60,6 +62,11 @@ export default function Compra() {
     };
 
     const handleSimulate = () => {
+
+        if(parseFloat(qttContratos) < 5){
+            alert("Quantidade mínima de 5 contratos");
+            return;
+        }
         setSimulado(false);
         setLoadigSimulation(true);
 
@@ -78,13 +85,13 @@ export default function Compra() {
 
     const handleModalCompra = () => {
 
-        if(!userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS){
-            alert("ENVIE OS DOCUMENTOS PARA VERIFICAÇÃO");
-            return;
-        }else if(userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS){
-            alert("AGUARDE A VERIFICAÇÃO DOS SEUS DOCUMENTOS");
-            return;
-        }
+        // if(!userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS){
+        //     alert("ENVIE OS DOCUMENTOS PARA VERIFICAÇÃO");
+        //     return;
+        // }else if(userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS){
+        //     alert("AGUARDE A VERIFICAÇÃO DOS SEUS DOCUMENTOS");
+        //     return;
+        // }
 
         setModalCompra(!modalCompra);
     }

@@ -15,21 +15,13 @@ export default function Saque() {
     const [modalSaque, setModalSaque] = useState(false);
     const [loading, setLoading] = useState(true); // Estado de carregamento
     const [diasDeSaque, setDiasDeSaque] = useState([]);
-    const [mostrarBotaoSaque, setMostrarBotaoSaque] = useState(false);
+    const [mostrarBotaoSaque, setMostrarBotaoSaque] = useState(true);
     const { userData } = useContext(AuthContext);
 
     const handleModalSaque = () => {
 
         if (!mostrarBotaoSaque) {
             alert("Saque indisponível");
-            return;
-        }
-
-        if (!userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS) {
-            alert("ENVIE OS DOCUMENTOS PARA VERIFICAÇÃO");
-            return;
-        } else if (userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS) {
-            alert("AGUARDE A VERIFICAÇÃO DOS SEUS DOCUMENTOS");
             return;
         }
 
@@ -82,14 +74,18 @@ export default function Saque() {
         fetchDiasDeSaque();
     }, []);
 
-    useEffect(() => {
-        const hoje = new Date().getDate();
-        if (diasDeSaque.includes(hoje)) {
-            setMostrarBotaoSaque(true);
-        } else {
-            setMostrarBotaoSaque(false);
-        }
-    }, [diasDeSaque]);
+
+    const handleClickPromotion = () => {
+        const phoneNumber = '17992562727';
+        const message = 'Olá, gostaria de investir meu lucro em contratos!'; // Mensagem que será enviada (opcional)
+        
+        // URL para abrir o WhatsApp
+        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+        
+        // Abre o WhatsApp em uma nova aba
+        window.open(whatsappURL, '_blank');
+    };
+    
 
     return (
         <SideBarBox>
@@ -107,22 +103,22 @@ export default function Saque() {
                             <S.WalletIcon>
                                 <img src='wallet.png' />
                             </S.WalletIcon>
-                            <S.SaqueBoxTitle>CARTEIRA</S.SaqueBoxTitle>
+                            <S.SaqueBoxTitle></S.SaqueBoxTitle>
                         </S.SaqueBox>
 
                         <S.CentralizeWallet>
                             <S.WalletValues>
                                 <S.WalletValue>
                                     <h2>SALDO PLATAFORMA</h2>
-                                    <h6>(investido + lucro + indicação)</h6>
+                                    <h6>(lucro + indicação)</h6>
                                     <span>R$ {userData && (userData.TOTAL_PLATAFORMA ? formatNumber(userData.TOTAL_PLATAFORMA) : 0)}</span>
                                 </S.WalletValue>
                                 <S.WalletValue>
                                     <h2>SALDO DISPONÍVEL</h2>
-                                    <h6>(lucro + contr. vencidos)</h6>
+                                    <h6>(lucro)</h6>
                                     <span>R$ {userData && (userData.DISPONIVEL_SAQUE ? formatNumber(userData.DISPONIVEL_SAQUE) : 0)}</span>
                                 </S.WalletValue>
-                                <S.WalletValue>
+                                {/* <S.WalletValue>
                                     <h2>SALDO DE INDICAÇÃO</h2>
                                     <span>R$ {userData && (userData.TOTAL_INDICACAO ? formatNumber(userData.TOTAL_INDICACAO) : formatNumber(0))}</span>
                                 </S.WalletValue>
@@ -133,13 +129,19 @@ export default function Saque() {
                                 <S.WalletValue>
                                     <h2>LUCRO À RECEBER</h2>
                                     <span>R$ {userData && (userData.VALOR_A_RECEBER ? formatNumber(userData.VALOR_A_RECEBER) : 0)}</span>
-                                </S.WalletValue>
+                                </S.WalletValue> */}
+                                {userData.DISPONIVEL_SAQUE > 0 && (
+                                    <S.NaoSaque>
+                                        <button onClick={handleClickPromotion}>Parabéns! você tem um bônus especial para comprar contratos de minérios com seu saldo sem taxa de saque! clique aqui.</button>
+                                    </S.NaoSaque>
+                                )}
                                 <S.RealizarSaqueBtn>
                                     <button onClick={handleModalSaque}>REALIZAR SAQUE</button>
                                 </S.RealizarSaqueBtn>
+
                                 <S.InformacoesSobreSaque>
                                     <p>
-                                        As solicitações de saques são feitas no <span>aniversário de 3 meses </span>
+                                        As solicitações de saques são feitas no <span>a cada 3 meses </span>
                                         da primeira valorização de cada compra, nessa data se abrirá
                                         uma janela de solicitação saque por <span>48 horas</span> onde o USUÁRIO
                                         definirá se efetua a solicitação de saque ou não, para concluir

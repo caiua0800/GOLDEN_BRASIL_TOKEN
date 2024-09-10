@@ -15,10 +15,9 @@ export const ModalContainer = styled.div`
 `;
 
 export const ModalBox = styled.div`
-  width: 80%;
+  width: 90%;
   box-sizing: border-box;
-  // background-color: rgba(255,255, 255, 1);
-  background: linear-gradient(-70deg, #B17D2A, #B17D2A, #B17D2A, #E6AA3A, #B17D2A, #B17D2A, #B17D2A);
+  background-color: rgba(255,255, 255, 1);
   position: relative;
   box-shadow: 3px 3px 2px rgba(0,0,0,0.7);
   padding: 20px 30px;
@@ -85,9 +84,12 @@ export const ConfirmacaoDeCadastro = styled.div`
         height: 40px;
         cursor: pointer;
         transition: .3s;
+        border: 0;
+        box-shadow: 4px 4px 2px rgba(0,0,0,0.4);
 
         &:hover{
             transform: scale(0.99);
+            box-shadow: 8px 8px 4px rgba(0,0,0,0.4);
         }
     }
 `;
@@ -108,7 +110,9 @@ export const LoginBox = styled.div`
         padding-left: 20px;
         color: rgba(0,0,0,0.7);
         font-size: 18px;
+        background-color: rgba(255, 230, 240, 1);
     }
+ 
 `;
 
 export const ModalTitle = styled.div`
@@ -119,7 +123,7 @@ export const ModalTitle = styled.div`
   h1{
     margin: 0;
     font-weight: 500;
-    color: #FFFFFF;
+    color: #000000;
     font-size: 22px;
   }
 `;
@@ -154,7 +158,7 @@ export const ValorASerSacado = styled.div`
 
   h2{
     margin-top: 20px;
-    color: #FFFFFF;
+    color: #000000;
   }
 
   h3{
@@ -165,10 +169,61 @@ export const ValorASerSacado = styled.div`
     color: rgba(0,0,0,0.6);
     text-shadow: none;
   }
+
+  span{
+    margin-top: 10px;
+    font-weight: 600;
+  }
 `;
 
-// export const nome = styled.div``;
+export const ContratosDisponiveis = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-// export const nome = styled.div``;
+  p{
+    margin: 0;
+    text-align: center;
+    margin-top: 20px;
+    text-decoration: underline;
+    font-weight: 800;
+  }
+
+  ul{
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    li{
+      color: ${({ isSelected }) => (isSelected ? 'green' : 'black')};
+      font-weight: 800;
+      cursor: pointer;
+      transition: .3s;
+      padding: 0;
+
+      span{
+        margin: 0;
+      }
+
+      &:hover{
+        color: ${({ isSelected }) => (isSelected ? 'green' : 'white')};
+        transform: scale(0.97);
+        text-shadow: 1px 1px 1px black;
+      }
+    }
+  }
+`;
+
+export const Nenhum = styled.p`
+  margin: 0;
+  margin-top: 10px;
+  color: red;
+  font-weight: 800;
+  text-align: center;
+`;
 
 // export const nome = styled.div``;

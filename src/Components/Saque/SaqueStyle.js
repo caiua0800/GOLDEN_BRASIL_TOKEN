@@ -293,6 +293,9 @@ export const NaoSaque = styled.div`
     }
 `;
 
-// export const nome = styled.div``;
+export const TabelaDeSaquesTitle = styled.h1`
+    margin: 0;
+    margin-top: 40px;
+`;
 
 

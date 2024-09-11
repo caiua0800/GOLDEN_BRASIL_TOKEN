@@ -4,11 +4,12 @@ import * as S from './SidebarStyles';
 import assets from "../../assets/assets";
 import { AuthContext } from "../../context/AuthContext";
 import ProfilePage from "../UserPage/UserPage";
+import { logDOM } from "@testing-library/react";
 
 
 export const Sidebar = ({ isOpen }) => {
 
-    const { userData } = useContext(AuthContext);
+    const { userData, logout } = useContext(AuthContext);
     const [fotoPerfil, setFotoPerfil] = useState(assets.user3)
     const [profilePage, setProfilePage] = useState(false);
 
@@ -17,6 +18,10 @@ export const Sidebar = ({ isOpen }) => {
             setFotoPerfil(userData.URLFOTOPERFIL);
         }
     }, [userData])
+
+    const handleLogOut = () => {
+        logout();
+    }
 
 
     return (
@@ -56,12 +61,22 @@ export const Sidebar = ({ isOpen }) => {
                     </Link>
                     <Link to="/extrato">
                         <S.NavItem>
-                            <S.NavLink>EXTRATO</S.NavLink>
+                            <S.NavLink>EXTRATO DA CONTA</S.NavLink>
+                        </S.NavItem>
+                    </Link>
+                    <Link to="/extratovalorizacao">
+                        <S.NavItem>
+                            <S.NavLink>EXTRATO DE VALORIZAÇÃO</S.NavLink>
                         </S.NavItem>
                     </Link>
                     <Link to="/relatorio">
                         <S.NavItem>
                             <S.NavLink>RELATÓRIO DE VAL.</S.NavLink>
+                        </S.NavItem>
+                    </Link>
+                    <Link onClick={handleLogOut}>
+                        <S.NavItem className="logout-link">
+                            <S.NavLink>SAIR</S.NavLink>
                         </S.NavItem>
                     </Link>
                     {/* <Link to="/validacao">

@@ -9,6 +9,7 @@ import { db } from "../../database/firebaseConfig"; // Importe a configuração 
 import { doc, getDoc } from 'firebase/firestore';
 import SideBarBox from "../Sidebar/SideBarBox";
 import { passou365Dias } from "../../assets/utils";
+import TabelaDeSaques from "../Tabelas/TabelaSaques";
 
 export default function Saque() {
 
@@ -158,6 +159,10 @@ export default function Saque() {
                         )}
                     </S.PrincipalContent>
                 )}
+
+                <S.TabelaDeSaquesTitle>SAQUES FEITOS</S.TabelaDeSaquesTitle>
+
+                <TabelaDeSaques />
             </S.SaqueContainer>
         </SideBarBox>
     );

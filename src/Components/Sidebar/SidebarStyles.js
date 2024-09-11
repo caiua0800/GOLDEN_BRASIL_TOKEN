@@ -97,6 +97,11 @@ export const NavItem = styled.div`
     background-color:rgba(0,0,0,0.2);
     transition: .3s;
 
+    &.logout-link{
+        background-color: rgba(244, 20, 30, 1);
+        color: white;
+    }
+
     &:hover{
         color: rgba(0,0,0,1);
         transform: scale(1.03);

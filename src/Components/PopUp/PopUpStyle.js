@@ -15,8 +15,8 @@ const getColor = (type) => {
 export const PopUpContainer = styled.div`
     position: fixed;
     top: 20px;
-    right: 20px;
-    z-index: 98888;
+    left: 20px;
+    z-index: 999999999999;
 `;
 
 export const PopUpContent = styled.div`

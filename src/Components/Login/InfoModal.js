@@ -45,10 +45,10 @@ export default function InfoModal({setCloseInfoModal}) {
                 </ModalInfoPrincipal>
 
                 <AuxHelp>
-                    <h2>SE PRECISAR DE AJUDA, NÃO EXITE EM NOS CHAMAR NO WHATSAPP</h2>
+                    <h2>SE PRECISAR DE AJUDA, ASSISTA O VÍDEO TUTORIAL DA NOVA PLATAFORMA</h2>
 
                     <div>
-                        <button>ENVIAR MENSAGEM</button>
+                        <button>QUERO ASSISTIR</button>
                     </div>
 
                 </AuxHelp>
@@ -71,7 +71,7 @@ const Modal = styled.div`
 `;
 
 const ModalContent = styled.div`
-    width: 90%;
+    width: 95%;
     height: 90%;
     background-color: white;
     border-radius: 12px;

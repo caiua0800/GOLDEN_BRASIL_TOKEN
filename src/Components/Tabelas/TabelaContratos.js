@@ -62,6 +62,7 @@ const TabelaDeContratos = () => {
                         <Style.TabelaHeader>CONTRATOS</Style.TabelaHeader>
                         <Style.TabelaHeader>VALOR</Style.TabelaHeader>
                         <Style.TabelaHeader>LUCRO OBTIDO</Style.TabelaHeader>
+                        <Style.TabelaHeader>TOTAL GANHO</Style.TabelaHeader>
                         <Style.TabelaHeader>LUCRO TOTAL FINAL</Style.TabelaHeader>
                         <Style.TabelaHeader>CONTRATO</Style.TabelaHeader>
                         <Style.TabelaHeader>TICKET</Style.TabelaHeader>
@@ -83,6 +84,9 @@ const TabelaDeContratos = () => {
                                 <Style.TabelaData>R$ {parseFloat(dado.TOTALSPENT).toFixed(2) ? (parseFloat(dado.TOTALSPENT).toFixed(2)) : dado.TOTALSPENT}</Style.TabelaData>
                                 <Style.TabelaData>
                                     {dado.RENDIMENTO_ATUAL ? dado.RENDIMENTO_ATUAL.toFixed(4) : dado.RENDIMENTO_ATUAL}%
+                                </Style.TabelaData>
+                                <Style.TabelaData>
+                                    R${dado.RENDIMENTO_ATUAL ? ((dado.RENDIMENTO_ATUAL/100)*parseFloat(dado.TOTALSPENT)).toFixed(2) : 0}
                                 </Style.TabelaData>
                                 <Style.TabelaData>{dado.MAXIMUMQUOTAYIELD}%</Style.TabelaData>
                                 <Style.TabelaData>

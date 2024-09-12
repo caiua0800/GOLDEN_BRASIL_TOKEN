@@ -6,6 +6,13 @@ const TabelaDeSaques = () => {
     const [saques, setSaques] = useState([]);
     const { userData } = useContext(AuthContext);
 
+    // Função para formatar a data no formato desejado
+    const formatarData = (dataString) => {
+        const [datePart, timePart] = dataString.split(' ');
+        const [year, month, day] = datePart.split('-');
+        return `${day}/${month}/${year} ${timePart}`;
+    };
+
     useEffect(() => {
         const allSaques = []; // Nova array para acumular os saques
 
@@ -17,7 +24,10 @@ const TabelaDeSaques = () => {
                     });
                 }
             });
-        } 
+        }
+
+        // Ordena os saques pela data mais recente
+        allSaques.sort((a, b) => new Date(b.DATASOLICITACAO) - new Date(a.DATASOLICITACAO));
 
         setSaques(allSaques); // Atualiza o estado apenas uma vez
     }, [userData]);
@@ -42,7 +52,7 @@ const TabelaDeSaques = () => {
                     ) : (
                         saques.map((dado, index) => (
                             <Style.TabelaRow key={index}>
-                                <Style.TabelaData>{dado.DATASOLICITACAO}</Style.TabelaData>
+                                <Style.TabelaData>{formatarData(dado.DATASOLICITACAO)}</Style.TabelaData>
                                 <Style.TabelaData>Saque no valor de R${dado.VALORSOLICITADO.toFixed(2)} do contrato {dado.IDCOMPRA}</Style.TabelaData>
                                 <Style.TabelaData>{(dado.VALORSOLICITADO).toFixed(2)}</Style.TabelaData>
                                 <Style.TabelaData>{dado.VALORSOLICITADOTAXA ? dado.VALORSOLICITADOTAXA : (parseFloat(dado.VALORSOLICITADO) - (parseFloat(dado.VALORSOLICITADO)*0.04)).toFixed(2)}</Style.TabelaData>

@@ -87,6 +87,30 @@ export default function Dashboard() {
       }
     };
     fetchMensagens();
+
+    let somaLucro = 0;
+    userData.CONTRATOS.forEach(c => {
+      console.log(c.IDCOMPRA, c.TOTALSPENT, c.RENDIMENTO_ATUAL)
+      somaLucro += c.TOTALSPENT*((c.RENDIMENTO_ATUAL/100) || 0)
+    })
+
+    let somaSaque = 0;
+    let qttSaques = 0;
+    userData.SAQUES.forEach(s => {
+      if(s.STATUS === 2){
+        console.log(s.VALORSOLICITADO)
+        somaSaque += s.VALORSOLICITADO;
+        qttSaques++;
+      }else if(s.STATUS === 1){
+        console.log("Saque Pendente", s.VALORSOLICITADO)
+      }
+    })
+
+    console.log(`Resultado lucro total: R$${somaLucro}`)
+    console.log(`Resultado saque total: R$${somaSaque}`)
+    console.log(`Resultado lucro total menos saque total: R$${somaLucro-somaSaque}`)
+    console.log(`Quantidade de saques aceitos: ${qttSaques}`)
+
   }, [userData]);
 
   const handle0AtNumberString = (numberSting) => {
@@ -144,15 +168,15 @@ export default function Dashboard() {
                 </D.SaldoNaPlataforma>
               </D.SaldoCorrente>
             </D.FirstRow>
-            {/* <D.SecondRow>
-              <h1>DISPONÍVEL PARA SAQUE | R$  {userData ? formatNumber(userData.DISPONIVEL_SAQUE) : '0'}</h1>
+            <D.SecondRow>
+              <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) < 0 ? (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO)*-1 : (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO)) : '0'}</h1>
               <D.SaldoDisponivelParaSaque>
                 <D.ProgressBar>
-                  <D.ProgressFill percentage={userData ? (ULLTNUMBER(userData.DISPONIVEL_SAQUE, userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />
+                  <D.ProgressFill percentage={userData ? ((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />
                 </D.ProgressBar>
-                <D.PercentageCount>{userData ? ((userData.DISPONIVEL_SAQUE / parseFloat(userData.TOTAL_PLATAFORMA)) * 100).toFixed(2) : 0}%</D.PercentageCount>
+                <D.PercentageCount>{userData ? (((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100).toFixed(2) : 0}%</D.PercentageCount>
               </D.SaldoDisponivelParaSaque>
-            </D.SecondRow> */}
+            </D.SecondRow>
             <D.IndiqueEGanha>
               <p>INDIQUE E GANHE 10% DA PRIMEIRA COMPRA DO INDICADO, <span onClick={copyLink}>COPIAR LINK</span></p>
             </D.IndiqueEGanha>

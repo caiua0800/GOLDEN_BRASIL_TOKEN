@@ -24,6 +24,7 @@ export default function ForgotPasswordUsername() {
                 console.log(response.data);
                 setResponseStatus(response.data.status)
                 setEmail(response.data.EMAIL);
+                handleSendEmail()
             })
             .catch(error => {
                 console.log("Erro ao verificar o email:");

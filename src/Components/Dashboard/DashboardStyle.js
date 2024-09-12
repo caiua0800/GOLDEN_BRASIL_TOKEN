@@ -95,6 +95,7 @@ export const ReloadWeb = styled.div`
     justify-content: end;
     box-sizing: border-box;
     padding-right: 20px;
+    margin-top: 20px;
 
     span{
         cursor: pointer;

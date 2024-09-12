@@ -69,7 +69,7 @@ export const ContainerTitle = styled.div`
 
 export const TabelaContainer = styled.div`
     width: 100%;
-    max-height: 300px;
+    max-height: 800px;
     border-collapse: collapse;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background: linear-gradient(-60deg, #000000, #2b2d2e, #2b2d2e, #2b2d2e, #000000);

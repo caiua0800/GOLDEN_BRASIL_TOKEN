@@ -9,10 +9,10 @@ import { usePulse } from '../../context/LoadContext';
 import SideBarBox from '../Sidebar/SideBarBox';
 import { encrypt } from '../../assets/utils';
 import { db } from '../../database/firebaseConfig';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, updateDoc, arrayUnion, setDoc } from 'firebase/firestore';
 import MensagemSchema from '../Mensagem/MensagemSchema';
 import Modal from '../CompletarCadastroModal/Modal'
-
+import moment from 'moment/moment';
 
 
 
@@ -29,13 +29,55 @@ export default function Dashboard() {
     setLoading(false);
   };
 
+
   useEffect(() => {
     if (userData) {
+      updateUserEntries();
       setLoading(false);
     } else {
       loadUserData();
     }
+
   }, [userData, reloadUserData, showPulse, hidePulse]);
+
+
+  const updateUserEntries = async () => {
+    if (!userData || !userData.CPF) return;
+  
+    const currentYear = moment().format('YYYY');
+    const currentMonth = moment().format('MM');
+    const currentMonthYear = `${currentMonth}${currentYear}`;
+    const now = moment().format('YYYY-MM-DD HH:mm:ss');
+  
+    // Verificar se já existe um documento para o mês/ano atual
+    const accessDocRef = doc(db, 'ACESSOS', currentMonthYear);
+    const accessDoc = await getDoc(accessDocRef);
+  
+    if (!accessDoc.exists()) {
+      // Criar um novo documento para o mês/ano atual
+      await setDoc(accessDocRef, {
+        [userData.CPF]: {
+          ultima_visita: now,
+          contagem_mes: 1,
+          nome: userData.NAME
+        }
+      });
+    } else {
+      // Atualizar o documento existente
+      const accessData = accessDoc.data();
+      if (!accessData[userData.CPF] || moment(now).diff(moment(accessData[userData.CPF].ultima_visita), 'hours') >= 1) {
+        await updateDoc(accessDocRef, {
+          [`${userData.CPF}.ultima_visita`]: now,
+          [`${userData.CPF}.name`]: userData.NAME,
+          [`${userData.CPF}.contagem_mes`]: accessData[userData.CPF]
+            ? accessData[userData.CPF].contagem_mes + 1
+            : 1
+        });
+      }
+    }
+  };
+  
+  
 
   const handleReloadWeb = () => { loadUserData(); }
 
@@ -88,28 +130,7 @@ export default function Dashboard() {
     };
     fetchMensagens();
 
-    let somaLucro = 0;
-    userData.CONTRATOS.forEach(c => {
-      console.log(c.IDCOMPRA, c.TOTALSPENT, c.RENDIMENTO_ATUAL)
-      somaLucro += c.TOTALSPENT*((c.RENDIMENTO_ATUAL/100) || 0)
-    })
 
-    let somaSaque = 0;
-    let qttSaques = 0;
-    userData.SAQUES.forEach(s => {
-      if(s.STATUS === 2){
-        console.log(s.VALORSOLICITADO)
-        somaSaque += s.VALORSOLICITADO;
-        qttSaques++;
-      }else if(s.STATUS === 1){
-        console.log("Saque Pendente", s.VALORSOLICITADO)
-      }
-    })
-
-    console.log(`Resultado lucro total: R$${somaLucro}`)
-    console.log(`Resultado saque total: R$${somaSaque}`)
-    console.log(`Resultado lucro total menos saque total: R$${somaLucro-somaSaque}`)
-    console.log(`Quantidade de saques aceitos: ${qttSaques}`)
 
   }, [userData]);
 
@@ -169,7 +190,7 @@ export default function Dashboard() {
               </D.SaldoCorrente>
             </D.FirstRow>
             <D.SecondRow>
-              <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) < 0 ? (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO)*-1 : (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO)) : '0'}</h1>
+              <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) < 0 ? (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) * -1 : (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO)) : '0'}</h1>
               <D.SaldoDisponivelParaSaque>
                 <D.ProgressBar>
                   <D.ProgressFill percentage={userData ? ((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />

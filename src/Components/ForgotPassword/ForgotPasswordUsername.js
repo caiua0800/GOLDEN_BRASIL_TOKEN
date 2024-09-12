@@ -68,7 +68,7 @@ export default function ForgotPasswordUsername() {
 
     const handleSendEmail = () => {
         if (email.trim() === '') {
-            alert("Insira o email!");
+            alert("Insira o username!");
             return;
         }
 

@@ -22,9 +22,13 @@ const TabelaDeSaques = () => {
                     ctr.SAQUES_FEITOS.forEach(saq => {
                         allSaques.push(saq); // Adiciona cada saque à nova array
                     });
+                    console.log(1)
                 }
             });
         }
+
+        console.log(userData.SAQUES.length)
+
 
         // Ordena os saques pela data mais recente
         allSaques.sort((a, b) => new Date(b.DATASOLICITACAO) - new Date(a.DATASOLICITACAO));

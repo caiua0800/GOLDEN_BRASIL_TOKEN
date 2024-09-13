@@ -433,6 +433,7 @@ export const TabelaContainer = styled.div`
 `;
 
 export const GrapthContainer = styled.div`
+    width: 100%;
     height: 450px;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.4);
 
@@ -469,3 +470,44 @@ export const BtnSidebar = styled.button`
         height: 100%;
     }
 `;
+
+export const IndicadosContainer = styled.div`
+    width: 30%;
+    display: flex;
+    padding: 50px;
+    box-sizing: border-box;
+    flex-direciton: column;
+    gap: 20px;
+    max-height: 450px;
+    overflow: auto;
+    flex-direction: column;
+    box-shadow: 0px 0px 6px rgba(0,0,0,0.4);
+`;
+
+export const Indicado = styled.div`
+    width: 100%;
+    display: flex;
+    height: 60px;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+
+    img{
+        width: 60px;
+        height: 60px;
+    }
+
+    span{
+        color: black;
+        font-weight: 800;
+        font-size: 18px;
+    }
+`;
+
+export const Justing = styled.div`
+    width: 100%;
+    display: flex;
+    gap: 20px;
+`;
+
+// export const nome = styled.div``;

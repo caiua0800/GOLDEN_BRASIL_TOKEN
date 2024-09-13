@@ -17,6 +17,8 @@ const TabelaDeContratos = () => {
     useEffect(() => {
         if (userData && Array.isArray(userData.CONTRATOS)) {
             setContratos(userData.CONTRATOS);
+            const sortedContratos = [...userData.CONTRATOS].sort((a, b) => a.IDCOMPRA - b.IDCOMPRA);
+            setContratos(sortedContratos);
         } else {
             setContratos([]);
         }

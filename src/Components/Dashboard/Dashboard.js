@@ -13,6 +13,7 @@ import { collection, getDocs, doc, getDoc, updateDoc, arrayUnion, setDoc } from 
 import MensagemSchema from '../Mensagem/MensagemSchema';
 import Modal from '../CompletarCadastroModal/Modal'
 import moment from 'moment/moment';
+import assets from '../../assets/assets';
 
 
 
@@ -43,16 +44,16 @@ export default function Dashboard() {
 
   const updateUserEntries = async () => {
     if (!userData || !userData.CPF) return;
-  
+
     const currentYear = moment().format('YYYY');
     const currentMonth = moment().format('MM');
     const currentMonthYear = `${currentMonth}${currentYear}`;
     const now = moment().format('YYYY-MM-DD HH:mm:ss');
-  
+
     // Verificar se já existe um documento para o mês/ano atual
     const accessDocRef = doc(db, 'ACESSOS', currentMonthYear);
     const accessDoc = await getDoc(accessDocRef);
-  
+
     if (!accessDoc.exists()) {
       // Criar um novo documento para o mês/ano atual
       await setDoc(accessDocRef, {
@@ -76,8 +77,8 @@ export default function Dashboard() {
       }
     }
   };
-  
-  
+
+
 
   const handleReloadWeb = () => { loadUserData(); }
 
@@ -129,7 +130,6 @@ export default function Dashboard() {
       }
     };
     fetchMensagens();
-
 
 
   }, [userData]);
@@ -190,7 +190,9 @@ export default function Dashboard() {
               </D.SaldoCorrente>
             </D.FirstRow>
             <D.SecondRow>
-              <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) < 0 ? (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) * -1 : (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO)) : '0'}</h1>
+              {/* <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) < 0 ? (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) * -1 : (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO)) : '0'}</h1> */}
+              <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) + (userData.ACERTARBD? (userData.ACERTARBD) : 0)) : 0}</h1>
+              
               <D.SaldoDisponivelParaSaque>
                 <D.ProgressBar>
                   <D.ProgressFill percentage={userData ? ((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />
@@ -201,9 +203,35 @@ export default function Dashboard() {
             <D.IndiqueEGanha>
               <p>INDIQUE E GANHE 10% DA PRIMEIRA COMPRA DO INDICADO, <span onClick={copyLink}>COPIAR LINK</span></p>
             </D.IndiqueEGanha>
-            <D.GrapthContainer>
-              <GrapthLikeBinance />
-            </D.GrapthContainer>
+
+            <D.Justing>
+
+              {userData.INDICADOS ? (
+                <>
+                 <D.IndicadosContainer>
+                {userData.INDICADOS && userData.INDICADOS.map(ind => (
+                  <D.Indicado>
+                    <img src={assets.user3} />
+                    <span>{ind.NOME_INDICADO}</span>
+                  </D.Indicado>
+                ))}
+              </D.IndicadosContainer>
+
+              <D.GrapthContainer>
+                <GrapthLikeBinance />
+              </D.GrapthContainer>
+                </>
+               
+              ) : (
+
+                <D.GrapthContainer>
+                <GrapthLikeBinance />
+              </D.GrapthContainer>
+              )}
+
+            </D.Justing>
+
+
             <D.ThirdRow>
               <h2>TABELA DE CONTRATOS</h2>
             </D.ThirdRow>

@@ -54,9 +54,9 @@ const LoginPage = () => {
 
   return (
     <Styles.Container>
-      {closeInfoModal && (
+      {/* {closeInfoModal && (
         <InfoModal setCloseInfoModal={setCloseInfoModal} />
-      )}
+      )} */}
       <Styles.LoginBox onSubmit={handleLogin}>
         <Styles.Logo src='logo-golden.png' alt="Logo" />
         <Styles.Title>Bem vindo!</Styles.Title>

@@ -27,7 +27,7 @@ const TabelaDeSaques = () => {
             });
         }
 
-        console.log(userData.SAQUES.length)
+
 
 
         // Ordena os saques pela data mais recente

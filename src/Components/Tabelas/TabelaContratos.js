@@ -90,7 +90,7 @@ const TabelaDeContratos = () => {
                                 <Style.TabelaData>
                                     R${dado.RENDIMENTO_ATUAL ? ((dado.RENDIMENTO_ATUAL/100)*parseFloat(dado.TOTALSPENT)).toFixed(2) : 0}
                                 </Style.TabelaData>
-                                <Style.TabelaData>{dado.MAXIMUMQUOTAYIELD}%</Style.TabelaData>
+                                <Style.TabelaData>{(parseFloat(dado.MAXIMUMQUOTAYIELD)).toFixed(2)}%</Style.TabelaData>
                                 <Style.TabelaData>
                                     <button onClick={() => handlePDFGenerator(dado)}>BAIXAR</button>
                                 </Style.TabelaData>

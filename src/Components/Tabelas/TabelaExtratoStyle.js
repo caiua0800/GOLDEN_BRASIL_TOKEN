@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const TabelaContainer = styled.div`
     width: 100%;
-    max-height: 300px;
+    max-height: 600px;
     border-collapse: collapse;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background: linear-gradient(-60deg, #000000, #2b2d2e, #2b2d2e, #2b2d2e, #000000);
@@ -63,6 +63,10 @@ export const Table = styled.table`
 
         &.indicacao {
             color: #6acc1a; /* verde escuro para indicação */
+        }
+
+        &.plus {
+            color: rgba(100,255,255,1); /* verde escuro para indicação */
         }
     }
 `;

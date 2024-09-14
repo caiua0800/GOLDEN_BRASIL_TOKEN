@@ -29,11 +29,12 @@ const TabelaExtrato = ({ startDate, endDate, filter }) => {
     const contratos = userData?.CONTRATOS || [];
     const saques = userData?.SAQUES || [];
     const indicacoes = userData?.INDICACAO || [];
+    const plusData = userData?.PLUS || []; // Dados do array PLUS
 
     const transactions = [
         // Filtra e mapeia os contratos com status diferente de 4
         ...contratos
-            .filter(c => c.STATUS !== 4) // Filtra contratos com status diferente de 4
+            .filter(c => c.STATUS !== 4)
             .map(c => ({
                 date: formatDateSystem(c.PURCHASEDATE) || '',
                 description: `Compra de ${c.COINS || 'N/A'} contratos`,
@@ -44,22 +45,31 @@ const TabelaExtrato = ({ startDate, endDate, filter }) => {
     
         // Filtra e mapeia os saques com status igual a 2
         ...saques
-            .filter(s => s.STATUS === 2) // Filtra saques com status igual a 2
+            .filter(s => s.STATUS === 2)
             .map(s => ({
                 date: formatDateSystem(s.DATASOLICITACAO) || '',
-                description: `Saque de ${s.VALORSOLICITADO || 'N/A'}`,
-                value: s.VALORSOLICITADO || 0,
+                description: `Saque de R$${s.VALORSOLICITADO.toFixed(2) || 'N/A'}`,
+                value: `${s.VALORSOLICITADO.toFixed(2)}` || 0,
                 status: returnSaquesResponse(s.STATUS),
                 type: 'saque'
             })),
-    
-        // Mapeia as indicações sem filtrar
+
+        // Mapeia as indicações
         ...indicacoes.map(i => ({
             date: formatDateSystem(i.TIMESTAMP) || '',
             description: `Indicação Cliente ${i.NAME || 'N/A'}: R$${formatNumber(i.VALOR*10) || 'Sem descrição'}`,
             value: (i.VALOR) || 0,
             status: 'ADICIONADO',
             type: 'indicacao'
+        })),
+
+        // Mapeia os dados do array PLUS
+        ...plusData.map(p => ({
+            date: formatDateSystem(p.date_created) || '',
+            description: `PLUS DE R$${p.value_multiplied} PARA CONTRATO ${p.IDCOMPRA}`,
+            value: p.value_multiplied || 0,
+            status: 'ADICIONADO',
+            type: 'plus' // Novo tipo para as transações do PLUS
         })),
 
         // Se o filtro for "Valorização", adicione as valorizacões de cada contrato
@@ -94,7 +104,9 @@ const TabelaExtrato = ({ startDate, endDate, filter }) => {
             case 'indicacao':
                 return '+';
             case 'valorizacao':
-                return '+'; // ou outro sinal que você desejar
+                return '+'; 
+            case 'plus':
+                return '+'; 
             default:
                 return '';
         }

@@ -109,7 +109,15 @@ export default function Modal({ handleModalSaque }) {
                                 onClick={() => { setSelectedContract(c) }}
                                 style={{ color: selectedContract === c ? 'green' : 'black' }} // Adicione esta linha
                             >
-                                CONTRATO: <span>{c.IDCOMPRA}, VALOR DISPONÍVEL: R${c.DISPONIVEL_SAQUE.toFixed(2)}</span>
+                                <M.Contratinho>
+
+                                    <img alt="example-ctr" src="contrato-icon.png" />
+                                    <div>
+                                        CONTRATO: <span>{c.IDCOMPRA}, VALOR DISPONÍVEL: R${c.DISPONIVEL_SAQUE.toFixed(2)}</span>
+                                    </div>
+                                    
+                                </M.Contratinho>
+
                             </li>
                         ))}
                     </ul>
@@ -124,7 +132,7 @@ export default function Modal({ handleModalSaque }) {
                         <M.ValorASerSacado>
                             <h2>Selecione o valor do saque</h2>
                             <input value={valorSolicitado} onChange={handleInputChange} />
-                       
+
                             {selectedContract.DISPONIVEL_SAQUE - valorSolicitadoNumber >= 0 ? (
                                 <>
                                     <span>{valorSolicitado != "" ? "Valor disponível" : ""} </span>
@@ -132,7 +140,7 @@ export default function Modal({ handleModalSaque }) {
                                 </>
                             ) : (
                                 <span>Saldo do contrato insuficiente.</span>
-                            ) }
+                            )}
                         </M.ValorASerSacado>
 
 

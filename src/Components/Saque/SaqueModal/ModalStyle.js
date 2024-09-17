@@ -15,7 +15,7 @@ export const ModalContainer = styled.div`
 `;
 
 export const ModalBox = styled.div`
-  width: 90%;
+  width: max-content;
   box-sizing: border-box;
   background-color: rgba(255,255, 255, 1);
   position: relative;
@@ -24,17 +24,20 @@ export const ModalBox = styled.div`
   display: flex;
   flex-direction: column;
   overflow: scroll;
+  border-radius: 12px;
 `;
 
 export const FecharModalBtn = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 20px;
 
   span {
     cursor: pointer;
     color: rgba(0,0,0,0.7);
     transition: .3s;
+
     &:hover {
       color: rgba(0,0,0,0.9);
       transform: scale(0.95);
@@ -122,9 +125,10 @@ export const ModalTitle = styled.div`
 
   h1{
     margin: 0;
-    font-weight: 500;
+    font-weight: 800;
     color: #000000;
-    font-size: 22px;
+    font-size: 28px;
+    text-shadow: 6px 7px 1px rgba(0,0,0,0.1);
   }
 `;
 
@@ -204,16 +208,7 @@ export const ContratosDisponiveis = styled.div`
       cursor: pointer;
       transition: .3s;
       padding: 0;
-
-      span{
-        margin: 0;
-      }
-
-      &:hover{
-        color: ${({ isSelected }) => (isSelected ? 'green' : 'white')};
-        transform: scale(0.97);
-        text-shadow: 1px 1px 1px black;
-      }
+    
     }
   }
 `;
@@ -226,4 +221,38 @@ export const Nenhum = styled.p`
   text-align: center;
 `;
 
+
+export const Contratinho = styled.div`
+  display: flex;
+  // max-width: 300px;
+  padding: 5px;
+  gap: 10px;
+  margin: 5px;
+  align-items: center;
+  transition: .3s;
+
+  img{
+    width: 40px;
+  }
+
+  div{
+    text-align: start;
+
+    span{
+        margin: 0;
+    }
+  }
+
+
+  &:hover{
+    color: ${({ isSelected }) => (isSelected ? 'green' : 'orange')};
+    transform: scale(0.97);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+    box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  }
+`;
+
 // export const nome = styled.div``;
+
+// export const nome = styled.div``;
+

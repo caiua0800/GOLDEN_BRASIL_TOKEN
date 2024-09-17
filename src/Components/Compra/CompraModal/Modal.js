@@ -226,7 +226,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                 </M.FecharModalBtn>
 
                 <M.ModalPDFContainer>
-                    <PDFGenerator ContratoData={modalData} assinatura={assinatura} />
+                    <PDFGenerator ContratoData={modalData} assinatura={assinatura} lastId={lastId+1}/>
                 </M.ModalPDFContainer>
                 <M.CheckboxContainer>
                     <label>

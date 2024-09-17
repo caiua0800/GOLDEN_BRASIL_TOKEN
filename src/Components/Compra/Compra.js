@@ -26,6 +26,7 @@ export default function Compra() {
     const [loadingSimulation, setLoadigSimulation] = useState(false);
     const [valorContratoUni, setValorContratoUni] = useState(0);
     const [minimum, setMinimum] = useState(null);
+    
 
 
     useEffect(() => {
@@ -154,7 +155,7 @@ export default function Compra() {
                         <S.CarteiraInfo isVisible={carteiraState}>
                             <S.CarteiraInfoBox>
                                 <h1>SALDO DE DISPONÍVEL</h1>
-                                <span>R${userData && (userData.DISPONIVEL_SAQUE.toFixed(2))}</span>
+                                <span>R${userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) + (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) : 0}</span>
                             </S.CarteiraInfoBox>
                             <S.CarteiraInfoBox>
                                 <h1>SALDO PLATAFORMA</h1>

@@ -63,7 +63,8 @@ const TabelaDeContratos = () => {
                         <Style.TabelaHeader>DATA DE RECOMPRA</Style.TabelaHeader>
                         <Style.TabelaHeader>CONTRATOS</Style.TabelaHeader>
                         <Style.TabelaHeader>VALOR</Style.TabelaHeader>
-                        <Style.TabelaHeader>LUCRO OBTIDO</Style.TabelaHeader>
+                        <Style.TabelaHeader>LUCRO ONTÉM</Style.TabelaHeader>
+                        <Style.TabelaHeader>LUCRO HOJE</Style.TabelaHeader>
                         <Style.TabelaHeader>TOTAL GANHO</Style.TabelaHeader>
                         <Style.TabelaHeader>LUCRO TOTAL FINAL</Style.TabelaHeader>
                         <Style.TabelaHeader>CONTRATO</Style.TabelaHeader>
@@ -85,7 +86,10 @@ const TabelaDeContratos = () => {
                                 <Style.TabelaData>{dado.COINS}</Style.TabelaData>
                                 <Style.TabelaData>R$ {parseFloat(dado.TOTALSPENT).toFixed(2) ? (parseFloat(dado.TOTALSPENT).toFixed(2)) : dado.TOTALSPENT}</Style.TabelaData>
                                 <Style.TabelaData>
-                                    {dado.RENDIMENTO_ATUAL ? dado.RENDIMENTO_ATUAL.toFixed(4) : dado.RENDIMENTO_ATUAL}%
+                                    {dado.RENDIMENTO_ATUAL ? (dado.RENDIMENTO_ATUAL - (parseFloat(dado.MAXIMUMQUOTAYIELD)/(parseFloat(dado.MAXIMUMNUMBEROFDAYSTOYIELD)*30))).toFixed(2) : dado.RENDIMENTO_ATUAL}%
+                                </Style.TabelaData>
+                                <Style.TabelaData>
+                                    {dado.RENDIMENTO_ATUAL ? dado.RENDIMENTO_ATUAL.toFixed(2) : dado.RENDIMENTO_ATUAL}%
                                 </Style.TabelaData>
                                 <Style.TabelaData>
                                     R${dado.RENDIMENTO_ATUAL ? ((dado.RENDIMENTO_ATUAL/100)*parseFloat(dado.TOTALSPENT)).toFixed(2) : 0}

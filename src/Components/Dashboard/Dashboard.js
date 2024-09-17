@@ -191,7 +191,7 @@ export default function Dashboard() {
             </D.FirstRow>
             <D.SecondRow>
               {/* <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) < 0 ? (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) * -1 : (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO)) : '0'}</h1> */}
-              <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) + (userData.ACERTARBD? (userData.ACERTARBD) : 0)) : 0}</h1>
+              <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) + (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) : 0}</h1>
               
               <D.SaldoDisponivelParaSaque>
                 <D.ProgressBar>

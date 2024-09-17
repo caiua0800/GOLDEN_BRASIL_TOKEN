@@ -22,16 +22,44 @@ const ExtratoValorizacao = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [message, setMessage] = useState("Carregando...");
     const [pontos, setPontos] = useState(0);
+    const [rendimentosFaltantes, setRendimentosFaltantes] = useState([])
     const intervalRef = useRef(null);
+    const [isInitialDataLoaded, setIsInitialDataLoaded] = useState(false);
+
+    
+    function calcularDiasAteHoje(ultima_data, arrayObjetos) {
+        // Converte a última data de string para um objeto Date
+        const ultimaDataObject = new Date(ultima_data);
+    
+        // Obtém a data de hoje
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0); // Zera horas, minutos e segundos para comparação
+    
+        if (ultimaDataObject < hoje) {
+            
+            const diferencaEmMs = hoje - ultimaDataObject;
+            const quantidadeDias = Math.floor(diferencaEmMs / (1000 * 60 * 60 * 24)); // Converte de ms para dias
+
+            // Retorna o novo array com o campo adicional
+
+            return arrayObjetos.map(obj => ({
+                ...obj, // Mantém as propriedades do objeto original
+                quantidadeAteHoje: quantidadeDias ,
+                diario: parseFloat(obj.MAXIMUMQUOTAYIELD)/(parseFloat(obj.MAXIMUMNUMBEROFDAYSTOYIELD)*parseFloat(30)) ,
+            }));
+        }
+    
+        // Caso a última data não seja anterior ao dia de hoje, retorne o array original
+        return arrayObjetos;
+    }
 
     useEffect(() => {
         setMessage("Carregando...");
         setPontos(0);
-
+    
         // Lógica de intervalo para atualizar "pontos"
         intervalRef.current = setInterval(() => {
             setPontos(prevPontos => {
-                // Atualiza a mensagem com base no novo valor de pontos
                 if (prevPontos < 3) {
                     if (prevPontos === 0) {
                         setMessage("Carregando.");
@@ -41,29 +69,90 @@ const ExtratoValorizacao = () => {
                         setMessage("Carregando...");
                     }
                 }
-                return (prevPontos + 1) % 5; // Reseta para 0 após 4
+                return (prevPontos + 1) % 5;
             });
         }, 200);
-
+    
         // Chamada à API
         axios.post(`${base}${route}`, { cpf_cliente: userData.CPF })
             .then(res => {
-                // Ordenar os dados pelo datacriacao do mais recente para o mais antigo
+                console.log(res.data[0])
                 const sortedData = res.data.sort((a, b) => new Date(b.datacriacao) - new Date(a.datacriacao));
                 setHistory(sortedData);
                 setMessage("Dados carregados");
+
+                if (sortedData.length > 0 && sortedData[0].datacriacao) {
+                    const rendimentosFaltantes = calcularDiasAteHoje(sortedData[0].datacriacao, userData.CONTRATOS);
+                    setRendimentosFaltantes(rendimentosFaltantes);
+                }
+                
+                setIsInitialDataLoaded(true);
             })
             .catch(error => {
                 console.log(`Erro ao obter histórico de rendimentos: ${error.message}`);
                 setHistory([]);
                 setMessage("Histórico Indisponível");
+                setIsInitialDataLoaded(true);
             })
             .finally(() => {
-                clearInterval(intervalRef.current); // Limpa o intervalo no final
+                clearInterval(intervalRef.current);
             });
+    
+        return () => clearInterval(intervalRef.current);
+    }, [userData.CPF]);
 
-        return () => clearInterval(intervalRef.current); // Cleanup do intervalo
-    }, [userData.CPF]); // Mantém apenas userData.CPF como dependência
+    useEffect(() => {
+        if (isInitialDataLoaded && rendimentosFaltantes.length > 0) {
+            addRendimentosAteHoje(rendimentosFaltantes);
+        }
+    }, [isInitialDataLoaded, rendimentosFaltantes]);
+
+    const addRendimentosAteHoje = (rendimentosFaltantes) => {
+        const today = new Date(); // Data de hoje
+    
+        // Iterar sobre cada rendimento faltante
+        rendimentosFaltantes.forEach(rendimento => {
+            if (rendimento.quantidadeAteHoje > 0) {  // Se a quantidade é maior que 0
+                const quantidadeAteHoje = rendimento.quantidadeAteHoje +  1; // Quantidade de dias a adicionar
+                const id_contrato = rendimento.IDCOMPRA; // ID do contrato do rendimento
+    
+                // Usar a última data de criação para começar a contar
+                const ultimaData = new Date(history[0].datacriacao);
+    
+                // Adicione rendimentos até a quantidade de dias
+                for (let i = 1; i <= (quantidadeAteHoje); i++) {
+                    const novaData = new Date(ultimaData); // Cria uma nova instância da última data
+                    novaData.setDate(ultimaData.getDate() + i); // Adiciona 'i' dias à última data
+
+                    if (novaData <= today) { // Somente adicione se a nova data for hoje ou antes
+                        const novoRendimento = {
+                            id_contrato: id_contrato,
+                            percentual: rendimento.diario, // Use o rendimento necessário
+                            datacriacao: novaData.toISOString().slice(0, 19).replace('T', ' '), // Data formatada
+                        };
+    
+                        // Adiciona o novo rendimento ao histórico
+                        setHistory(prevHistory => {
+                            // Adiciona o novo rendimento ao histórico existente
+                            const updatedHistory = [novoRendimento, ...prevHistory];
+                            
+                            // Ordena o histórico atualizado pela data de criação (do mais recente para o mais antigo)
+                            const sortedHistory = updatedHistory.sort((a, b) => 
+                                new Date(b.datacriacao) - new Date(a.datacriacao)
+                            );
+                            
+                            // Retorna o histórico ordenado
+                            return sortedHistory;
+                        });
+                    }
+                }
+            }
+        });
+    };
+    
+    
+
+
 
     // Lógica para calcular os índices da página atual
     const indexOfLastItem = currentPage * itemsPerPage;

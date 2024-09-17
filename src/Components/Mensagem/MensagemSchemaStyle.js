@@ -24,6 +24,10 @@ const messageTypeStyles = {
         background: linear-gradient(to right, #cca000, #ffc300);
         color: white;
     `,
+    IMAGEM: css`
+    background: linear-gradient(to right, #60b6fb, #1e96fc);
+    color: white;
+`,
 };
 
 export const MensagemVerBox = styled.div`
@@ -64,10 +68,19 @@ export const MensagemVerBox = styled.div`
     }
 
     div{
+
+        &.normal{
+            margin-top: 0;
+            padding-bottom: 20px;
+        }
         margin-top: 20px;
         display: flex;
         width: 100%;
         justify-content: space-between;
+
+        &.normal {
+            justify-content: start;
+        }
 
         h5{
             margin: 0;
@@ -103,6 +116,7 @@ export const MensagemVerBox = styled.div`
             transform: scale(1.1);
         }
     }
+        
     transition: .3s;
 
     &:hover{
@@ -131,4 +145,47 @@ export const MensagemVerBox = styled.div`
     }
 `;
 
+
+
+
+export const ComImagem = styled.div`
+
+  
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    
+    img{
+        width: 80px;
+    }
+
+    h3{
+        padding-left: 20px;
+
+        text-align: start;
+        margin: 0;
+        color: white;
+        width: max-content;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    h6{
+        position: absolute;
+        bottom: 0px;
+        right: 10px;
+        color: yellow;
+        cursor: pointer;
+    }
+
+    h5{
+        position: absolute;
+        bottom: 0px;
+        left: 10px;
+        color: black;
+    }
+`;
 

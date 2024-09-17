@@ -26,37 +26,38 @@ const ExtratoValorizacao = () => {
     const intervalRef = useRef(null);
     const [isInitialDataLoaded, setIsInitialDataLoaded] = useState(false);
 
-    
+
     function calcularDiasAteHoje(ultima_data, arrayObjetos) {
         // Converte a última data de string para um objeto Date
         const ultimaDataObject = new Date(ultima_data);
-    
+
         // Obtém a data de hoje
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0); // Zera horas, minutos e segundos para comparação
-    
+
         if (ultimaDataObject < hoje) {
-            
             const diferencaEmMs = hoje - ultimaDataObject;
             const quantidadeDias = Math.floor(diferencaEmMs / (1000 * 60 * 60 * 24)); // Converte de ms para dias
 
-            // Retorna o novo array com o campo adicional
-
-            return arrayObjetos.map(obj => ({
-                ...obj, // Mantém as propriedades do objeto original
-                quantidadeAteHoje: quantidadeDias ,
-                diario: parseFloat(obj.MAXIMUMQUOTAYIELD)/(parseFloat(obj.MAXIMUMNUMBEROFDAYSTOYIELD)*parseFloat(30)) ,
-            }));
+            // Retorna o novo array filtrado e com o campo adicional
+            return arrayObjetos
+                .map(obj => ({
+                    ...obj,
+                    quantidadeAteHoje: quantidadeDias,
+                    diario: parseFloat(obj.MAXIMUMQUOTAYIELD) / (parseFloat(obj.MAXIMUMNUMBEROFDAYSTOYIELD) * parseFloat(30)),
+                }))
+                .filter(obj => obj.STATUS === 1 || obj.STATUS === 2); // Filtra apenas os objetos com STATUS 1 ou 2
         }
-    
+
         // Caso a última data não seja anterior ao dia de hoje, retorne o array original
-        return arrayObjetos;
+        return arrayObjetos.filter(obj => obj.STATUS === 1 || obj.STATUS === 2); // Filtra os objetos com STATUS 1 ou 2
     }
+
 
     useEffect(() => {
         setMessage("Carregando...");
         setPontos(0);
-    
+
         // Lógica de intervalo para atualizar "pontos"
         intervalRef.current = setInterval(() => {
             setPontos(prevPontos => {
@@ -72,7 +73,7 @@ const ExtratoValorizacao = () => {
                 return (prevPontos + 1) % 5;
             });
         }, 200);
-    
+
         // Chamada à API
         axios.post(`${base}${route}`, { cpf_cliente: userData.CPF })
             .then(res => {
@@ -85,7 +86,7 @@ const ExtratoValorizacao = () => {
                     const rendimentosFaltantes = calcularDiasAteHoje(sortedData[0].datacriacao, userData.CONTRATOS);
                     setRendimentosFaltantes(rendimentosFaltantes);
                 }
-                
+
                 setIsInitialDataLoaded(true);
             })
             .catch(error => {
@@ -93,11 +94,28 @@ const ExtratoValorizacao = () => {
                 setHistory([]);
                 setMessage("Histórico Indisponível");
                 setIsInitialDataLoaded(true);
+
+                if (userData.CONTRATOS) {
+                    let ctr = null;
+                    for (let i = 0; i < userData.CONTRATOS.length; i++) {
+                        if (userData.CONTRATOS[i].STATUS === 1) {
+                            ctr = userData.CONTRATOS[i];
+                            break;
+                        }
+                    }
+                    if (ctr) {
+                        console.log(ctr);
+                        const rendimentosFaltantes = calcularDiasAteHoje(ctr.PRIMEIRO_RENDIMENTO ? ctr.PRIMEIRO_RENDIMENTO : ctr.PURCHASEDATE, userData.CONTRATOS);
+                        setRendimentosFaltantes(rendimentosFaltantes);
+                        setIsInitialDataLoaded(true);
+
+                    }
+                }
             })
             .finally(() => {
                 clearInterval(intervalRef.current);
             });
-    
+
         return () => clearInterval(intervalRef.current);
     }, [userData.CPF]);
 
@@ -109,16 +127,25 @@ const ExtratoValorizacao = () => {
 
     const addRendimentosAteHoje = (rendimentosFaltantes) => {
         const today = new Date(); // Data de hoje
-    
-        // Iterar sobre cada rendimento faltante
+
         rendimentosFaltantes.forEach(rendimento => {
             if (rendimento.quantidadeAteHoje > 0) {  // Se a quantidade é maior que 0
-                const quantidadeAteHoje = rendimento.quantidadeAteHoje +  1; // Quantidade de dias a adicionar
-                const id_contrato = rendimento.IDCOMPRA; // ID do contrato do rendimento
-    
+                const quantidadeAteHoje = rendimento.quantidadeAteHoje + 1;
+                const id_contrato = rendimento.IDCOMPRA;
+
+                let ctr = null;
+                if (userData.CONTRATOS) {
+                    for (let i = 0; i < userData.CONTRATOS.length; i++) {
+                        if (userData.CONTRATOS[i].STATUS === 1) {
+                            ctr = userData.CONTRATOS[i];
+                            break;
+                        }
+                    }
+                }
+
                 // Usar a última data de criação para começar a contar
-                const ultimaData = new Date(history[0].datacriacao);
-    
+                const ultimaData = new Date(history[0] ? history[0].datacriacao : (ctr.PRIMEIRO_RENDIMENTO ? ctr.PRIMEIRO_RENDIMENTO : ctr.PURCHASEDATE));
+
                 // Adicione rendimentos até a quantidade de dias
                 for (let i = 1; i <= (quantidadeAteHoje); i++) {
                     const novaData = new Date(ultimaData); // Cria uma nova instância da última data
@@ -130,17 +157,17 @@ const ExtratoValorizacao = () => {
                             percentual: rendimento.diario, // Use o rendimento necessário
                             datacriacao: novaData.toISOString().slice(0, 19).replace('T', ' '), // Data formatada
                         };
-    
+
                         // Adiciona o novo rendimento ao histórico
                         setHistory(prevHistory => {
                             // Adiciona o novo rendimento ao histórico existente
                             const updatedHistory = [novoRendimento, ...prevHistory];
-                            
+
                             // Ordena o histórico atualizado pela data de criação (do mais recente para o mais antigo)
-                            const sortedHistory = updatedHistory.sort((a, b) => 
+                            const sortedHistory = updatedHistory.sort((a, b) =>
                                 new Date(b.datacriacao) - new Date(a.datacriacao)
                             );
-                            
+
                             // Retorna o histórico ordenado
                             return sortedHistory;
                         });
@@ -149,8 +176,8 @@ const ExtratoValorizacao = () => {
             }
         });
     };
-    
-    
+
+
 
 
 
@@ -169,7 +196,7 @@ const ExtratoValorizacao = () => {
                 }
             }
         }
-        return 0; 
+        return 0;
     }
 
     return (

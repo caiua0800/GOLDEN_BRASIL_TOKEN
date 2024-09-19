@@ -3,6 +3,7 @@ import { addMonths, differenceInDays } from 'date-fns';
 import { db, doc, getDoc } from '../database/firebaseConfig'
 import axios from 'axios';
 import CryptoJS from 'crypto-js'
+import styled from 'styled-components';
 
 export const formatNumber = (number) => {
 
@@ -233,12 +234,16 @@ export const verifyLogin = async (cpf, username, password) => {
     }
 };
 
+const LinkRecompra = styled.a`
+    color: lightgreen;
+`;
+
 export const retornaResposta = (dado) => {
     switch (dado.STATUS) {
         case 1:
             return 'VALORIZANDO';
         case 2:
-            return 'Contrato Finalizado';
+            return <LinkRecompra href='https://caiuamello.com' target='_blank'>Finalizado, Clique aqui</LinkRecompra>;
         case 3:
             return 'CANCELADO';
         case 4:

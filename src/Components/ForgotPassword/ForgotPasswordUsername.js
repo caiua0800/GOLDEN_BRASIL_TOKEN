@@ -14,23 +14,23 @@ export default function ForgotPasswordUsername() {
     const [email, setEmail] = useState('');
 
     const handleEmailExists = () => {
-        if (username.trim() === '') {
-            return alert("Insira o username!");
-        }
-
         axios.post(`${BASE_ROUTE}${returnEmailLogin}`, { USERNAME: username })
             .then(response => {
                 console.log("Resposta recebida:");
                 console.log(response.data);
                 setResponseStatus(response.data.status)
                 setEmail(response.data.EMAIL);
-                handleSendEmail()
+                console.log(response.data.EMAIL)
+
+                if(response.data.EMAIL){
+                    handleSendEmail(response.data.EMAIL);
+                }
             })
             .catch(error => {
                 console.log("Erro ao verificar o email:");
                 if (error.response) {
-                    setResponseStatus(error.response.status)
 
+                    setResponseStatus(error.response.status)
                     console.log("Status do erro:", error.response.status);
                     console.log("Dados do erro:", error.response.data);
                 } else if (error.request) {
@@ -66,11 +66,8 @@ export default function ForgotPasswordUsername() {
         setResponseMessage(null);
     }
 
-    const handleSendEmail = () => {
-        if (email.trim() === '') {
-            alert("Insira o username!");
-            return;
-        }
+    const handleSendEmail = (email) => {
+
 
         sendPasswordResetEmail(auth, email)
             .then(() => {
@@ -87,7 +84,7 @@ export default function ForgotPasswordUsername() {
 
     return (
         <S.Container>
-            <S.GetBack onClick={() => {window.location.href = '/'}}>VOLTAR</S.GetBack>
+            <S.GetBack onClick={() => { window.location.href = '/' }}>VOLTAR</S.GetBack>
             <S.BoxCenter>
                 <h4>QUAL O SEU USERNAME?</h4>
                 <input
@@ -96,8 +93,14 @@ export default function ForgotPasswordUsername() {
                     placeholder="username"
                     value={username}
                 />
-                <h6 onClick={() => {window.location.href='/recover'}}>Tentar pelo email</h6>
-                <button onClick={handleEmailExists}>Buscar</button>
+                <h6 onClick={() => { window.location.href = '/recover' }}>Tentar pelo email</h6>
+                <button onClick={() => {
+                    if (username.trim() === '') {
+                        alert("Insira o username!");
+                    } else {
+                        handleEmailExists();
+                    }
+                }}>Buscar</button>
                 {responseStatus != null && (
                     <p>{responseMessage} <span onClick={handleClear}>x</span></p>
                 )}

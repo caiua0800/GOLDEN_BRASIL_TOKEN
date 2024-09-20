@@ -8,6 +8,7 @@ import { mapFieldNameToFirebase } from '../../assets/utils';
 import { usePulse } from '../../context/LoadContext';
 import { db, storage, doc, updateDoc } from '../../database/firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { Link } from "react-router-dom";
 
 const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE;
 const EDITAR_CLIENTE_INFO = process.env.REACT_APP_EDITAR_CLIENTE_INFO;
@@ -283,6 +284,7 @@ const ProfilePage = ({ setProfilePage }) => {
                                 </U.ChangePhotoOverlay>
                             </U.ProfilePicture>
                             <U.ProfileName>{inputValues.usuario}</U.ProfileName>
+                            <U.MudarSenhaLink><Link to='/alterarSenha'>Mudar Senha</Link></U.MudarSenhaLink>
                         </U.InitialContent>
 
                         <U.ProfileInfo>

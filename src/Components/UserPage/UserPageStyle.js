@@ -314,4 +314,20 @@ export const SaveAccountHandler = styled.span`
     }
 `;
 
-// export const AccountBox = styled.div``;
+export const MudarSenhaLink = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+
+
+    text-decoration: underline;
+    cursor: pointer;
+    color: blue;
+    font-size: 12px;
+    transition: .3s;
+    margin: 0;
+    &:hover{color: black;}
+    
+`;

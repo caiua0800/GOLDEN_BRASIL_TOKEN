@@ -19,7 +19,7 @@ import useImagePreloader from './hooks/useImagePreloader';
 import Pagina from './Components/ContaDeposito/Pagina';
 import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
 import ForgotPasswordUsername from './Components/ForgotPassword/ForgotPasswordUsername';
-import Ajuda from './Components/Ajuda/Ajuda';
+import AlterarSenha from './Components/AlterarSenha/AlterarSenha';
 import { createGlobalStyle } from 'styled-components';
 import Relatorio from './Components/Relatorio/Relatorio';
 import ExtratoValorizacao from './Components/ExtratoValorizacao/ExtratoValorizacao';
@@ -62,7 +62,7 @@ function App() {
             <Route path="/extrato" element={<PrivateRoute element={Extrato} />} />
             <Route path="/extratovalorizacao" element={<PrivateRoute element={ExtratoValorizacao} />} />
             <Route path="/relatorio" element={<PrivateRoute element={Relatorio} />} />
-            {/* <Route path="/ajuda" element={<PrivateRoute element={Ajuda} />} /> */}
+            <Route path="/alterarSenha" element={<AlterarSenha />} />
             <Route path="/ContaDeDeposito" element={<Pagina />} />
           </Routes>
         </Router>

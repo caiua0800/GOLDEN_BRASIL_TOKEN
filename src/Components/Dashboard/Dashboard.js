@@ -166,12 +166,12 @@ export default function Dashboard() {
               <D.ContratosAtivos>
                 <h1>CONTRATOS ATIVOS</h1>
                 <span>{userData && userData.TOTAL_COINS}</span>
-                <TwoBars totalSpent={userData ? ULLTNUMBER(userData.TOTAL_SPENT, userData.VALOR_SACADO) : 0} totalValue={userData ? ULLTNUMBER(userData.TOTAL_PLATAFORMA, userData.VALOR_SACADO) : 0} />
+                <TwoBars totalSpent={userData ? (userData.TOTAL_SPENT) : 0} totalValue={userData ? ULLTNUMBER(userData.TOTAL_PLATAFORMA) : 0} />
               </D.ContratosAtivos>
               <D.SaldoCorrente>
                 <D.SaldoNaPlataforma>
                   <h2>SALDO NA PLATAFORMA</h2>
-                  <span>R$ {userData ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO) : '0'}</span>
+                  <span>R$ {userData ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO  + (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) : '0'}</span>
                   <D.SaldoPlataformaDivs>
                     <div>
                       <h3>VALOR DE COMPRA</h3>
@@ -195,9 +195,9 @@ export default function Dashboard() {
               
               <D.SaldoDisponivelParaSaque>
                 <D.ProgressBar>
-                  <D.ProgressFill percentage={userData ? ((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />
+                  <D.ProgressFill percentage={userData ? (((userData.LUCRO_CONTRATOS+ (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) - userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />
                 </D.ProgressBar>
-                <D.PercentageCount>{userData ? (((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100).toFixed(2) : 0}%</D.PercentageCount>
+                <D.PercentageCount>{userData ? ((((userData.LUCRO_CONTRATOS+ (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) - userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100).toFixed(2) : 0}%</D.PercentageCount>
               </D.SaldoDisponivelParaSaque>
             </D.SecondRow>
             <D.IndiqueEGanha>

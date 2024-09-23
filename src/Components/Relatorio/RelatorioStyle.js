@@ -60,6 +60,8 @@ export const Filters = styled.div`
     display: flex;
     justify-content: center;
     gap: 20px;
+    flex-wrap: wrap:
+
 `;
 
 export const RelatorioInputBox = styled.div`
@@ -69,12 +71,13 @@ export const RelatorioInputBox = styled.div`
 
     span{
         font-size: 22px;
+        text-align: center;
         font-weight: 500;
     }
 
     input{
-        width: 300px;
-        height: 30px;
+        width: 100%;
+        height: 40px;
         background: linear-gradient(-70deg, #2e3033, #000000, #2e3033, #000000, #2e3033);
         color: gold;
         padding-left: 20px;

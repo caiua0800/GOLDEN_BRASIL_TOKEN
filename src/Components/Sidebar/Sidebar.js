@@ -23,6 +23,12 @@ export const Sidebar = ({ isOpen }) => {
         logout();
     }
 
+    function obterPrimeiroNome(nomeCompleto) {
+        // Divide a string pelo espaço e retorna o primeiro elemento
+        const primeiroNome = nomeCompleto.split(' ')[0];
+        return primeiroNome;
+    }
+
 
     return (
         <>
@@ -97,7 +103,7 @@ export const Sidebar = ({ isOpen }) => {
                     <span>
                         <img src={fotoPerfil} />
                     </span>
-                    <p>{userData && userData.USERNAME}</p>
+                    <p>{userData && obterPrimeiroNome(userData.NAME)}</p>
                 </S.Footer>
             </S.Container>
         </>

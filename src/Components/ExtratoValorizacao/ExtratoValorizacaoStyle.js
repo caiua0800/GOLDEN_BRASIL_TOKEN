@@ -165,3 +165,24 @@ export const Pagination = styled.div`
         margin: 0 10px;
     }
 `;
+
+
+export const SearchBar = styled.div`
+    width: 100%;
+    // padding: 20px;
+    box-sizing: border-box;
+    margin: 10px 0;
+
+    input{
+        width: 100%;
+        height: 40px;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+        background: rgba(233, 234, 245, 1);
+        font-size: 16px;
+        font-weight: 800;
+        padding-left: 20px;;
+        border-radius: 8px;
+        box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
+    }
+`;

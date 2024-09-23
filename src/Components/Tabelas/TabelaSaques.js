@@ -18,23 +18,29 @@ const TabelaDeSaques = () => {
 
         if (userData && Array.isArray(userData.CONTRATOS)) {
             userData.CONTRATOS.forEach(ctr => {
-                if(ctr.SAQUES_FEITOS && ctr.SAQUES_FEITOS.length > 0) {
+                if (ctr.SAQUES_FEITOS && ctr.SAQUES_FEITOS.length > 0) {
                     ctr.SAQUES_FEITOS.forEach(saq => {
-                        allSaques.push(saq); // Adiciona cada saque à nova array
+                        // Filtra os saques para não incluir "Saque Anônimo"
+                        if (saq.description !== "Saque Anônimo") {
+                            allSaques.push(saq); // Adiciona cada saque à nova array
+                        }
                     });
-                    console.log(1)
                 }
             });
         }
 
-
-
-
         // Ordena os saques pela data mais recente
         allSaques.sort((a, b) => new Date(b.DATASOLICITACAO) - new Date(a.DATASOLICITACAO));
-
         setSaques(allSaques); // Atualiza o estado apenas uma vez
     }, [userData]);
+
+    const handleDescription = (des) => {
+        if (des && des.toUpperCase().includes("DESCONTAR")) {
+            return "Saque Manual feito pela Golden"
+        } else {
+            return null;
+        }
+    }
 
     return (
         <>
@@ -57,9 +63,16 @@ const TabelaDeSaques = () => {
                         saques.map((dado, index) => (
                             <Style.TabelaRow key={index}>
                                 <Style.TabelaData>{formatarData(dado.DATASOLICITACAO)}</Style.TabelaData>
-                                <Style.TabelaData>Saque no valor de R${dado.VALORSOLICITADO.toFixed(2)} do contrato {dado.IDCOMPRA}</Style.TabelaData>
+                                <Style.TabelaData>
+                                    {handleDescription(dado.description) === null ? (
+                                        `Saque no valor de R$${dado.VALORSOLICITADO.toFixed(2)} do contrato ${dado.IDCOMPRA}`
+                                    ) : (
+                                        `${handleDescription(dado.description)} de R$${dado.VALORSOLICITADOTAXA ? dado.VALORSOLICITADOTAXA : dado.VALORSOLICITADO.toFixed(2)}`
+                                    )}
+                                </Style.TabelaData>
+
                                 <Style.TabelaData>{(dado.VALORSOLICITADO).toFixed(2)}</Style.TabelaData>
-                                <Style.TabelaData>{dado.VALORSOLICITADOTAXA ? dado.VALORSOLICITADOTAXA : (parseFloat(dado.VALORSOLICITADO) - (parseFloat(dado.VALORSOLICITADO)*0.04)).toFixed(2)}</Style.TabelaData>
+                                <Style.TabelaData>{dado.VALORSOLICITADOTAXA ? dado.VALORSOLICITADOTAXA : (parseFloat(dado.VALORSOLICITADO) - (parseFloat(dado.VALORSOLICITADO) * 0.04)).toFixed(2)}</Style.TabelaData>
                                 <Style.TabelaData>{dado.STATUS === 1 ? "Pendente" : dado.STATUS === 2 ? 'PAGO' : "CANCELADO"}</Style.TabelaData>
                             </Style.TabelaRow>
                         ))

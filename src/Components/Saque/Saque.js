@@ -77,7 +77,7 @@ export default function Saque() {
 
 
     const handleClickPromotion = () => {
-        const phoneNumber = '17992562727';
+        const phoneNumber = '+558006066048'; // Número a ser utilizado
         const message = 'Olá, gostaria de investir meu lucro em contratos!'; // Mensagem que será enviada (opcional)
         
         // URL para abrir o WhatsApp
@@ -86,6 +86,7 @@ export default function Saque() {
         // Abre o WhatsApp em uma nova aba
         window.open(whatsappURL, '_blank');
     };
+    
     
 
     return (

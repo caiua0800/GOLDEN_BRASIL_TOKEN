@@ -51,6 +51,10 @@ export const TabelaData = styled.td`
         cursor: pointer;
         text-align: center;
     }
+
+    &.valorSaqueDisp{
+        color: rgba(100, 255, 20, 1);
+    }
 `;
 
 export const Certificado = styled.div`

@@ -19,46 +19,39 @@ const ExtratoValorizacao = () => {
     const { userData } = useContext(AuthContext);
     const [history, setHistory] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage] = useState(10);
     const [message, setMessage] = useState("Carregando...");
     const [pontos, setPontos] = useState(0);
-    const [rendimentosFaltantes, setRendimentosFaltantes] = useState([])
+    const [rendimentosFaltantes, setRendimentosFaltantes] = useState([]);
+    const [filterId, setFilterId] = useState(""); // Estado do filtro
     const intervalRef = useRef(null);
     const [isInitialDataLoaded, setIsInitialDataLoaded] = useState(false);
 
-
     function calcularDiasAteHoje(ultima_data, arrayObjetos) {
-        // Converte a última data de string para um objeto Date
         const ultimaDataObject = new Date(ultima_data);
-
-        // Obtém a data de hoje
         const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0); // Zera horas, minutos e segundos para comparação
+        hoje.setHours(0, 0, 0, 0);
 
         if (ultimaDataObject < hoje) {
             const diferencaEmMs = hoje - ultimaDataObject;
-            const quantidadeDias = Math.floor(diferencaEmMs / (1000 * 60 * 60 * 24)); // Converte de ms para dias
+            const quantidadeDias = Math.floor(diferencaEmMs / (1000 * 60 * 60 * 24));
 
-            // Retorna o novo array filtrado e com o campo adicional
             return arrayObjetos
                 .map(obj => ({
                     ...obj,
                     quantidadeAteHoje: quantidadeDias,
                     diario: parseFloat(obj.MAXIMUMQUOTAYIELD) / (parseFloat(obj.MAXIMUMNUMBEROFDAYSTOYIELD) * parseFloat(30)),
                 }))
-                .filter(obj => obj.STATUS === 1 || obj.STATUS === 2); // Filtra apenas os objetos com STATUS 1 ou 2
+                .filter(obj => obj.STATUS === 1 || obj.STATUS === 2);
         }
 
-        // Caso a última data não seja anterior ao dia de hoje, retorne o array original
-        return arrayObjetos.filter(obj => obj.STATUS === 1 || obj.STATUS === 2); // Filtra os objetos com STATUS 1 ou 2
+        return arrayObjetos.filter(obj => obj.STATUS === 1 || obj.STATUS === 2);
     }
-
 
     useEffect(() => {
         setMessage("Carregando...");
         setPontos(0);
 
-        // Lógica de intervalo para atualizar "pontos"
         intervalRef.current = setInterval(() => {
             setPontos(prevPontos => {
                 if (prevPontos < 3) {
@@ -74,10 +67,8 @@ const ExtratoValorizacao = () => {
             });
         }, 200);
 
-        // Chamada à API
         axios.post(`${base}${route}`, { cpf_cliente: userData.CPF })
             .then(res => {
-                console.log(res.data[0])
                 const sortedData = res.data.sort((a, b) => new Date(b.datacriacao) - new Date(a.datacriacao));
                 setHistory(sortedData);
                 setMessage("Dados carregados");
@@ -108,7 +99,6 @@ const ExtratoValorizacao = () => {
                         const rendimentosFaltantes = calcularDiasAteHoje(ctr.PRIMEIRO_RENDIMENTO ? ctr.PRIMEIRO_RENDIMENTO : ctr.PURCHASEDATE, userData.CONTRATOS);
                         setRendimentosFaltantes(rendimentosFaltantes);
                         setIsInitialDataLoaded(true);
-
                     }
                 }
             })
@@ -126,10 +116,10 @@ const ExtratoValorizacao = () => {
     }, [isInitialDataLoaded, rendimentosFaltantes]);
 
     const addRendimentosAteHoje = (rendimentosFaltantes) => {
-        const today = new Date(); // Data de hoje
+        const today = new Date();
 
         rendimentosFaltantes.forEach(rendimento => {
-            if (rendimento.quantidadeAteHoje > 0) {  // Se a quantidade é maior que 0
+            if (rendimento.quantidadeAteHoje > 0) {
                 const quantidadeAteHoje = rendimento.quantidadeAteHoje + 1;
                 const id_contrato = rendimento.IDCOMPRA;
 
@@ -143,33 +133,24 @@ const ExtratoValorizacao = () => {
                     }
                 }
 
-                // Usar a última data de criação para começar a contar
                 const ultimaData = new Date(history[0] ? history[0].datacriacao : (ctr.PRIMEIRO_RENDIMENTO ? ctr.PRIMEIRO_RENDIMENTO : ctr.PURCHASEDATE));
 
-                // Adicione rendimentos até a quantidade de dias
                 for (let i = 1; i <= (quantidadeAteHoje); i++) {
-                    const novaData = new Date(ultimaData); // Cria uma nova instância da última data
-                    novaData.setDate(ultimaData.getDate() + i); // Adiciona 'i' dias à última data
+                    const novaData = new Date(ultimaData);
+                    novaData.setDate(ultimaData.getDate() + i);
 
-                    if (novaData <= today) { // Somente adicione se a nova data for hoje ou antes
+                    if (novaData <= today) {
                         const novoRendimento = {
                             id_contrato: id_contrato,
-                            percentual: rendimento.diario, // Use o rendimento necessário
-                            datacriacao: novaData.toISOString().slice(0, 19).replace('T', ' '), // Data formatada
+                            percentual: rendimento.diario,
+                            datacriacao: novaData.toISOString().slice(0, 19).replace('T', ' '),
                         };
 
-                        // Adiciona o novo rendimento ao histórico
                         setHistory(prevHistory => {
-                            // Adiciona o novo rendimento ao histórico existente
                             const updatedHistory = [novoRendimento, ...prevHistory];
-
-                            // Ordena o histórico atualizado pela data de criação (do mais recente para o mais antigo)
-                            const sortedHistory = updatedHistory.sort((a, b) =>
+                            return updatedHistory.sort((a, b) =>
                                 new Date(b.datacriacao) - new Date(a.datacriacao)
                             );
-
-                            // Retorna o histórico ordenado
-                            return sortedHistory;
                         });
                     }
                 }
@@ -177,15 +158,12 @@ const ExtratoValorizacao = () => {
         });
     };
 
-
-
-
-
-    // Lógica para calcular os índices da página atual
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = history.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(history.length / itemsPerPage);
+    useEffect(() => {
+        if (history.length > 0) {
+            const sortedHistory = [...history].sort((a, b) => new Date(a.datacriacao) - new Date(b.datacriacao));
+            setHistory(sortedHistory);
+        }
+    }, [history]);
 
     const handleReturnValor = (id, per) => {
         if (userData.CONTRATOS) {
@@ -199,6 +177,20 @@ const ExtratoValorizacao = () => {
         return 0;
     }
 
+    const handleFilterChange = (event) => {
+        setFilterId(event.target.value);
+    };
+
+    const filteredItems = history.filter(item =>
+        item.id_contrato.toString().includes(filterId)
+    );
+
+    // Lógica para paginação
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+
     return (
         <SideBarBox>
             <T.ExtratoValorizacaoContainer>
@@ -206,6 +198,14 @@ const ExtratoValorizacao = () => {
 
                 <T.PrincipalContent>
                     <T.ContainerTitle>Histórico de Valorização</T.ContainerTitle>
+
+                    <T.SearchBar>
+                        <input
+                            placeholder="Filtre pelo ID do Contrato"
+                            value={filterId}
+                            onChange={handleFilterChange}
+                        />
+                    </T.SearchBar>
 
                     <T.TabelaContainer>
                         <T.Table>
@@ -253,3 +253,4 @@ const ExtratoValorizacao = () => {
 };
 
 export default ExtratoValorizacao;
+

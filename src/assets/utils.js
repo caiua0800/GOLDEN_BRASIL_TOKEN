@@ -243,7 +243,7 @@ export const retornaResposta = (dado) => {
         case 1:
             return 'VALORIZANDO';
         case 2:
-            return <LinkRecompra href='https://caiuamello.com' target='_blank'>Finalizado, Clique aqui</LinkRecompra>;
+            return <LinkRecompra href='https://wa.me/+558006066048?text=Meu Contrato Acabou.' target='_blank'>Finalizado, Clique aqui</LinkRecompra>;
         case 3:
             return 'CANCELADO';
         case 4:

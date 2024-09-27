@@ -138,6 +138,10 @@ export const WalletValues = styled.div`
     & > div:nth-child(5) {
         grid-column: span 2; /* A quarta div ocupa a largura total na segunda linha */
     }
+
+     & > div:nth-child(6) {
+        grid-column: span 2; /* A quarta div ocupa a largura total na segunda linha */
+    }
     & > div:nth-child(8) {
         grid-column: span 2; /* A quarta div ocupa a largura total na segunda linha */
     }

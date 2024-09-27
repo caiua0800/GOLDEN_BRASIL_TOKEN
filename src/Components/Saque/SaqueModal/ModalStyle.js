@@ -132,6 +132,21 @@ export const ModalTitle = styled.div`
   }
 `;
 
+export const ModalSubTitle = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  h1{
+    margin: 0;
+    font-weight: 800;
+    color: rgba(0, 190, 30, 1);
+
+    font-size: 22px;
+    text-shadow: 0px 0px 1px rgba(0,0,0,1);
+  }
+`;
+
 export const ValorASerSacado = styled.div`
 
   width: 100%;
@@ -249,6 +264,27 @@ export const Contratinho = styled.div`
     transform: scale(0.97);
     text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
     box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  }
+`;
+
+export const Table = styled.table`
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
   }
 `;
 

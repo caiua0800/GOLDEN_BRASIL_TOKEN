@@ -21,6 +21,14 @@ export default function Saque() {
 
     const handleModalSaque = () => {
 
+        // console.log(userData.CONTRATOS_COM_SAQUE_DISPONIVEL.length)
+
+        if(userData.CONTRATOS_COM_SAQUE_DISPONIVEL.length === 0 && (userData.TOTAL_INDICACAO > -1 && userData.TOTAL_INDICACAO < 1)){
+            
+            alert("Você não possui saldo suficiente");
+            return;
+        }
+
         if (!mostrarBotaoSaque) {
             alert("Saque indisponível");
             return;
@@ -112,31 +120,27 @@ export default function Saque() {
                             <S.WalletValues>
                                 <S.WalletValue>
                                     <h2>SALDO PLATAFORMA</h2>
-                                    <h6>(lucro + indicação)</h6>
+                                    <h6>valor total</h6>
                                     <span>R$ {userData && (userData.TOTAL_PLATAFORMA ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO) : 0)}</span>
                                 </S.WalletValue>
                                 <S.WalletValue>
                                     <h2>SALDO DISPONÍVEL</h2>
-                                    <h6>(lucro)</h6>
+                                    <h6>(lucro + indicação)</h6>
                                     <span>R$ {userData && (userData.DISPONIVEL_SAQUE ? formatNumber(userData.DISPONIVEL_SAQUE) : 0)}</span>
                                 </S.WalletValue>
-                                {/* <S.WalletValue>
-                                    <h2>SALDO DE INDICAÇÃO</h2>
-                                    <span>R$ {userData && (userData.TOTAL_INDICACAO ? formatNumber(userData.TOTAL_INDICACAO) : formatNumber(0))}</span>
-                                </S.WalletValue>
                                 <S.WalletValue>
-                                    <h2>LUCRO RECEBIDO</h2>
-                                    <span>R$ {userData && (userData.LUCRO_CONTRATOS ? formatNumber(userData.LUCRO_CONTRATOS) : 0)}</span>
+                                    <h2>SALDO DE INIDCAÇÃO</h2>
+                                    <h6>(total)</h6>
+                                    <span>R$ {userData && userData.TOTAL_INDICACAO ? formatNumber(userData.TOTAL_INDICACAO) : formatNumber(0)}</span>
                                 </S.WalletValue>
-                                <S.WalletValue>
-                                    <h2>LUCRO À RECEBER</h2>
-                                    <span>R$ {userData && (userData.VALOR_A_RECEBER ? formatNumber(userData.VALOR_A_RECEBER) : 0)}</span>
-                                </S.WalletValue> */}
-                                {userData.DISPONIVEL_SAQUE > 0 && (
+
+                                {userData.CONTRATOS_COM_SAQUE_DISPONIVEL.length > 0 && (
                                     <S.NaoSaque>
                                         <button onClick={handleClickPromotion}>Parabéns! você tem um bônus especial para comprar contratos de minérios com seu saldo sem taxa de saque! clique aqui.</button>
                                     </S.NaoSaque>
                                 )}
+
+
                                 <S.RealizarSaqueBtn>
                                     <button onClick={handleModalSaque}>REALIZAR SAQUE</button>
                                 </S.RealizarSaqueBtn>

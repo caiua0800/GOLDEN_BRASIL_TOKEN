@@ -4,7 +4,7 @@ import * as U from './UserPageStyle';
 import assets from '../../assets/assets';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
-import { mapFieldNameToFirebase } from '../../assets/utils';
+import { formatCPF, mapFieldNameToFirebase } from '../../assets/utils';
 import { usePulse } from '../../context/LoadContext';
 import { db, storage, doc, updateDoc } from '../../database/firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -284,6 +284,7 @@ const ProfilePage = ({ setProfilePage }) => {
                                 </U.ChangePhotoOverlay>
                             </U.ProfilePicture>
                             <U.ProfileName>{inputValues.usuario}</U.ProfileName>
+                            <U.ProfileName>{userData.CPF? formatCPF(userData.CPF) : userData.CPF}</U.ProfileName>
                             <U.MudarSenhaLink><Link to='/alterarSenha'>Mudar Senha</Link></U.MudarSenhaLink>
                         </U.InitialContent>
 

@@ -171,7 +171,7 @@ export default function Dashboard() {
               <D.SaldoCorrente>
                 <D.SaldoNaPlataforma>
                   <h2>SALDO NA PLATAFORMA</h2>
-                  <span>R$ {userData ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO  + (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) : '0'}</span>
+                  <span>R$ {userData ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO + (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) : '0'}</span>
                   <D.SaldoPlataformaDivs>
                     <div>
                       <h3>VALOR DE COMPRA</h3>
@@ -192,12 +192,29 @@ export default function Dashboard() {
             <D.SecondRow>
               {/* <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) < 0 ? (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) * -1 : (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO)) : '0'}</h1> */}
               <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) + (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) : 0}</h1>
-              
+
               <D.SaldoDisponivelParaSaque>
                 <D.ProgressBar>
-                  <D.ProgressFill percentage={userData ? (((userData.LUCRO_CONTRATOS+ (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) - userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />
+                  <D.ProgressFill percentage={userData ? (((userData.LUCRO_CONTRATOS + (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) - userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100 : 0} />
                 </D.ProgressBar>
-                <D.PercentageCount>{userData ? ((((userData.LUCRO_CONTRATOS+ (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) - userData.VALOR_SACADO) / parseFloat(userData.TOTAL_PLATAFORMA)) * 100).toFixed(2) : 0}%</D.PercentageCount>
+                <D.PercentageCount>{
+                  userData ? (
+                    // Obtém os valores garantindo que não sejam NaN ou undefined
+                    (() => {
+                      const lucroContratos = Number(userData.LUCRO_CONTRATOS) || 0;
+                      const acertarBD = Number(userData.ACERTARBD) || 0;
+                      const valorSacado = Number(userData.VALOR_SACADO) || 0;
+                      const totalPlataforma = parseFloat(userData.TOTAL_PLATAFORMA) || 1; // Use 1 como default para evitar divisão por zero
+
+                      const percentage = (lucroContratos + acertarBD - valorSacado) / totalPlataforma;
+
+                      // Verifica se o resultado é um número finito
+                      return Number.isFinite(percentage) ? (percentage * 100).toFixed(2) : 0;
+                    })()
+                  ) : (
+                    0
+                  )}%
+                </D.PercentageCount>
               </D.SaldoDisponivelParaSaque>
             </D.SecondRow>
             <D.IndiqueEGanha>
@@ -208,25 +225,25 @@ export default function Dashboard() {
 
               {userData.INDICADOS ? (
                 <>
-                 <D.IndicadosContainer>
-                {userData.INDICADOS && userData.INDICADOS.map(ind => (
-                  <D.Indicado>
-                    <img src={assets.user3} />
-                    <span>{ind.NOME_INDICADO}</span>
-                  </D.Indicado>
-                ))}
-              </D.IndicadosContainer>
+                  <D.IndicadosContainer>
+                    {userData.INDICADOS && userData.INDICADOS.map(ind => (
+                      <D.Indicado>
+                        <img src={assets.user3} />
+                        <span>{ind.NOME_INDICADO}</span>
+                      </D.Indicado>
+                    ))}
+                  </D.IndicadosContainer>
 
-              <D.GrapthContainer>
-                <GrapthLikeBinance />
-              </D.GrapthContainer>
+                  <D.GrapthContainer>
+                    <GrapthLikeBinance />
+                  </D.GrapthContainer>
                 </>
-               
+
               ) : (
 
                 <D.GrapthContainer>
-                <GrapthLikeBinance />
-              </D.GrapthContainer>
+                  <GrapthLikeBinance />
+                </D.GrapthContainer>
               )}
 
             </D.Justing>

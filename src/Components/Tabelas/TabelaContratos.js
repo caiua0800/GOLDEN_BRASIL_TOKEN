@@ -14,6 +14,13 @@ const TabelaDeContratos = () => {
     const [selecionada, setSelecionada] = useState(null)
     const pdfRef = useRef();
 
+
+    const handlePutaria = (normal, comTaxa) => {
+        if(parseFloat(comTaxa) > parseFloat(normal))
+            return parseFloat(comTaxa)
+        return parseFloat(normal);
+    }
+
     useEffect(() => {
         if (userData && Array.isArray(userData.CONTRATOS)) {
             setContratos(userData.CONTRATOS);
@@ -125,10 +132,11 @@ const TabelaDeContratos = () => {
                                 <Style.TabelaData>{formatDateSystem(dado.YIELDTERM)}</Style.TabelaData>
                                 <Style.TabelaData>{dado.PRIMEIRO_RENDIMENTO ? dado.PRIMEIRO_RENDIMENTO : "Não encontrado"}</Style.TabelaData>
                                 <Style.TabelaData>{dado.COINS}</Style.TabelaData>
-                                <Style.TabelaData>R$ {parseFloat(dado.TOTALSPENT).toFixed(2) ? (parseFloat(dado.TOTALSPENT).toFixed(2)) : dado.TOTALSPENT}</Style.TabelaData>
-                                {/* <Style.TabelaData>
-                                    {dado.RENDIMENTO_ATUAL ? (dado.RENDIMENTO_ATUAL - (parseFloat(dado.MAXIMUMQUOTAYIELD)/(parseFloat(dado.MAXIMUMNUMBEROFDAYSTOYIELD)*30))).toFixed(2) : dado.RENDIMENTO_ATUAL}%
-                                </Style.TabelaData> */}
+
+
+                                <Style.TabelaData>R$ {parseFloat(dado.TOTALSPENT).toFixed(2) ? handlePutaria(dado.TOTALSPENT, dado.TOTALSPENTFEE).toFixed(2) : handlePutaria(dado.TOTALSPENT, dado.TOTALSPENTFEE)}</Style.TabelaData>
+                   
+
                                 <Style.TabelaData>
                                     {dado.RENDIMENTO_ATUAL ? dado.RENDIMENTO_ATUAL.toFixed(2) : dado.RENDIMENTO_ATUAL}%
                                 </Style.TabelaData>

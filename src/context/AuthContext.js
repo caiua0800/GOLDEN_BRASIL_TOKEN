@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
       const userResponse = await axios.post(`${BASE_ROUTE}${PESQUISAR_CLIENTE}`, { clientId: cpf });
       const data = userResponse.data;
       setUserData(data);
-      localStorage.setItem('userData', JSON.stringify(data));
+      // localStorage.setItem('userData', JSON.stringify(data));
       setError(null); // Limpa qualquer erro anterior
     } catch (error) {
       if (error.response) {

@@ -23,13 +23,21 @@ const returnSaquesResponse = (str) => {
     }
 }
 
+const isBeforeDate = (dateString, compareDateString) => {
+    const date = new Date(dateString);
+    const compareDate = new Date(compareDateString);
+    return date < compareDate;
+};
+
 const TabelaExtrato = ({ startDate, endDate, filter }) => {
     const { userData } = useContext(AuthContext);
 
     const contratos = userData?.CONTRATOS || [];
     const saques = userData?.SAQUES || [];
     const indicacoes = userData?.INDICACAO || [];
+    const saque_indicacao = userData?.SAQUES_INDICACAO || [];
     const plusData = userData?.PLUS || []; // Dados do array PLUS
+
 
     const transactions = [
         // Filtra e mapeia os contratos com status diferente de 4
@@ -56,9 +64,17 @@ const TabelaExtrato = ({ startDate, endDate, filter }) => {
 
         // Mapeia as indicações
         ...indicacoes.map(i => ({
-            date: formatDateSystem(i.TIMESTAMP) || '',
-            description: `Indicação Cliente ${i.NAME || 'N/A'}: R$${formatNumber(i.VALOR*10) || 'Sem descrição'}`,
-            value: (i.VALOR) || 0,
+            date: formatDateSystem(i.DATACRIACAO) || '',
+            description: `${i.DESCRIPTION || 'Sem descrição'}`,
+            value: (isBeforeDate(i.DATACRIACAO) ? (i.VALUE/5.34) : (i.VALUE))  || 0,
+            status: 'ADICIONADO',
+            type: 'indicacao'
+        })),
+
+        ...saque_indicacao.map(i => ({
+            date: formatDateSystem(i.DATASOLICITACAO) || '',
+            description: `${i.description || 'Sem descrição'}`,
+            value: (isBeforeDate(i.DATACRIACAO) ? (i.VALOR/5.34) : (i.VALOR))  || 0,
             status: 'ADICIONADO',
             type: 'indicacao'
         })),

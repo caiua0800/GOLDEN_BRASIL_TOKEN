@@ -27,12 +27,12 @@ const LoginPage = () => {
     hidePulse();
   };
 
-  useEffect(() => {
-    const storedUserData = localStorage.getItem('userData');
-    if (storedUserData) {
-      setUserData(JSON.parse(storedUserData))
-    }
-  }, [])
+  // useEffect(() => {
+  //   const storedUserData = localStorage.getItem('userData');
+  //   if (storedUserData) {
+  //     setUserData(JSON.parse(storedUserData))
+  //   }
+  // }, [])
 
   useEffect(() => {
     if (error) {

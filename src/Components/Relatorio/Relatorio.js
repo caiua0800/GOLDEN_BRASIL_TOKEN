@@ -16,6 +16,7 @@ export default function Relatorio() {
     const [dateOut, setDateOut] = useState("");
     const [serverResponseContracts, setServerResponseContracts] = useState([]);
     const { showPulse, hidePulse } = usePulse();
+    const [sortedContracts, setSortedContracts] = useState([]);
 
     const handleGetFilteredRelatorio = async () => {
         showPulse();
@@ -56,34 +57,49 @@ export default function Relatorio() {
         return sum.toFixed(2);
     }
 
-    const downloadPDF = () => {
-        const input = document.getElementById('pdfContent'); // ID do conteúdo a ser gerado em PDF
-
-        html2canvas(input, {
-            scale: 2, // Aumenta a escala da captura
-            useCORS: true, // Permite usar imagens de outros domínios
-        }).then((canvas) => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const imgWidth = 190; // Largura da imagem no PDF
-            const pageHeight = 295; // Altura da página A4 em mm
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            let heightLeft = imgHeight;
-            let position = 0;
-        
-            pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-        
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-            }
-            pdf.save('relatorio_de_valorizacao.pdf');
+    const downloadPDF = async () => {
+        const input = document.getElementById('pdfContent');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pageHeight = 297; // Altura de uma página A4 em mm
+    
+        const canvas = await html2canvas(input, {
+            scale: 2,
+            useCORS: true,
+            logging: true, // Para depuração
         });
-        
+    
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = 210; // Largura de uma página A4 em mm
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+    
+        let heightLeft = imgHeight;
+        let position = 0;
+    
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, 0);
+        heightLeft -= pageHeight;
+    
+        while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, 0);
+            heightLeft -= pageHeight;
+        }
+    
+        pdf.save('relatorio_de_valorizacao.pdf');
     };
+    
+    const sortContractsByDate = (contracts) => {
+        return [...contracts].sort((a, b) => {
+            return new Date(a.PURCHASEDATE) - new Date(b.PURCHASEDATE);
+        });
+    };
+
+
+    useEffect(() => {
+        setSortedContracts(sortContractsByDate(serverResponseContracts));
+    }, [serverResponseContracts]);
+    
+    
 
     return (
         <SideBarBox>
@@ -115,9 +131,9 @@ export default function Relatorio() {
                             <S.ButtonGenerate onClick={handleGetFilteredRelatorio}>GERAR RELATÓRIO</S.ButtonGenerate>
                         )}
 
-                        {serverResponseContracts.length > 0 && (
+                        {sortedContracts.length > 0 && (
                             <>
-                                <S.PDFModel id="pdfContent"> {/* Adicionando ID aqui */}
+                                {/* <S.PDFModel id="pdfContent"> 
                                     <S.PdfTitle>RELATÓRIO DE VALORIZAÇÃO - GOLDEN TOKEN BRASIL</S.PdfTitle>
                                     <S.PdfSubTitle>CONTRATOS</S.PdfSubTitle>
 
@@ -130,10 +146,10 @@ export default function Relatorio() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {serverResponseContracts.map(contract => (
+                                            {sortedContracts.map(contract => (
                                                 <tr key={contract.IDCOMPRA}>
                                                     <td>{formatDate(contract.PURCHASEDATE)}</td>
-                                                    <td>R${contract.TOTALSPENT}</td>
+                                                    <td>R${(contract.TOTALSPENT < contract.TOTALSPENTFEE ? contract.TOTALSPENTFEE : contract.TOTALSPENT).toFixed(2)}</td>
                                                     <td>R${((contract.RENDIMENTO_ATUAL / 100) * contract.TOTALSPENT).toFixed(2)}</td>
                                                 </tr>
                                             ))}
@@ -150,8 +166,8 @@ export default function Relatorio() {
                                         SÃO PAULO – SP<br />
                                         CNPJ: 42.007.698/0001-17<br />
                                     </S.HoldingGoldenGate>
-                                </S.PDFModel>
-                                <S.DownloadPDF onClick={downloadPDF}>DOWNLOAD</S.DownloadPDF>
+                                </S.PDFModel>*/}
+                                <S.DownloadPDF onClick={downloadPDF}>DOWNLOAD</S.DownloadPDF> 
                             </>
                         )}
                     </S.RelatorioContent>

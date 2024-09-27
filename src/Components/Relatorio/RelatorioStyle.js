@@ -86,7 +86,7 @@ export const RelatorioInputBox = styled.div`
 `;
 
 export const ButtonGenerate = styled.button`
-    width: 620px;
+    width: 280px;
     height: 40px;
     border: 0;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.4);
@@ -100,21 +100,21 @@ export const ButtonGenerate = styled.button`
 `;
 
 export const PDFModel = styled.div`
-    width: 280px;
-    height: 400px;
+    width: 210mm; // Largura de uma página A4
+    min-height: 297mm; // Altura mínima de uma página A4
     background-color: white;
     border-radius: 3px;
-    // border: 1px solid black;
     box-shadow: 3px 3px 2px rgba(0,0,0,0.4);
-    padding: 10px;
+    padding: 10mm;
     box-sizing: border-box;
-    transition: .5s;
+    margin: 0 auto; // Centraliza o conteúdo
+    overflow: visible; // Permite que o conteúdo exceda o tamanho da div
 
-    &:hover{
-        transform: scale(1.5);
-        box-shadow: 7px 7px 4px rgba(0,0,0,0.4);
+    @media print {
+        box-shadow: none;
     }
 `;
+
 
 export const PdfTitle = styled.h2`
     margin: 0;

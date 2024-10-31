@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { AuthContext } from '../../../context/AuthContext';
-import { formatCPF, formatNumber } from '../../../assets/utils';
+import { formatCNPJ, formatCPF, formatNumber } from '../../../assets/utils';
 import moment from 'moment-timezone';
 
 const PDFContainer = styled.div`
@@ -100,6 +100,12 @@ const PDFGenerator = ({ ContratoData, assinatura, lastId }) => {
     qttContratos = 0,
     valorPorContrato = 0,
   } = ContratoData || {};
+
+  const handleCNPJ = () => {
+    if(userData.CNPJ)
+      return formatCNPJ(userData.CPF)
+    else return formatCPF(userData.CPF)
+  }
 
   const dataAtual = moment.tz("America/Sao_Paulo").format('DD/MM/YYYY');
 
@@ -349,7 +355,7 @@ const PDFGenerator = ({ ContratoData, assinatura, lastId }) => {
       </Content>
       <Signature>
         <SignatureBlock>
-          <div>{assinatura === "assinado" ? userData.NAME + " - " + formatarCPF(userData.CPF) : ""}</div>
+          <div>{assinatura === "assinado" ? userData.NAME + " - " + handleCNPJ() : ""}</div>
           <div className='borderLine'></div>
           <div>Assinatura do Comprador(a)</div>
         </SignatureBlock>

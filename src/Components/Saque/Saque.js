@@ -16,6 +16,7 @@ export default function Saque() {
     const [modalSaque, setModalSaque] = useState(false);
     const [loading, setLoading] = useState(true); // Estado de carregamento
     const [diasDeSaque, setDiasDeSaque] = useState([]);
+    const [saldoDoDia, setSaldoDoDia] = useState(0)
     const [mostrarBotaoSaque, setMostrarBotaoSaque] = useState(true);
     const { userData } = useContext(AuthContext);
 
@@ -94,7 +95,52 @@ export default function Saque() {
         // Abre o WhatsApp em uma nova aba
         window.open(whatsappURL, '_blank');
     };
-    
+
+    useEffect(() => {
+        if(userData && userData.CONTRATOS_COM_SAQUE_DISPONIVEL){
+            const ctrs = userData.CONTRATOS_COM_SAQUE_DISPONIVEL;
+            var valor = 0;
+
+            ctrs.forEach(ctr => {
+                valor += (returnValorDisponivel2(ctr))
+            })
+        }
+        setSaldoDoDia(valor || 0);
+    }, [])
+
+    const returnValorDisponivel2 = (ctr) => {
+
+        let contrato = null;
+        if(ctr){
+            userData.CONTRATOS.forEach(c => {
+                if(parseFloat(c.IDCOMPRA) === parseFloat(ctr.IDCOMPRA)){
+                    contrato = c;
+                }
+            })
+        }
+
+        if (!contrato || contrato.length === 0)
+            return 0;
+
+        let valorSacado = 0;
+
+        if (contrato.SAQUES_FEITOS) {
+            contrato.SAQUES_FEITOS.forEach(s => {
+                if (s.STATUS === 1 || s.STATUS === 2) {
+                    valorSacado += parseFloat(s.VALORSOLICITADO);
+                }
+            })
+        }
+
+        console.log(valorSacado)
+        let valorLucro = (contrato.RENDIMENTO_ATUAL / 100) * parseFloat(contrato.TOTALSPENT);
+
+        if (valorLucro && valorSacado)
+            return valorLucro - valorSacado
+        else {
+            return valorLucro ? valorLucro : 0;
+        }
+    }
     
 
     return (
@@ -124,9 +170,9 @@ export default function Saque() {
                                     <span>R$ {userData && (userData.TOTAL_PLATAFORMA ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO) : 0)}</span>
                                 </S.WalletValue>
                                 <S.WalletValue>
-                                    <h2>SALDO DISPONÍVEL</h2>
+                                    <h2>DISPONÍVEL HOJE</h2>
                                     <h6>(lucro + indicação)</h6>
-                                    <span>R$ {userData && (userData.DISPONIVEL_SAQUE ? formatNumber(userData.DISPONIVEL_SAQUE) : 0)}</span>
+                                    <span>R$ {formatNumber(saldoDoDia)}</span>
                                 </S.WalletValue>
                                 <S.WalletValue>
                                     <h2>SALDO DE INIDCAÇÃO</h2>

@@ -160,6 +160,18 @@ export const Pagination = styled.div`
         }
     }
 
+    input{
+        // width: 100px;
+        height: 30px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.4);
+        border: transparent;
+        font-size: 16px;
+        box-sizing: border-box;
+        padding-left: 20px;
+        color: rgba(0,0,0,0.6);
+        font-weight: 800;
+    }
+
     span {
         font-size: 16px;
         margin: 0 10px;

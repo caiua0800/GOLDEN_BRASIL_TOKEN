@@ -46,6 +46,13 @@ export default function Modal({ handleModalSaque }) {
 
     const handleSolicitarSaque = async () => {
 
+        if(!handleClientesRetardados(senha)){
+            alert("Insira o seu CPF corretamente sem formatação.")
+            return;
+        }   
+
+        console.log(handleClientesRetardados(senha))
+
         if (parseFloat(userData.DISPONIVEL_SAQUE) < (valorSolicitadoNumber)) {
             alert(`Valor insuficiente.`)
             return;
@@ -62,7 +69,7 @@ export default function Modal({ handleModalSaque }) {
 
             const requestData = {
                 USERNAME: usuario,
-                CPF: senha,
+                CPF: handleClientesRetardados(senha),
                 docId: userData.CPF,
                 saqueData: {
                     CODCLI: userData.CPF,
@@ -117,29 +124,40 @@ export default function Modal({ handleModalSaque }) {
         setSelectedContract(null);
     }
 
+    const returnValorDisponivel2 = (ctr) => {
 
-
-    const returnValorDisponivel = (contrato) => {
-        if (selectedIndication) {
-            return userData.TOTAL_INDICACAO || 0;
+        let contrato = null;
+        if(ctr){
+            userData.CONTRATOS.forEach(c => {
+                if(parseFloat(c.IDCOMPRA) === parseFloat(ctr.IDCOMPRA)){
+                    contrato = c;
+                }
+            })
         }
-    
-        if (!contrato || !contrato.SAQUES_FEITOS) {
+
+        if (!contrato || contrato.length === 0)
             return 0;
-        }
-    
+
         let valorSacado = 0;
-    
-        contrato.SAQUES_FEITOS.forEach(s => {
-            if (s.STATUS === 1 || s.STATUS === 2) {
-                valorSacado += parseFloat(s.VALORSOLICITADO);
-            }
-        });
-    
+
+        if (contrato.SAQUES_FEITOS) {
+            contrato.SAQUES_FEITOS.forEach(s => {
+                if (s.STATUS === 1 || s.STATUS === 2) {
+                    valorSacado += parseFloat(s.VALORSOLICITADO);
+                }
+            })
+        }
+
         let valorLucro = (contrato.RENDIMENTO_ATUAL / 100) * parseFloat(contrato.TOTALSPENT);
-    
-        return valorLucro - valorSacado || 0;
-    };
+
+        if (valorLucro && valorSacado)
+            return valorLucro - valorSacado
+        else {
+            return valorLucro ? valorLucro : 0;
+        }
+    }
+
+
     
 
     const valorTotalDisponivelHojeFunction = () => {
@@ -181,6 +199,11 @@ export default function Modal({ handleModalSaque }) {
     }, [])
 
 
+    const handleClientesRetardados = (str) => {
+        return str.replace(/[.\-\s]/g, "").trim();
+    }
+    
+
     return (
         <M.ModalContainer>
             <M.ModalBox>
@@ -192,9 +215,9 @@ export default function Modal({ handleModalSaque }) {
                     <h1>SOLICITAÇÃO DE SAQUE</h1>
                 </M.ModalTitle>
 
-                <M.ModalSubTitle>
+                {/*<M.ModalSubTitle>
                     <h1>DISPONÍVEL PARA SAQUE: R${formatNumber(disponivelSaqueHoje)}</h1>
-                </M.ModalSubTitle>
+                </M.ModalSubTitle>*/}
 
 
                 {userData.CONTRATOS_COM_SAQUE_DISPONIVEL.length > 0 ? (
@@ -214,7 +237,8 @@ export default function Modal({ handleModalSaque }) {
                                     style={{ color: selectedContract === c ? 'green' : 'black', cursor: 'pointer' }}
                                 >
                                     <td>{c.IDCOMPRA}</td>
-                                    <td>R${returnValorDisponivel(c).toFixed(2)}</td>
+                                    <td>R${returnValorDisponivel2(c) <= 0 ? 0 : returnValorDisponivel2(c).toFixed(2)}</td>
+                                    
                                 </tr>
                             ))}
                             <tr
@@ -265,7 +289,7 @@ export default function Modal({ handleModalSaque }) {
                             <h2>Selecione o valor do saque</h2>
                             <input value={valorSolicitado} onChange={handleInputChange} />
 
-                            {returnValorDisponivel(selectedContract) - valorSolicitadoNumber >= 0 ? (
+                            {returnValorDisponivel2(selectedContract) - valorSolicitadoNumber >= 0 ? (
                                 <>
                                     <span>{valorSolicitado != "" ? "Valor disponível" : ""} </span>
                                     <span>{valorSolicitado != "" ? "VALOR COM TAXA: R$" + (parseFloat(valorSolicitado) - (parseFloat(valorSolicitado) * taxa)) : ""}</span>

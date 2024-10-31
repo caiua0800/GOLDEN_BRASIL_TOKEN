@@ -151,6 +151,7 @@ export const ResultadoSimulacaoContainer = styled.div`
 
     @media (max-width: 1000px){
         margin-top: 20px;
+        flex-wrap: wrap;
     }
 `;
 

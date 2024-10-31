@@ -23,6 +23,7 @@ import AlterarSenha from './Components/AlterarSenha/AlterarSenha';
 import { createGlobalStyle } from 'styled-components';
 import Relatorio from './Components/Relatorio/Relatorio';
 import ExtratoValorizacao from './Components/ExtratoValorizacao/ExtratoValorizacao';
+import CadastroPageJuridico from './Components/Cadastro/CadastroPageJuridico';
 
 const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar {
@@ -50,10 +51,10 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/cadastro" element={<CadastroPage />} />
+            <Route path="/cadastroJuridico" element={<CadastroPageJuridico />} />
             <Route path="/cadastroIndicacao" element={<CadastroPageIndicacao />} />
             <Route path="/recover" element={<ForgotPassword />} />
             <Route path="/recoverByUsername" element={<ForgotPasswordUsername />} />
-            {/* <Route path="/validacao" element={<PrivateRoute element={Validacao} />} /> */}
             <Route path="/dashboard" element={<PrivateRoute element={Dashboard} />} />
             <Route path="/novacompra" element={<PrivateRoute element={Compra} />} />
             <Route path="/saque" element={<PrivateRoute element={Saque} />} />

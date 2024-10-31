@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import * as M from './ModalStyle';
 import PDFGenerator from "./PDFGenerator";
 import { AuthContext } from "../../../context/AuthContext";
-import { formatCPF, gerarStringAleatoria, GeneratePIX_MP, separarNome, GenerateBOLETO_MP } from "../../../assets/utils";
+import { formatCPF, gerarStringAleatoria, GeneratePIX_MP, separarNome, GenerateBOLETO_MP, formatCNPJ } from "../../../assets/utils";
 import axios from "axios";
 import Loading from "../../Loading/Loader";
 import { db } from "../../../database/firebaseConfig";
@@ -82,6 +82,27 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
         }
     };
 
+    function formatarString(str) {
+        
+        if(userData.CNPJ)
+            return formatCNPJ(userData.CPF)
+
+        if (str.length !== 11) {
+            throw new Error('A string deve ter 11 caracteres.');
+        }
+    
+        // Formata a string corretamente
+        const parte1 = str.substring(0, 3); // primeiros 3 dígitos
+        const parte2 = str.substring(3, 6); // próximos 3 dígitos
+        const parte3 = str.substring(6, 9); // próximos 3 dígitos
+        const parte4 = str.substring(9, 11); // últimos 2 dígitos
+    
+        return `${parte1}.${parte2}.${parte3}-${parte4}`; // Concatena no formato desejado
+    }
+
+    console.log(formatarString(userData.CPF))
+    
+
     const handlePostPIX = async (data) => {
         try {
             const response = await GeneratePIX_MP(data);
@@ -128,8 +149,10 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                 paymentMethodId: paymentMethod.toLowerCase(), // Use o valor do estado paymentMethod
                 email: userData.EMAIL,
                 identificationType: "CPF",
-                number: '075.411.521-61'
+                number: formatarString(userData.CPF)
             }
+
+            
 
             const separeted_name = separarNome(userData.NAME);
 
@@ -142,7 +165,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                 first_name: separeted_name[0],
                 last_name: separeted_name[1],
                 identificationType: "CPF",
-                number: '075.411.521-61'
+                number: formatarString(userData.CPF)
             }
 
             var ticket = null;
@@ -257,7 +280,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                             onChange={(e) => setUsuario(e.target.value)}
                         />
                         <input
-                            placeholder="CPF"
+                            placeholder={userData.CNPJ ? "CNPJ" : "CPF"}
                             type="text"
                             value={senha}
                             onChange={(e) => setSenha(e.target.value)}

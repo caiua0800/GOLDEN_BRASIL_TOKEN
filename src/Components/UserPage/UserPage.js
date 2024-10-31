@@ -4,7 +4,7 @@ import * as U from './UserPageStyle';
 import assets from '../../assets/assets';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
-import { formatCPF, mapFieldNameToFirebase } from '../../assets/utils';
+import { formatCEP, formatCNPJ, formatCPF, mapFieldNameToFirebase } from '../../assets/utils';
 import { usePulse } from '../../context/LoadContext';
 import { db, storage, doc, updateDoc } from '../../database/firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -117,9 +117,9 @@ const ProfilePage = ({ setProfilePage }) => {
                 cep: userData.POSTALCODE || "",
                 cidade: userData.CITY || "",
                 agency: userData.AGENCY || "",
-                bank: userData.BANK || "",
-                account: userData.ACCOUNT || "",
-                beneficiario: userData.BENEFICIARIO || "",
+                bank: userData.BANCO || "",
+                account: userData.ACCOUNTNUMBER || "",
+                beneficiario: userData.NAME || "",
                 keyPix: userData.KEYPIX || "",
                 accountType: userData.ACCOUNTTYPE || "",
             });
@@ -212,8 +212,9 @@ const ProfilePage = ({ setProfilePage }) => {
 
     const handleAccountInfoSave = async () => {
         if (inputValues["agency"] != userData.AGENCY ||
-            inputValues["account"] != userData.ACCOUNT ||
+            inputValues["account"] != userData.ACCOUNTNUMBER ||
             inputValues["keyPix"] != userData.KEYPIX ||
+            inputValues["bank"] != userData.BANCO ||
             inputValues["accountType"] != userData.ACCOUNTTYPE
         ) {
             const response = await axios.post(`${BASE_ROUTE}${REACT_APP_EDITAR_CLIENTE_MAIS_CAMPOS_INFO}`, {
@@ -224,7 +225,7 @@ const ProfilePage = ({ setProfilePage }) => {
                         fieldNewValue: inputValues["agency"]
                     },
                     {
-                        field: "ACCOUNT",
+                        field: "ACCOUNTNUMBER",
                         fieldNewValue: inputValues["account"]
                     },
                     {
@@ -237,7 +238,7 @@ const ProfilePage = ({ setProfilePage }) => {
                     }
                     ,
                     {
-                        field: "BANK",
+                        field: "BANCO",
                         fieldNewValue: inputValues["bank"]
                     }
                 ]
@@ -284,7 +285,7 @@ const ProfilePage = ({ setProfilePage }) => {
                                 </U.ChangePhotoOverlay>
                             </U.ProfilePicture>
                             <U.ProfileName>{inputValues.usuario}</U.ProfileName>
-                            <U.ProfileName>{userData.CPF? formatCPF(userData.CPF) : userData.CPF}</U.ProfileName>
+                            <U.ProfileName>{userData.CNPJ ? formatCNPJ(userData.CPF) : userData.CPF? formatCPF(userData.CPF) : userData.CPF}</U.ProfileName>
                             <U.MudarSenhaLink><Link to='/alterarSenha'>Mudar Senha</Link></U.MudarSenhaLink>
                         </U.InitialContent>
 

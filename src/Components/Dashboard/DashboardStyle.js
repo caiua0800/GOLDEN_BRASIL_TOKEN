@@ -432,6 +432,7 @@ export const TabelaContainer = styled.div`
 
 `;
 
+
 export const GrapthContainer = styled.div`
     width: 100%;
     height: 450px;
@@ -439,75 +440,124 @@ export const GrapthContainer = styled.div`
 
     @media(max-width: 1000px){
         height: 300px;
-    }
-`;
-
-
-export const BtnSidebar = styled.button`
-
-    position: fixed;
-    top: 50px;
-    right: 50px;
-    z-index: 9999;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white;
-    border: 2px solid black;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: .3s;
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
-    &:hover{
-        transform: scale(1.1);
-    }
-
-    img{
-        z-index: 9999
         width: 100%;
-        height: 100%;
+
     }
 `;
 
 export const IndicadosContainer = styled.div`
-    width: 30%;
+    width: 100%;
     display: flex;
-    padding: 50px;
+    padding: 80px 50px 50px 50px;
     box-sizing: border-box;
     flex-direciton: column;
-    gap: 20px;
+    gap: 50px;
     max-height: 450px;
     overflow: auto;
     flex-direction: column;
     box-shadow: 0px 0px 6px rgba(0,0,0,0.4);
+    background: white;
+    position: relative;
+
+    @media(max-width: 1000px){
+        height: 300px;
+        align-item: center;
+        justify-content: center;
+    }
 `;
 
 export const Indicado = styled.div`
     width: 100%;
     display: flex;
-    height: 60px;
-    justify-content: start;
-    align-items: center;
-    gap: 10px;
+    justify-content: space-between;
 
-    img{
-        width: 60px;
-        height: 60px;
+    .info{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        gap: 10px;
+
+        img{
+            width: 20px;
+            height: 20px;
+        }
+
+        span{
+            color: black;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        h6{
+            margin: 0;
+            font-size: 18px;
+            color: red;
+        }
+
+        .ativo{
+            color: green;
+        }
     }
 
-    span{
-        color: black;
-        font-weight: 800;
-        font-size: 18px;
+    @media(max-width: 1000px){
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        .info{
+            flex-direction: column;
+            align-items: center;
+            max-width: 200px;
+            text-align: center;
+        }
     }
+    
 `;
 
 export const Justing = styled.div`
     width: 100%;
     display: flex;
     gap: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
 `;
 
-// export const nome = styled.div``;
+export const TableColumns = styled.div`
+    width: 100%;
+    position: absolute;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 50px;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    border-bottom: 3px solid black;
+    color: black;
+    gap: 20px;
+
+    span{
+        font-weight: 800;
+        font-size: 22px;
+    }
+
+    @media(max-width: 1000px){
+        .itemColumnName{
+            display: none;
+            border: 0;
+            height: 0;
+        }
+    }
+
+`;
+
+
+export const WrapIt = styled.div`
+    width: 100%;
+    max-height: 450px;
+    overflow: auto;
+    box-shadow: 4px 4px 2px rgba(0,0,0,0.4);
+
+`;

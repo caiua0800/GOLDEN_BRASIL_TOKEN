@@ -11,7 +11,7 @@ const TabelaDeSaques = () => {
         if (typeof dataString !== 'string') {
             return "Data Inválida"; // Ou outro valor padrão
         }
-    
+
         const [datePart, timePart] = dataString.split(' ');
         if (!datePart || !timePart) {
             return "Data Inválida";
@@ -39,13 +39,14 @@ const TabelaDeSaques = () => {
             // Inclui SAQUES_INDICACAO
             if (Array.isArray(userData.SAQUES_INDICACAO)) {
                 userData.SAQUES_INDICACAO.forEach(saqInd => {
-                    allSaques.push({
-                        ...saqInd,
-                        isIndication: true,
-                        description: saqInd.DESCRIPTION || "Saque de Indicação",
-                        VALORSOLICITADO: saqInd.VALOR,
-                        VALORSOLICITADOTAXA: saqInd.VALORSOLICITADOTAXA || saqInd.VALOR
-                    });
+                    if(parseFloat(saqInd.VALOR) > 0)
+                        allSaques.push({
+                            ...saqInd,
+                            isIndication: true,
+                            description: saqInd.DESCRIPTION || "Saque de Indicação",
+                            VALORSOLICITADO: saqInd.VALOR,
+                            VALORSOLICITADOTAXA: saqInd.VALORSOLICITADOTAXA || saqInd.VALOR
+                        });
                 });
             }
         }
@@ -100,23 +101,26 @@ const TabelaDeSaques = () => {
                         </Style.TabelaRow>
                     ) : (
                         saques.map((dado, index) => (
-                            <Style.TabelaRow key={index}>
-                                {/* <Style.TabelaData>{"id"}</Style.TabelaData> */}
-                                <Style.TabelaData>{formatarData(dado.DATASOLICITACAO)}</Style.TabelaData>
-                                <Style.TabelaData>
-                                    {dado.isIndication ? (
-                                        `Saque de Indicação de R$${dado.VALORSOLICITADOTAXA ? dado.VALORSOLICITADOTAXA : dado.VALORSOLICITADO.toFixed(2)}`
-                                    ) : handleDescription(dado.description) === null ? (
-                                        `Saque no valor de R$${dado.VALORSOLICITADO.toFixed(2)} do contrato ${dado.IDCOMPRA}`
-                                    ) : (
-                                        `${handleDescription(dado.description)} de R$${dado.VALORSOLICITADOTAXA ? dado.VALORSOLICITADOTAXA : dado.VALORSOLICITADO.toFixed(2)}`
-                                    )}
-                                </Style.TabelaData>
+                            dado.description != "Descontar" && (
+                                <Style.TabelaRow key={index}>
+                                    {/* <Style.TabelaData>{"id"}</Style.TabelaData> */}
+                                    <Style.TabelaData>{formatarData(dado.DATASOLICITACAO)}</Style.TabelaData>
+                                    <Style.TabelaData>
+                                        {dado.isIndication ? (
+                                            `Saque de Indicação de R$${dado.VALORSOLICITADOTAXA ? dado.VALORSOLICITADOTAXA : dado.VALORSOLICITADO.toFixed(2)}`
+                                        ) : handleDescription(dado.description) === null ? (
+                                            `Saque no valor de R$${dado.VALORSOLICITADO.toFixed(2)} do contrato ${dado.IDCOMPRA}`
+                                        ) : (
+                                            `${handleDescription(dado.description)} de R$${dado.VALORSOLICITADOTAXA ? dado.VALORSOLICITADOTAXA : dado.VALORSOLICITADO.toFixed(2)}`
+                                        )}
+                                    </Style.TabelaData>
 
-                                <Style.TabelaData>{(dado.VALORSOLICITADO).toFixed(2)}</Style.TabelaData>
-                                <Style.TabelaData>{dado.VALORSOLICITADOTAXA ? dado.VALORSOLICITADOTAXA : (parseFloat(dado.VALORSOLICITADO) - (parseFloat(dado.VALORSOLICITADO) * 0.04)).toFixed(2)}</Style.TabelaData>
-                                <Style.TabelaData>{dado.STATUS === 1 ? "Pendente" : dado.STATUS === 2 ? 'PAGO' : "CANCELADO"}</Style.TabelaData>
-                            </Style.TabelaRow>
+                                    <Style.TabelaData>{(dado.VALORSOLICITADO).toFixed(2)}</Style.TabelaData>
+                                    <Style.TabelaData>{dado.VALORSOLICITADO ? (parseFloat(dado.VALORSOLICITADO) - (parseFloat(dado.VALORSOLICITADO) * 0.04)).toFixed(2) : 0}</Style.TabelaData>
+                                    <Style.TabelaData>{dado.STATUS === 1 ? "Pendente" : dado.STATUS === 2 ? 'PAGO' : "CANCELADO"}</Style.TabelaData>
+                                </Style.TabelaRow>
+                            )
+
                         ))
                     )}
                 </Style.TabelaBody>

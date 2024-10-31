@@ -27,6 +27,23 @@ const ExtratoValorizacao = () => {
     const intervalRef = useRef(null);
     const [isInitialDataLoaded, setIsInitialDataLoaded] = useState(false);
 
+
+    const getClosestDate = (history) => {
+        const today = new Date('2024-10-15'); // Substitua por `new Date()` para pegar a data atual
+        let closestDate = null;
+
+        history.forEach(transaction => {
+            const transactionDate = new Date(transaction.datacriacao);
+            if (transactionDate <= today) {
+                if (!closestDate || transactionDate > closestDate) {
+                    closestDate = transactionDate;
+                }
+            }
+        });
+
+        return closestDate ? closestDate.toISOString().slice(0, 10) : 'Nenhuma data disponível';
+    };
+
     function calcularDiasAteHoje(ultima_data, arrayObjetos) {
         const ultimaDataObject = new Date(ultima_data);
         const hoje = new Date();
@@ -78,6 +95,7 @@ const ExtratoValorizacao = () => {
                     setRendimentosFaltantes(rendimentosFaltantes);
                 }
 
+                const closestDate = getClosestDate(sortedData);
                 setIsInitialDataLoaded(true);
             })
             .catch(error => {
@@ -95,7 +113,6 @@ const ExtratoValorizacao = () => {
                         }
                     }
                     if (ctr) {
-                        console.log(ctr);
                         const rendimentosFaltantes = calcularDiasAteHoje(ctr.PRIMEIRO_RENDIMENTO ? ctr.PRIMEIRO_RENDIMENTO : ctr.PURCHASEDATE, userData.CONTRATOS);
                         setRendimentosFaltantes(rendimentosFaltantes);
                         setIsInitialDataLoaded(true);
@@ -115,55 +132,55 @@ const ExtratoValorizacao = () => {
         }
     }, [isInitialDataLoaded, rendimentosFaltantes]);
 
-    const addRendimentosAteHoje = (rendimentosFaltantes) => {
-        const today = new Date();
+   
 
+    const addRendimentosAteHoje = (rendimentosFaltantes) => {
+        const today = new Date(); // Obtém a data atual
+        today.setHours(2, 30, 0, 0); // Define o horário para 02:30
+    
+        const novasEntradas = []; // Array para armazenar novas entradas a serem adicionadas
+    
+        // Percorre cada rendimento faltante
         rendimentosFaltantes.forEach(rendimento => {
             if (rendimento.quantidadeAteHoje > 0) {
-                const quantidadeAteHoje = rendimento.quantidadeAteHoje + 1;
                 const id_contrato = rendimento.IDCOMPRA;
-
-                let ctr = null;
-                if (userData.CONTRATOS) {
-                    for (let i = 0; i < userData.CONTRATOS.length; i++) {
-                        if (userData.CONTRATOS[i].STATUS === 1) {
-                            ctr = userData.CONTRATOS[i];
-                            break;
-                        }
-                    }
-                }
-
-                const ultimaData = new Date(history[0] ? history[0].datacriacao : (ctr.PRIMEIRO_RENDIMENTO ? ctr.PRIMEIRO_RENDIMENTO : ctr.PURCHASEDATE));
-
-                for (let i = 1; i <= (quantidadeAteHoje); i++) {
+    
+                // Obtendo a última data do histórico
+                const ultimaData = new Date(history[0] ? history[0].datacriacao : (userData.CONTRATOS[0]?.PRIMEIRO_RENDIMENTO || userData.CONTRATOS[0]?.PURCHASEDATE));
+                ultimaData.setHours(0, 0, 0, 0); // Reseta a última data para 00:00 para comparação
+    
+                // Mantém a contagem de dias a serem adicionados
+                const quantidadeAteHoje = Math.floor((today - ultimaData) / (1000 * 60 * 60 * 24)); 
+    
+                // Adiciona novos rendimentos a partir do último dia conhecido até hoje, inclusive
+                for (let i = 1; i <= quantidadeAteHoje; i++) {
                     const novaData = new Date(ultimaData);
                     novaData.setDate(ultimaData.getDate() + i);
-
-                    if (novaData <= today) {
+                    novaData.setHours(2, 30, 0, 0); // Define o horário para 02:30
+    
+                    // Adiciona se esta data não estiver já no histórico
+                    if (!history.some(item => new Date(item.datacriacao).toDateString() === novaData.toDateString())) {
                         const novoRendimento = {
                             id_contrato: id_contrato,
                             percentual: rendimento.diario,
                             datacriacao: novaData.toISOString().slice(0, 19).replace('T', ' '),
                         };
-
-                        setHistory(prevHistory => {
-                            const updatedHistory = [novoRendimento, ...prevHistory];
-                            return updatedHistory.sort((a, b) =>
-                                new Date(b.datacriacao) - new Date(a.datacriacao)
-                            );
-                        });
+    
+                        novasEntradas.push(novoRendimento);
                     }
                 }
             }
         });
-    };
-
-    useEffect(() => {
-        if (history.length > 0) {
-            const sortedHistory = [...history].sort((a, b) => new Date(a.datacriacao) - new Date(b.datacriacao));
-            setHistory(sortedHistory);
+    
+        // Atualiza o histórico se houver novas entradas
+        if (novasEntradas.length > 0) {
+            setHistory(prevHistory => {
+                const updatedHistory = [...novasEntradas, ...prevHistory];
+                return updatedHistory.sort((a, b) => new Date(b.datacriacao) - new Date(a.datacriacao));
+            });
         }
-    }, [history]);
+    };
+    
 
     const handleReturnValor = (id, per) => {
         if (userData.CONTRATOS) {
@@ -184,6 +201,14 @@ const ExtratoValorizacao = () => {
     const filteredItems = history.filter(item =>
         item.id_contrato.toString().includes(filterId)
     );
+
+    const handleSearchPage = (e) => {
+        if (e.trim() === "" || e === 0 || e === "0") {
+            setCurrentPage(1)
+        } else {
+            setCurrentPage(e)
+        }
+    }
 
     // Lógica para paginação
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -236,7 +261,7 @@ const ExtratoValorizacao = () => {
                         </T.Table>
                     </T.TabelaContainer>
 
-                    {/* Controles de Paginação */}
+
                     <T.Pagination>
                         <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
                             Anterior
@@ -245,6 +270,7 @@ const ExtratoValorizacao = () => {
                         <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
                             Próximo
                         </button>
+                        <input onChange={(e) => handleSearchPage(e.target.value)} type="number" placeholder="Página" />
                     </T.Pagination>
                 </T.PrincipalContent>
             </T.ExtratoValorizacaoContainer>

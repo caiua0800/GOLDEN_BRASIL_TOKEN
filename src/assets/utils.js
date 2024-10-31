@@ -294,6 +294,17 @@ export const formatCPF = (value) => {
         .replace(/(-\d{2})\d+?$/, '$1'); // Limita a 11 dígitos
 };
 
+export const formatCNPJ = (value) => {
+    return value
+        .replace(/\D/g, '') // Remove tudo o que não é dígito
+        .replace(/(\d{2})(\d)/, '$1.$2') // Adiciona ponto após 2 dígitos
+        .replace(/(\d{2})\.(\d{3})(\d)/, '$1.$2.$3') // Adiciona ponto após 3 dígitos
+        .replace(/\.(\d{3})(\d)/, '.$1/$2') // Adiciona barra após 3 dígitos
+        .replace(/(\d{4})(\d)/, '$1-$2') // Adiciona hífen após 4 dígitos
+        .slice(0, 18); // Limita a 18 caracteres
+};
+
+
 export const formatTelefone = (value) => {
     return value
         .replace(/\D/g, '') // Remove tudo o que não é dígito
@@ -321,6 +332,22 @@ export const removeFormatting = (type, value) => {
             return value; // Retorna o valor sem alterações se o tipo não corresponder a nenhum dos casos
     }
 };
+
+export const removeFormattingCnpj = (type, value) => {
+    switch (type) {
+        case 'cpf':
+            return value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        case 'telefone':
+            return value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        case 'cep':
+            return value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        case 'cnpj':
+            return value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        default:
+            return value; // Retorna o valor sem alterações se o tipo não corresponder a nenhum dos casos
+    }
+};
+
 
 const url_base = process.env.REACT_APP_BASE_ROUTE;
 const url_gerar_pix = process.env.REACT_APP_GERAR_PIX;

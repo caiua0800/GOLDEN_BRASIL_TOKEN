@@ -3,7 +3,7 @@ import TabelaDeContratos from '../Tabelas/TabelaContratos';
 import TwoBars from '../TwoBars/TwoBars';
 import * as D from './DashboardStyle';
 import { AuthContext } from '../../context/AuthContext';
-import { abreviarNome, decrypt, formatNumber, ULLT, ULLTNUMBER } from '../../assets/utils';
+import { abreviarNome, formatNumber, ULLTNUMBER } from '../../assets/utils';
 import GrapthLikeBinance from '../GoldGrapth/GrapthLikeBinance';
 import { usePulse } from '../../context/LoadContext';
 import SideBarBox from '../Sidebar/SideBarBox';
@@ -11,17 +11,18 @@ import { encrypt } from '../../assets/utils';
 import { db } from '../../database/firebaseConfig';
 import { collection, getDocs, doc, getDoc, updateDoc, arrayUnion, setDoc } from 'firebase/firestore';
 import MensagemSchema from '../Mensagem/MensagemSchema';
-import Modal from '../CompletarCadastroModal/Modal'
 import moment from 'moment/moment';
 import assets from '../../assets/assets';
+import axios from 'axios';
 
-
+const rotaInfoIndicados = process.env.REACT_APP_BASE_ROUTE + process.env.REACT_APP_OBTER_INFO_INDICADOS;
 
 export default function Dashboard() {
   const { userData, reloadUserData } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const { showPulse, hidePulse } = usePulse();
   const [messageExists, setMessageExists] = useState(null);
+  const [indicados, setIndicados] = useState([]);
 
   const loadUserData = async () => {
     showPulse();
@@ -30,15 +31,32 @@ export default function Dashboard() {
     setLoading(false);
   };
 
+  useEffect(() => {
+    if (userData)
+      updateUserEntries();
+  }, []);
+
+  useEffect(() => {
+    if (userData && userData.INDICADOS) {
+      if (userData.INDICADOS.length > 0) {
+        axios.post(rotaInfoIndicados, { INDICADOS: userData.INDICADOS }).then(res => {
+          console.log(res.data);
+          setIndicados(res.data)
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+    }
+  }, [userData])
+
 
   useEffect(() => {
     if (userData) {
-      updateUserEntries();
       setLoading(false);
+      setIndicados(userData.INDICADOS)
     } else {
       loadUserData();
     }
-
   }, [userData, reloadUserData, showPulse, hidePulse]);
 
 
@@ -155,7 +173,7 @@ export default function Dashboard() {
           )
           }
           <D.ContainerTitle>
-            {/* <p>DASHBOARD</p> */}
+
           </D.ContainerTitle>
           <D.SaldacoesUsuario>
             <span>OLÁ {abreviarNome((userData?.NAME || '').toUpperCase())}</span>
@@ -190,8 +208,8 @@ export default function Dashboard() {
               </D.SaldoCorrente>
             </D.FirstRow>
             <D.SecondRow>
-              {/* <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) < 0 ? (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) * -1 : (userData.LUCRO_CONTRATOS - userData.VALOR_SACADO)) : '0'}</h1> */}
-              <h1>SALDO DISPONÍVEL| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) + (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) : 0}</h1>
+              <h1>SALDO| R$  {userData ? formatNumber((userData.LUCRO_CONTRATOS - userData.VALOR_SACADO)) : 0}</h1>
+              {/* <h1>SALDO| R$  {userData ? formatNumber((userData.VALOR_SACADO)) : 0}</h1> */}
 
               <D.SaldoDisponivelParaSaque>
                 <D.ProgressBar>
@@ -223,16 +241,33 @@ export default function Dashboard() {
 
             <D.Justing>
 
-              {userData.INDICADOS ? (
+              {(indicados && indicados.length > 0) ? (
                 <>
-                  <D.IndicadosContainer>
-                    {userData.INDICADOS && userData.INDICADOS.map(ind => (
-                      <D.Indicado>
-                        <img src={assets.user3} />
-                        <span>{ind.NOME_INDICADO}</span>
-                      </D.Indicado>
-                    ))}
-                  </D.IndicadosContainer>
+                  <D.WrapIt>
+                    <D.IndicadosContainer>
+                      <D.TableColumns>
+                        <span className='itemColumnName'>STATUS</span>
+                        <span className='itemColumnName'>NOME</span>
+                        <span className='itemColumnName'>COMISSÃO</span>
+                      </D.TableColumns>
+                      {indicados && indicados.map(ind => (
+                        <D.Indicado>
+                          <div className='info'>
+                            {ind.ATIVO ? <h6 className='ativo'>Ativo</h6> : <h6 className='inativo'>Inativo</h6>}
+                          </div>
+                          <div className='info'>
+                            <img src={assets.user3} />
+                            <span>{ind.NOME_INDICADO || ind.NAME || ""}</span>
+                          </div>
+                          <div className='info'>
+                            {ind.TOTAL ? <h6 className='ativo'>R${formatNumber(ind.TOTAL * 0.10)}</h6> : <h6>R$00,00</h6>}
+                          </div>
+
+                        </D.Indicado>
+                      ))}
+                    </D.IndicadosContainer>
+                  </D.WrapIt>
+
 
                   <D.GrapthContainer>
                     <GrapthLikeBinance />

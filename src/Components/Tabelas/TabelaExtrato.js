@@ -5,7 +5,7 @@ import { formatDateSystem, formatNumber } from "../../assets/utils";
 import { retornaResposta } from "../../assets/utils";
 
 const parseDate = (dateString) => {
-    if (!dateString) return new Date(0); 
+    if (!dateString) return new Date(0);
     const [day, month, year] = dateString.split('/');
     return new Date(`${year}-${month}-${day}`);
 };
@@ -50,7 +50,7 @@ const TabelaExtrato = ({ startDate, endDate, filter }) => {
                 status: retornaResposta(c),
                 type: 'contrato'
             })),
-    
+
         // Filtra e mapeia os saques com status igual a 2
         ...saques
             .filter(s => s.STATUS === 2)
@@ -65,8 +65,8 @@ const TabelaExtrato = ({ startDate, endDate, filter }) => {
         // Mapeia as indicações
         ...indicacoes.map(i => ({
             date: formatDateSystem(i.DATACRIACAO) || '',
-            description: `${i.DESCRIPTION || 'Sem descrição'}`,
-            value: (isBeforeDate(i.DATACRIACAO) ? (i.VALUE/5.34) : (i.VALUE))  || 0,
+            description: `Indicação de R$${(isBeforeDate(i.DATACRIACAO) ? (i.VALUE / 5.34) : (i.VALUE))} de ${i.NAME}`,
+            value: (isBeforeDate(i.DATACRIACAO) ? (i.VALUE / 5.34) : (i.VALUE)) || 0,
             status: 'ADICIONADO',
             type: 'indicacao'
         })),
@@ -74,21 +74,22 @@ const TabelaExtrato = ({ startDate, endDate, filter }) => {
         ...saque_indicacao.map(i => ({
             date: formatDateSystem(i.DATASOLICITACAO) || '',
             description: `${i.description || 'Sem descrição'}`,
-            value: (isBeforeDate(i.DATACRIACAO) ? (i.VALOR/5.34) : (i.VALOR))  || 0,
+            value: (isBeforeDate(i.DATACRIACAO) ? (i.VALOR / 5.34) : (i.VALOR)) || 0,
             status: 'ADICIONADO',
             type: 'indicacao'
         })),
 
-        // Mapeia os dados do array PLUS
-        ...plusData.map(p => ({
-            date: formatDateSystem(p.date_created) || '',
-            description: `PLUS DE R$${p.value_multiplied} PARA CONTRATO ${p.IDCOMPRA}`,
-            value: p.value_multiplied || 0,
-            status: 'ADICIONADO',
-            type: 'plus' // Novo tipo para as transações do PLUS
-        })),
+        ...plusData.map(p => {
+            console.log(p); // Log para verificar se os dados estão corretos
+            return {
+                date: formatDateSystem(p.date_created) || '',
+                description: `PLUS DE R$${p.value_multiplied} PARA CONTRATO ${p.IDCOMPRA}`,
+                value: p.value_multiplied || 0,
+                status: 'ADICIONADO',
+                type: 'plus'
+            };
+        }),
 
-        // Se o filtro for "Valorização", adicione as valorizacões de cada contrato
         ...(filter === 'Valorizacao' ? contratos.reduce((acc, contrato) => {
             const historicoRendimentos = contrato.HISTORICO_RENDIMENTO || [];
             const newTransactions = historicoRendimentos.map(rendimento => ({
@@ -101,15 +102,15 @@ const TabelaExtrato = ({ startDate, endDate, filter }) => {
             return [...acc, ...newTransactions];
         }, []) : [])
     ];
-    
-    // Remova transações com dados inválidos e fora do intervalo de datas
+
     const validTransactions = transactions.filter(t => {
         const date = parseDate(t.date);
         return date >= parseDate(startDate) && date <= parseDate(endDate) && t.value >= 0;
     });
 
-    // Ordene as transações por data do mais recente para o mais antigo
+
     validTransactions.sort((a, b) => parseDate(b.date) - parseDate(a.date));
+
 
     const getSign = (type) => {
         switch (type) {
@@ -120,9 +121,9 @@ const TabelaExtrato = ({ startDate, endDate, filter }) => {
             case 'indicacao':
                 return '+';
             case 'valorizacao':
-                return '+'; 
+                return '+';
             case 'plus':
-                return '+'; 
+                return '+';
             default:
                 return '';
         }

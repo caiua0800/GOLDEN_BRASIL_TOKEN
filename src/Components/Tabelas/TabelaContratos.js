@@ -47,11 +47,10 @@ const TabelaDeContratos = () => {
             qttContratos: data.COINS,
             valorPorContrato: data.COINVALUE,
             lucroTotal: data.TOTALSPENT,
+            IDCOMPRA: data.IDCOMPRA
         };
 
         setModalData(newModalData);
-
-
     };
 
     const returnValorDisponivel = (contrato) => {
@@ -68,7 +67,6 @@ const TabelaDeContratos = () => {
             })
         }
 
-        console.log(valorSacado)
         let valorLucro = (contrato.RENDIMENTO_ATUAL / 100) * parseFloat(contrato.TOTALSPENT);
 
         if (valorLucro && valorSacado)
@@ -80,6 +78,7 @@ const TabelaDeContratos = () => {
 
     useEffect(() => {
         if (modalData !== null) {
+            console.log(modalData)
             pdfRef.current.downloadPDF();
         }
     }, [modalData]);
@@ -102,7 +101,6 @@ const TabelaDeContratos = () => {
                         <Style.TabelaHeader>DATA 1º REND.</Style.TabelaHeader>
                         <Style.TabelaHeader>CONTRATOS</Style.TabelaHeader>
                         <Style.TabelaHeader>VALOR</Style.TabelaHeader>
-                        {/* <Style.TabelaHeader>LUCRO ONTÉM</Style.TabelaHeader> */}
                         <Style.TabelaHeader>LUCRO HOJE</Style.TabelaHeader>
                         <Style.TabelaHeader>DISP. SAQUE</Style.TabelaHeader>
                         <Style.TabelaHeader>TOTAL GANHO</Style.TabelaHeader>
@@ -130,7 +128,7 @@ const TabelaDeContratos = () => {
                                 <Style.TabelaData>{dado.IDCOMPRA}</Style.TabelaData>
                                 <Style.TabelaData>{formatDateSystem(dado.PURCHASEDATE)}</Style.TabelaData>
                                 <Style.TabelaData>{formatDateSystem(dado.YIELDTERM)}</Style.TabelaData>
-                                <Style.TabelaData>{dado.PRIMEIRO_RENDIMENTO ? dado.PRIMEIRO_RENDIMENTO : "Não encontrado"}</Style.TabelaData>
+                                <Style.TabelaData>{dado.PRIMEIRO_RENDIMENTO ? formatDateSystem(dado.PRIMEIRO_RENDIMENTO ) : dado.PRIMEIRA_VALORIZACAO ? (dado.PRIMEIRA_VALORIZACAO ) : "Não encontrado"}</Style.TabelaData>
                                 <Style.TabelaData>{dado.COINS}</Style.TabelaData>
 
 

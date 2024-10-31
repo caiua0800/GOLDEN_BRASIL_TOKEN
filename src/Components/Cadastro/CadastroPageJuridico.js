@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as S from './CadastroPageStyle';
-import { formatCPF, formatCEP, formatTelefone, removeFormatting } from "../../assets/utils";
+import { formatCPF, formatCEP, formatTelefone, removeFormatting, formatCNPJ, removeFormattingCnpj } from "../../assets/utils";
 import axios from "axios";
 import MessageBox from "./MessageBox";
 import { usePulse } from "../../context/LoadContext";
@@ -8,7 +8,7 @@ import { usePulse } from "../../context/LoadContext";
 const BASE_ROUTE = process.env.REACT_APP_BASE_ROUTE;
 const CRIAR_CLIENTE = process.env.REACT_APP_CRIAR_CLIENTE;
 
-export default function CadastroPage() {
+export default function CadastroPageJuridico() {
     // Estados para os inputs
     const [nome, setNome] = useState('');
     const [cpf, setCpf] = useState('');
@@ -44,7 +44,8 @@ export default function CadastroPage() {
         showPulse();
 
         const clientData = {
-            CPF: removeFormatting('cpf', cpf),
+            CPF: removeFormattingCnpj('cpf', cpf),
+            CNPJ: true,
             ADRESS: endereco.toUpperCase(),
             CITY: cidade.toUpperCase(),
             COUNTRY: pais.toUpperCase(),
@@ -83,27 +84,27 @@ export default function CadastroPage() {
 
             <S.CaixaDeCadastro>
                 <S.CaixaDeInformacao>
-                    <h2>Seu nome Completo</h2>
+                    <h2>Razão Social</h2>
                     <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
                 </S.CaixaDeInformacao>
 
                 <S.CaixaDeInformacao>
-                    <h2>Seu CPF</h2>
+                    <h2>Seu CNPJ</h2>
                     <input
                         type="text"
  
                         value={cpf}
-                        onChange={(e) => setCpf(formatCPF(e.target.value))}
+                        onChange={(e) => setCpf(formatCNPJ(e.target.value))}
                     />
                 </S.CaixaDeInformacao>
 
                 <S.CaixaDeInformacao>
-                    <h2>Sua data de nascimento</h2>
+                    <h2>Data De Criação CNPJ</h2>
                     <input type="date" value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} />
                 </S.CaixaDeInformacao>
 
                 <S.CaixaDeInformacao>
-                    <h2>Seu telefone de contato</h2>
+                    <h2>Telefone de Contato</h2>
                     <input
                         type="text"
         
@@ -113,12 +114,12 @@ export default function CadastroPage() {
                 </S.CaixaDeInformacao>
 
                 <S.CaixaDeInformacao>
-                    <h2>País da atual residência</h2>
+                    <h2>País</h2>
                     <input type="text" value={pais} onChange={(e) => setPais(e.target.value)} />
                 </S.CaixaDeInformacao>
 
                 <S.CaixaDeInformacao>
-                    <h2>Seu endereço e Nº</h2>
+                    <h2>Endereço e Nº</h2>
                     <input type="text" value={endereco} onChange={(e) => setEndereco(e.target.value)} />
                 </S.CaixaDeInformacao>
 
@@ -141,7 +142,6 @@ export default function CadastroPage() {
                     <h2>CEP</h2>
                     <input
                         type="text"
-              
                         value={cep}
                         onChange={(e) => setCep(formatCEP(e.target.value))}
                     />
@@ -157,7 +157,7 @@ export default function CadastroPage() {
                 </S.CaixaDeInformacao>
 
                 <S.CaixaDeInformacaoLogin>
-                    <h2>Crie seu nome de usuário</h2>
+                    <h2>Nome de Usuário</h2>
                     <input type="text" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
                 </S.CaixaDeInformacaoLogin>
 

@@ -109,7 +109,7 @@ export const PDFModel = styled.div`
     box-sizing: border-box;
     margin: 0 auto; // Centraliza o conteúdo
     overflow: visible; // Permite que o conteúdo exceda o tamanho da div
-
+    display: none;
     @media print {
         box-shadow: none;
     }
@@ -210,4 +210,17 @@ export const DownloadPDF = styled.button`
     }
 `;
 
-// export const nome = styled.div``;
+export const Manutencao = styled.div`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    font-size: 38px;
+    font-weight: 800;
+    color: black;
+    position: fixed;
+    top: 0;
+    left: 0;
+`;

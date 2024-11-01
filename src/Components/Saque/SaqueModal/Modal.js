@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import * as M from './ModalStyle';
-import { formatNumber } from '../../../assets/utils';
 import { AuthContext } from "../../../context/AuthContext";
-import { atualizarSaque } from "../../../database/firebaseService";
+import { db } from "../../../database/firebaseConfig";
 import { usePulse } from "../../../context/LoadContext";
+import { doc, getDoc } from "firebase/firestore";
 import axios from "axios";
 
 
@@ -23,7 +23,9 @@ export default function Modal({ handleModalSaque }) {
     const { showPulse, hidePulse } = usePulse()
     const [disponivelSaqueHoje, setDisponivelSaqueHoje] = useState(0);
     const [valorMinimo, serValorMinimo] = useState(150)
-    const [selectedIndication, setSelectedIndication] = useState(false)
+    const [isActive, setIsActive] = useState(true);
+    const docRef = doc(db, "SYSTEM_VARIABLES", "JANELA_DE_SAQUES");
+    const [selectedIndication, setSelectedIndication] = useState(false);
     const taxa = 0.04;
 
     const [selectedContract, setSelectedContract] = useState(null);
@@ -46,10 +48,10 @@ export default function Modal({ handleModalSaque }) {
 
     const handleSolicitarSaque = async () => {
 
-        if(!handleClientesRetardados(senha)){
+        if (!handleClientesRetardados(senha)) {
             alert("Insira o seu CPF corretamente sem formatação.")
             return;
-        }   
+        }
 
         console.log(handleClientesRetardados(senha))
 
@@ -127,9 +129,9 @@ export default function Modal({ handleModalSaque }) {
     const returnValorDisponivel2 = (ctr) => {
 
         let contrato = null;
-        if(ctr){
+        if (ctr) {
             userData.CONTRATOS.forEach(c => {
-                if(parseFloat(c.IDCOMPRA) === parseFloat(ctr.IDCOMPRA)){
+                if (parseFloat(c.IDCOMPRA) === parseFloat(ctr.IDCOMPRA)) {
                     contrato = c;
                 }
             })
@@ -156,9 +158,6 @@ export default function Modal({ handleModalSaque }) {
             return valorLucro ? valorLucro : 0;
         }
     }
-
-
-    
 
     const valorTotalDisponivelHojeFunction = () => {
 
@@ -198,11 +197,24 @@ export default function Modal({ handleModalSaque }) {
         valorTotalDisponivelHojeFunction();
     }, [])
 
+    useEffect(() => {
+        const fetchActiveState = async () => {
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                setIsActive(docSnap.data().ACTIVE);
+            } else {
+                console.log("Documento não encontrado!");
+            }
+        };
+
+        fetchActiveState();
+    }, []);
+
 
     const handleClientesRetardados = (str) => {
         return str.replace(/[.\-\s]/g, "").trim();
     }
-    
+
 
     return (
         <M.ModalContainer>
@@ -219,66 +231,75 @@ export default function Modal({ handleModalSaque }) {
                     <h1>DISPONÍVEL PARA SAQUE: R${formatNumber(disponivelSaqueHoje)}</h1>
                 </M.ModalSubTitle>*/}
 
-
-                {userData.CONTRATOS_COM_SAQUE_DISPONIVEL.length > 0 ? (
-                    <M.Table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>VALOR DISPONÍVEL</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {userData.CONTRATOS_COM_SAQUE_DISPONIVEL.map(c => (
-                                <tr
-                                    key={c.IDCOMPRA}
-                                    onClick={() => { setSelectedContract(c); setSelectedIndication(false) }}
-                                    style={{ color: selectedContract === c ? 'green' : 'black', cursor: 'pointer' }}
-                                >
-                                    <td>{c.IDCOMPRA}</td>
-                                    <td>R${returnValorDisponivel2(c) <= 0 ? 0 : returnValorDisponivel2(c).toFixed(2)}</td>
-                                    
-                                </tr>
-                            ))}
-                            <tr
-                                style={{ color: selectedIndication ? 'green' : 'black', cursor: 'pointer' }}
-                                key="IndicacaoValue"
-                                onClick={() => { setSelectedIndication(true); setSelectedContract(null) }}
-                            >
-                                <td>INDICAÇÃO</td>
-                                <td>R${userData.TOTAL_INDICACAO.toFixed(2)}</td>
-                            </tr>
-                        </tbody>
-
-                    </M.Table>
-                ) : (
+                {!isActive ? (
                     <>
                         <M.Nenhum>Nenhum contrato disponível para saque</M.Nenhum>
-
-                        <M.Table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>VALOR DISPONÍVEL</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <tr
-                                    style={{ color: selectedIndication ? 'green' : 'black', cursor: 'pointer' }}
-                                    key="IndicacaoValue"
-                                    onClick={() => { setSelectedIndication(true); setSelectedContract(null) }}
-                                >
-                                    <td>INDICAÇÃO</td>
-                                    <td>R${userData.TOTAL_INDICACAO.toFixed(2)}</td>
-                                </tr>
-                            </tbody>
-
-                        </M.Table>
                     </>
+                ) : (
+                    <>
+                        {userData.CONTRATOS_COM_SAQUE_DISPONIVEL.length > 0 ? (
+                            <M.Table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>VALOR DISPONÍVEL</th>
+                                    </tr>
+                                </thead>
 
+                                <tbody>
+                                    {userData.CONTRATOS_COM_SAQUE_DISPONIVEL.map(c => (
+                                        <tr
+                                            key={c.IDCOMPRA}
+                                            onClick={() => { setSelectedContract(c); setSelectedIndication(false) }}
+                                            style={{ color: selectedContract === c ? 'green' : 'black', cursor: 'pointer' }}
+                                        >
+                                            <td>{c.IDCOMPRA}</td>
+                                            <td>R${returnValorDisponivel2(c) <= 0 ? 0 : returnValorDisponivel2(c).toFixed(2)}</td>
+
+                                        </tr>
+                                    ))}
+                                    <tr
+                                        style={{ color: selectedIndication ? 'green' : 'black', cursor: 'pointer' }}
+                                        key="IndicacaoValue"
+                                        onClick={() => { setSelectedIndication(true); setSelectedContract(null) }}
+                                    >
+                                        <td>INDICAÇÃO</td>
+                                        <td>R${userData.TOTAL_INDICACAO.toFixed(2)}</td>
+                                    </tr>
+                                </tbody>
+
+                            </M.Table>
+                        ) : (
+                            <>
+                                <M.Nenhum>Nenhum contrato disponível para saque</M.Nenhum>
+
+                                <M.Table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>VALOR DISPONÍVEL</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr
+                                            style={{ color: selectedIndication ? 'green' : 'black', cursor: 'pointer' }}
+                                            key="IndicacaoValue"
+                                            onClick={() => { setSelectedIndication(true); setSelectedContract(null) }}
+                                        >
+                                            <td>INDICAÇÃO</td>
+                                            <td>R${userData.TOTAL_INDICACAO.toFixed(2)}</td>
+                                        </tr>
+                                    </tbody>
+
+                                </M.Table>
+                            </>
+
+                        )}
+                    </>
                 )}
+
+
 
 
                 {(selectedContract || selectedIndication) && (

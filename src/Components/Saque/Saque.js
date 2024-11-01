@@ -18,11 +18,25 @@ export default function Saque() {
     const [diasDeSaque, setDiasDeSaque] = useState([]);
     const [saldoDoDia, setSaldoDoDia] = useState(0)
     const [mostrarBotaoSaque, setMostrarBotaoSaque] = useState(true);
+    const [isActive, setIsActive] = useState(true);
+    const docRef = doc(db, "SYSTEM_VARIABLES", "JANELA_DE_SAQUES");
     const { userData } = useContext(AuthContext);
 
-    const handleModalSaque = () => {
 
-        // console.log(userData.CONTRATOS_COM_SAQUE_DISPONIVEL.length)
+    useEffect(() => {
+        const fetchActiveState = async () => {
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                setIsActive(docSnap.data().ACTIVE);
+            } else {
+                console.log("Documento não encontrado!");
+            }
+        };
+
+        fetchActiveState();
+    }, []);
+
+    const handleModalSaque = () => {
 
         if(userData.CONTRATOS_COM_SAQUE_DISPONIVEL.length === 0 && (userData.TOTAL_INDICACAO > -1 && userData.TOTAL_INDICACAO < 1)){
             
@@ -180,7 +194,7 @@ export default function Saque() {
                                     <span>R$ {userData && userData.TOTAL_INDICACAO ? formatNumber(userData.TOTAL_INDICACAO) : formatNumber(0)}</span>
                                 </S.WalletValue>
 
-                                {userData.CONTRATOS_COM_SAQUE_DISPONIVEL.length > 0 && (
+                                {(userData.CONTRATOS_COM_SAQUE_DISPONIVEL.length > 0 && isActive) && (
                                     <S.NaoSaque>
                                         <button onClick={handleClickPromotion}>Parabéns! você tem um bônus especial para comprar contratos de minérios com seu saldo sem taxa de saque! clique aqui.</button>
                                     </S.NaoSaque>

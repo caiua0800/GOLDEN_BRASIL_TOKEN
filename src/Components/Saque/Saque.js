@@ -189,7 +189,7 @@ export default function Saque() {
                                     <span>R$ {formatNumber(saldoDoDia)}</span>
                                 </S.WalletValue>
                                 <S.WalletValue>
-                                    <h2>SALDO DE INIDCAÇÃO</h2>
+                                    <h2>SALDO DE INDICAÇÃO</h2>
                                     <h6>(total)</h6>
                                     <span>R$ {userData && userData.TOTAL_INDICACAO ? formatNumber(userData.TOTAL_INDICACAO) : formatNumber(0)}</span>
                                 </S.WalletValue>

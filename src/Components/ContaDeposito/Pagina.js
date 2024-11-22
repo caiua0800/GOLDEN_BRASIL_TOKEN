@@ -11,10 +11,11 @@ export default function Pagina() {
 
             <Dados>
                 <h2>Conta para Depósito</h2>
-                <p>Agência: <span>00000-00</span></p>
-                <p>Conta: <span>000000-00</span></p>
-                <p>Banco: <span>000000-00</span></p>
-                <p>Beneficiário: <span>Golden Brasil</span></p>
+                <p>PIX (CNPJ): <span>42007698000117</span></p>
+                <p>Agência: <span>1342</span></p>
+                <p>Conta: <span>12720-5</span></p>
+                <p>Banco: <span>Banco Bradesco S.A.</span></p>
+                <p>Beneficiário: <span>Holding Golden Brasil S/A.</span></p>
             </Dados>
 
         </PaginaContainer>
@@ -42,7 +43,7 @@ const Dados = styled.div`
     
     p{
         margin: 0;
-        font-weight: 500;
+        font-weight: 600;
         span{
             font-weight: 100;
             text-decoration: underline;

@@ -14,6 +14,7 @@ import MensagemSchema from '../Mensagem/MensagemSchema';
 import moment from 'moment/moment';
 import assets from '../../assets/assets';
 import axios from 'axios';
+import TabelaRecompra from '../Tabelas/TabelaRecompra/TabelaRecompra';
 
 const rotaInfoIndicados = process.env.REACT_APP_BASE_ROUTE + process.env.REACT_APP_OBTER_INFO_INDICADOS;
 
@@ -23,6 +24,7 @@ export default function Dashboard() {
   const { showPulse, hidePulse } = usePulse();
   const [messageExists, setMessageExists] = useState(null);
   const [indicados, setIndicados] = useState([]);
+  const [filtroContratos, setFiltroContratos] = useState("0");
 
   const loadUserData = async () => {
     showPulse();
@@ -286,9 +288,17 @@ export default function Dashboard() {
 
             <D.ThirdRow>
               <h2>TABELA DE CONTRATOS</h2>
+              <select onChange={(e) => setFiltroContratos(e.target.value)}>
+                <option value={0}>EM CONTA</option>
+                <option value={1}>RECOMPRADOS</option>
+              </select>
             </D.ThirdRow>
             <D.TabelaContainer>
-              <TabelaDeContratos dados={userData ? userData.CONTRATOS : []} />
+              {filtroContratos === "0" ? (
+                <TabelaDeContratos dados={userData ? userData.CONTRATOS : []} />
+              ) : (
+                <TabelaRecompra dados={userData ? userData.RECOMPRAS : []} />
+              )}
             </D.TabelaContainer>
           </D.ContainerContent>
         </D.PrincipalContent>

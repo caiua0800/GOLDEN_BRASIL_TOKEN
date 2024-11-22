@@ -216,6 +216,8 @@ export default function Modal({ handleModalSaque }) {
     }
 
 
+
+
     return (
         <M.ModalContainer>
             <M.ModalBox>
@@ -227,9 +229,6 @@ export default function Modal({ handleModalSaque }) {
                     <h1>SOLICITAÇÃO DE SAQUE</h1>
                 </M.ModalTitle>
 
-                {/*<M.ModalSubTitle>
-                    <h1>DISPONÍVEL PARA SAQUE: R${formatNumber(disponivelSaqueHoje)}</h1>
-                </M.ModalSubTitle>*/}
 
                 {!isActive ? (
                     <>
@@ -299,9 +298,6 @@ export default function Modal({ handleModalSaque }) {
                     </>
                 )}
 
-
-
-
                 {(selectedContract || selectedIndication) && (
 
                     <>
@@ -310,7 +306,7 @@ export default function Modal({ handleModalSaque }) {
                             <h2>Selecione o valor do saque</h2>
                             <input value={valorSolicitado} onChange={handleInputChange} />
 
-                            {returnValorDisponivel2(selectedContract) - valorSolicitadoNumber >= 0 ? (
+                            {(selectedContract ? returnValorDisponivel2(selectedContract) : parseFloat(userData.TOTAL_INDICACAO)) - valorSolicitadoNumber >= 0 ? (
                                 <>
                                     <span>{valorSolicitado != "" ? "Valor disponível" : ""} </span>
                                     <span>{valorSolicitado != "" ? "VALOR COM TAXA: R$" + (parseFloat(valorSolicitado) - (parseFloat(valorSolicitado) * taxa)) : ""}</span>

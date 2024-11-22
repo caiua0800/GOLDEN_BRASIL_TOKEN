@@ -161,7 +161,7 @@ export const Pagination = styled.div`
     }
 
     input{
-        // width: 100px;
+        width: 300px;
         height: 30px;
         box-shadow: 0 0 10px rgba(0,0,0,0.4);
         border: transparent;

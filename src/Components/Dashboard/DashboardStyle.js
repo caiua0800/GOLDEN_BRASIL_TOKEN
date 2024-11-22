@@ -415,11 +415,34 @@ export const IndiqueEGanha = styled.div`
 export const ThirdRow = styled.div`
     margin-top: 40px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    @media(max-width: 1200px){
+        flex-direction: column;
+    }
+
     h2{
         margin: 0;
         font-size: 28px;
         color: #72ce27;
         text-shadow: 2px 2px 1px rgba(0,0,0,0.6);
+    }
+
+    select{
+        width: 200px;
+        height: 28px;
+        box-sizing: border-box;
+        border-radius: 6px;
+        border: 2px solid black;
+        cursor: pointer;
+        background: rgba(0, 230, 0, 1);
+        font-weight: 800;
+        color: rgba(255, 255, 255, 1);
+        text-align: center;
+        text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
     }
 `;
 

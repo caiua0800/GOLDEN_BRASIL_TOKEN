@@ -305,12 +305,25 @@ const ExtratoValorizacao = () => {
     const [itemsPerPage] = useState(10);
     const [filterId, setFilterId] = useState("");
 
-    function diasDesdeData(dataString) {
+    function diasDesdeData(dataString, yieldTerm) {
         const dataInformada = new Date(dataString);
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0);
-        const diffEmMilissegundos = hoje - dataInformada;
-        return Math.floor(diffEmMilissegundos / (1000 * 60 * 60 * 24));
+        
+        // Converte a yieldTerm para um objeto Date (assumindo que yieldTerm é uma string em um formato aceitável pelo construtor Date)
+        const termoRendimento = new Date(yieldTerm);
+        termoRendimento.setHours(0, 0, 0, 0);
+    
+        // Verifica se a data de hoje está depois do yieldTerm
+        if (hoje > termoRendimento) {
+            // Se hoje é após o yieldTerm, retorna a quantidade de dias entre dataInformada e yieldTerm
+            const diffEmMilissegundos = termoRendimento - dataInformada;
+            return Math.floor(diffEmMilissegundos / (1000 * 60 * 60 * 24));
+        } else {
+            // Se não, retorna a quantidade de dias entre dataInformada e hoje
+            const diffEmMilissegundos = hoje - dataInformada;
+            return Math.floor(diffEmMilissegundos / (1000 * 60 * 60 * 24));
+        }
     }
 
     useEffect(() => {
@@ -320,8 +333,9 @@ const ExtratoValorizacao = () => {
 
             contrs.forEach(cont => {
                 const dataPrimeira = cont.PRIMEIRO_RENDIMENTO || cont.PRIMEIRA_VALORIZACAO || null;
+                const yieldTerm = cont.YIELDTERM;
                 if (dataPrimeira) {
-                    const dias = diasDesdeData(dataPrimeira);
+                    const dias = diasDesdeData(dataPrimeira, yieldTerm);
                     novosDados.push({ id: cont.IDCOMPRA, dias });
                 }
             });

@@ -19,8 +19,6 @@ export const parseDateBrazilianFormat = (dateString) => {
     return false;
 };
 
-
-
 export const consultarALLOWSELL = (dateString) => {
     const [day, month, year] = dateString.split('/').map(Number);
     const inputDate = new Date(year, month - 1, day);
@@ -87,8 +85,23 @@ export const formatarMoedaDollar = (valor) => {
 }
 
 export const formatDateSystem = (dateString) => {
-    if (dateString) {
-        const date = new Date(dateString);
+    var realData = "";
+
+    if (!dateString || typeof dateString !== "string") {
+        return null;
+    }
+
+    if(dateString.includes("/")){
+        var aux1 = dateString.replace("/", "-").replace("/", "-").split("-")
+        var aux2 = aux1[2].split(" ");
+        var novaData = `${aux2[0]}-${aux1[1]}-${aux1[0]} ${aux2[1]}`
+        realData = novaData;
+    }else{
+        realData = dateString;
+    }
+
+    if (realData) {
+        const date = new Date(realData);
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();

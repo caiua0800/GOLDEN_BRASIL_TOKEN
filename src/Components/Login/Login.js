@@ -41,7 +41,7 @@ const LoginPage = () => {
       setShowError(true);
       const timer = setTimeout(() => {
         setShowError(false);
-        window.location.reload();  //Adicionei isso pra aparecer a mensagem novamente
+        window.location.reload();  
       }, 2000);
       return () => clearTimeout(timer);
     }

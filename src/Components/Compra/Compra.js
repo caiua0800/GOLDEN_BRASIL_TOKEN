@@ -28,7 +28,6 @@ export default function Compra() {
     const [minimum, setMinimum] = useState(null);
     
 
-
     useEffect(() => {
         const fetchValorContrato = async () => {
             try {

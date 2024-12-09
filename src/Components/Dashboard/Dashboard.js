@@ -25,6 +25,8 @@ export default function Dashboard() {
   const [messageExists, setMessageExists] = useState(null);
   const [indicados, setIndicados] = useState([]);
   const [filtroContratos, setFiltroContratos] = useState("0");
+  const [saldoDeRecompra, setSaldoDeRecompra] = useState(0);
+  const [saldoDeRecomprado, setSaldoDeRecomprado] = useState(0);
 
   const loadUserData = async () => {
     showPulse();
@@ -162,6 +164,18 @@ export default function Dashboard() {
     }
   }
 
+  useEffect(() => {
+    let saldoDeRecompraAux = 0;
+    let saldoDeRecompradoAux = 0;
+    const contratosFiltrados = userData.CONTRATOS ? userData.CONTRATOS.filter(contrato => contrato.STATUS === 2) : [];
+    saldoDeRecompraAux = userData.CONTRATOS ? contratosFiltrados.reduce((total, contrato) => total + (contrato.TOTALSPENT), 0) : [];
+    saldoDeRecompradoAux = contratosFiltrados.reduce((total, contrato) => total + (contrato.SALDO_SACADO_RECOMPRA || 0), 0);
+    console.log("SALDO RECOMPRADO: R$: ", saldoDeRecompradoAux)
+    setSaldoDeRecomprado(saldoDeRecompradoAux);
+    setSaldoDeRecompra(saldoDeRecompraAux)
+  }, [userData]);
+
+
   if (loading) return null;
 
   return (
@@ -191,15 +205,15 @@ export default function Dashboard() {
               <D.SaldoCorrente>
                 <D.SaldoNaPlataforma>
                   <h2>SALDO NA PLATAFORMA</h2>
-                  <span>R$ {userData ? formatNumber(userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO + (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) : '0'}</span>
+                  <span>R$ {userData ? formatNumber((userData.TOTAL_PLATAFORMA - userData.VALOR_SACADO + (userData.ACERTARBD ? (userData.ACERTARBD) : 0)) - saldoDeRecompra) : '0'}</span>
                   <D.SaldoPlataformaDivs>
                     <div>
                       <h3>VALOR DE COMPRA</h3>
-                      <span>R$ {formatNumber(handle0AtNumberString(userData.TOTAL_SPENT))}</span>
+                      <span>R$ {formatNumber(handle0AtNumberString(userData.TOTAL_SPENT - saldoDeRecompra))}</span>
                     </div>
                     <div>
                       <h3>VALOR  DE LUCRO</h3>
-                      <span>R$ {userData ? formatNumber(userData.LUCRO_CONTRATOS) : '0'}</span>
+                      <span>R$ {userData ? formatNumber(userData.LUCRO_CONTRATOS - userData.VALOR_SACADO) : '0'}</span>
                     </div>
                     <div>
                       <h3>SALDO DE INDICAÇÃO</h3>

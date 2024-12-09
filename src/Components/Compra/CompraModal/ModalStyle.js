@@ -96,12 +96,17 @@ export const ConfirmacaoDeCadastro = styled.div`
     flex-direction: column;
     text-align: center;
     font-weight: 500;
+
     button{
         width: 100%;
         margin-top: 20px;
         height: 40px;
         cursor: pointer;
         transition: .3s;
+        background: linear-gradient(to bottom, rgba(0, 180, 0, 1), rgba(20, 230, 0, 1));
+        color: white;
+        font-size: 18px;
+        text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
 
         &:hover{
             transform: scale(0.99);

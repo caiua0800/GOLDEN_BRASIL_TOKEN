@@ -33,12 +33,8 @@ export const AuthProvider = ({ children }) => {
     console.log(chaveMestra)
   }, []);
 
-
-
-
   const login = async (username, password) => {
     try {
-      // Passo 1: Obter o email associado ao username
       const response = await axios.post(`${BASE_ROUTE}${OBTER_EMAIL}`, { USERNAME: username });
       const email = response.data.EMAIL;
       const cpf = response.data.CPF;
@@ -52,8 +48,8 @@ export const AuthProvider = ({ children }) => {
         
       } else {
         await signInWithEmailAndPassword(auth, email, password);
+        console.log("ai ai ai ai ai")
       }
-      // Passo 2: Fazer login no Firebase com o email e senha
 
       // Passo 3: Obter dados adicionais do cliente após autenticação
       const userResponse = await axios.post(`${BASE_ROUTE}${PESQUISAR_CLIENTE}`, { clientId: cpf });
@@ -123,8 +119,6 @@ export const AuthProvider = ({ children }) => {
     return axios.post(`${BASE_ROUTE}${PESQUISAR_CLIENTE}`, LoginSendableData)
       .then((response) => {
         const data = response.data;
-        console.log("data")
-        console.log(data)
         setUserData(data);
         setError(null);
       })

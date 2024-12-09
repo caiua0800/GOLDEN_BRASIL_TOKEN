@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import * as Style from './TabelaContratosStyle';
-import { formatDateSystem } from '../../assets/utils';
+import { formatDateSystem, formatNumber } from '../../assets/utils';
 import { AuthContext } from '../../context/AuthContext';
 import { retornaResposta } from '../../assets/utils';
 import PDFGenerator from './PDF';
@@ -16,15 +16,16 @@ const TabelaDeContratos = () => {
 
 
     const handlePutaria = (normal, comTaxa) => {
-        if(parseFloat(comTaxa) > parseFloat(normal))
+        if (parseFloat(comTaxa) > parseFloat(normal))
             return parseFloat(comTaxa)
         return parseFloat(normal);
     }
 
     useEffect(() => {
         if (userData && Array.isArray(userData.CONTRATOS)) {
-            setContratos(userData.CONTRATOS);
-            const sortedContratos = [...userData.CONTRATOS].sort((a, b) => a.IDCOMPRA - b.IDCOMPRA);
+            // Filtrando contratos para não incluir aqueles que têm SALDO_SACADO_RECOMPRA definido
+            const filteredContratos = userData.CONTRATOS.filter(contrato => !contrato.SALDO_SACADO_RECOMPRA);
+            const sortedContratos = filteredContratos.sort((a, b) => a.IDCOMPRA - b.IDCOMPRA);
             setContratos(sortedContratos);
         } else {
             setContratos([]);
@@ -90,6 +91,33 @@ const TabelaDeContratos = () => {
             setSelecionada(c);
     }
 
+    function getDateBasedOnTime(st) {
+        if (st != 1)
+            return "----";
+
+        const now = new Date();
+        const options = { timeZone: 'America/Sao_Paulo', hour12: false, hour: '2-digit', minute: '2-digit' };
+        const formatter = new Intl.DateTimeFormat('pt-BR', options);
+        const timeString = formatter.format(now);
+
+        // Extrai a hora e o minuto
+        const [hour, minute] = timeString.split(':').map(Number);
+
+        // Verifica se já passou das 02:00
+        const today = now.toLocaleDateString('pt-BR'); // Data de hoje
+
+        if (hour >= 2) {
+            return today; // Retorna a data de hoje
+        } else {
+            // Para a data de ontem
+            const yesterday = new Date(now);
+            yesterday.setDate(now.getDate() - 1);
+            return yesterday.toLocaleDateString('pt-BR'); // Retorna a data de ontem
+        }
+    }
+
+
+
     return (
         <>
             <Style.Tabela>
@@ -98,7 +126,9 @@ const TabelaDeContratos = () => {
                         <Style.TabelaHeader>Cód.</Style.TabelaHeader>
                         <Style.TabelaHeader>DATA DA COMPRA</Style.TabelaHeader>
                         <Style.TabelaHeader>DATA DE RECOMPRA</Style.TabelaHeader>
-                        <Style.TabelaHeader>DATA 1º REND.</Style.TabelaHeader>
+                        <Style.TabelaHeader>DATA 1º VALORI.</Style.TabelaHeader>
+                        <Style.TabelaHeader>ULTIMO VALORI.</Style.TabelaHeader>
+                        <Style.TabelaHeader>VALOR ULT. VALORI.</Style.TabelaHeader>
                         <Style.TabelaHeader>CONTRATOS</Style.TabelaHeader>
                         <Style.TabelaHeader>VALOR</Style.TabelaHeader>
                         <Style.TabelaHeader>LUCRO HOJE</Style.TabelaHeader>
@@ -128,13 +158,12 @@ const TabelaDeContratos = () => {
                                 <Style.TabelaData>{dado.IDCOMPRA}</Style.TabelaData>
                                 <Style.TabelaData>{formatDateSystem(dado.PURCHASEDATE)}</Style.TabelaData>
                                 <Style.TabelaData>{formatDateSystem(dado.YIELDTERM)}</Style.TabelaData>
-                                <Style.TabelaData>{dado.PRIMEIRO_RENDIMENTO ? formatDateSystem(dado.PRIMEIRO_RENDIMENTO ) : dado.PRIMEIRA_VALORIZACAO ? (dado.PRIMEIRA_VALORIZACAO ) : "Não encontrado"}</Style.TabelaData>
+
+                                <Style.TabelaData>{dado.PRIMEIRO_RENDIMENTO ? formatDateSystem(dado.PRIMEIRO_RENDIMENTO) : dado.PRIMEIRA_VALORIZACAO ? (dado.PRIMEIRA_VALORIZACAO) : "Não encontrado"}</Style.TabelaData>
+                                <Style.TabelaData>{getDateBasedOnTime(dado.STATUS)}</Style.TabelaData>
+                                <Style.TabelaData>R${formatNumber((dado.RENDIMENTO_ATUAL / (dado.MAXIMUMNUMBEROFDAYSTOYIELD * 30) / 100) * dado.TOTALSPENT)}</Style.TabelaData>
                                 <Style.TabelaData>{dado.COINS}</Style.TabelaData>
-
-
                                 <Style.TabelaData>R$ {parseFloat(dado.TOTALSPENT).toFixed(2) ? handlePutaria(dado.TOTALSPENT, dado.TOTALSPENTFEE).toFixed(2) : handlePutaria(dado.TOTALSPENT, dado.TOTALSPENTFEE)}</Style.TabelaData>
-                   
-
                                 <Style.TabelaData>
                                     {dado.RENDIMENTO_ATUAL ? dado.RENDIMENTO_ATUAL.toFixed(2) : dado.RENDIMENTO_ATUAL}%
                                 </Style.TabelaData>

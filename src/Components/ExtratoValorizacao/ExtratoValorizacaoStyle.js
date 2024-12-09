@@ -198,3 +198,20 @@ export const SearchBar = styled.div`
         box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
     }
 `;
+
+export const FiltrePeloId = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+    input{
+        width: 300px;
+        height: 35px;
+        font-size: 18px;
+        box-sizing: border-box;
+        padding-left: 20px;
+        margin-top: 10px;
+        box-shadow: 4px 4px 1px rgba(0,0,0,0.4);
+    }
+`;

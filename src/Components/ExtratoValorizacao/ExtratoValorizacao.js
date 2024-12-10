@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import * as T from './ExtratoValorizacaoStyle';
 import SideBarBox from "../Sidebar/SideBarBox";
+import TabelaValorizacao from "../Tabelas/TabelaValorizacao";
 
 // Função para formatar a data
 const formatDate = (date) => {
@@ -39,21 +40,8 @@ const ExtratoValorizacao = () => {
             contrs.forEach(cont => {
                 var dataPrimeira = cont.PRIMEIRO_RENDIMENTO || cont.PRIMEIRA_VALORIZACAO || null;
 
-                if(dataPrimeira)
+                if (dataPrimeira)
                     novosDados.push(dataPrimeira)
-                // const yieldTerm = cont.YIELDTERM;
-
-                // var aux1 = dataPrimeira.replace("/", "-").replace("/", "-").split("-")
-                // var aux2 = aux1[2].split(" ");
-                // var novaData = `${aux2[0]}-${aux1[1]}-${aux1[0]} ${aux2[1]}`
-                // dataPrimeira = novaData;
-
-                // if (dataPrimeira) {
-                //     const dias = diasDesdeData(dataPrimeira, yieldTerm);
-                //     novosDados.push({ id: cont.IDCOMPRA, dias, diario: ((parseFloat(cont.MAXIMUMQUOTAYIELD) / (parseFloat(cont.MAXIMUMNUMBEROFDAYSTOYIELD) * 31)/100)*parseFloat(cont.TOTALSPENT)) });
-                // } else {
-                //     console.log(dataPrimeira)
-                // }
             });
 
             console.log(novosDados)
@@ -85,70 +73,22 @@ const ExtratoValorizacao = () => {
         setCurrentPage(newPage);
     };
 
-    const handleInputPageChange = (e) => {
-        const pageNumber = Number(e.target.value);
-        if (pageNumber > 0 && pageNumber <= totalPages) {
-            setCurrentPage(pageNumber);
-        }
-    };
-
     return (
         <SideBarBox>
             <T.ExtratoValorizacaoContainer>
                 <T.PrincipalContent>
                     <T.ContainerTitle>Histórico de Valorização</T.ContainerTitle>
-                    <T.FiltrePeloId>
+                    {/* <T.FiltrePeloId>
                         <input
                             onChange={handleFilterChange}
                             placeholder="Filtre pelo ID"
                             type="text"
                             value={filterId}
                         />
-                    </T.FiltrePeloId>
-                    <T.TabelaContainer>
-                        <T.Table>
-                            <thead>
-                                <tr>
-                                    <th>Data</th>
-                                    <th>Descrição</th>
-                                    <th>Valor</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currentItems.length > 0 ? (
-                                    currentItems.map((item, index) => (
-                                        <tr key={index}>
-                                            <td>{item.date}</td>
-                                            <td>{item.description}</td>
-                                            <td>+ R${item.value}</td>
-                                            <td>{item.status}</td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="4">Nenhum registro correspondente encontrado.</td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </T.Table>
-                    </T.TabelaContainer>
-                    <T.Pagination>
-                        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-                            Anterior
-                        </button>
-                        <span>{`Página ${currentPage} de ${totalPages}`}</span>
-                        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-                            Próximo
-                        </button>
-                        <input
-                            type="number"
-                            min="1"
-                            max={totalPages}
-                            placeholder="Digite a Página"
-                            onChange={handleInputPageChange}
-                        />
-                    </T.Pagination>
+                    </T.FiltrePeloId> */}
+                    <T.TabelaContainerzinho>
+                        <TabelaValorizacao />
+                    </T.TabelaContainerzinho>
                 </T.PrincipalContent>
             </T.ExtratoValorizacaoContainer>
         </SideBarBox>

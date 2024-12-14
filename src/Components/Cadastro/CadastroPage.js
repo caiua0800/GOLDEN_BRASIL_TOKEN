@@ -41,6 +41,16 @@ export default function CadastroPage() {
             return;
         }
 
+        if(senha.length === 5){
+            setResposta({ message: 'A senha precisa ter mais de 5 caracteres.', type: 'error' });
+            return;
+        }
+
+        if(senha.includes(" ")){
+            setResposta({ message: 'A senha não pode conter espaços.', type: 'error' });
+            return;
+        }
+
         showPulse();
 
         const clientData = {

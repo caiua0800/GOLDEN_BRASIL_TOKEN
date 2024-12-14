@@ -44,7 +44,7 @@ const ExtratoValorizacao = () => {
                     novosDados.push(dataPrimeira)
             });
 
-            console.log(novosDados)
+            // console.log(novosDados)
             setQuantidadeDadosPorContrato(novosDados);
         }
     }, [userData.CONTRATOS]);

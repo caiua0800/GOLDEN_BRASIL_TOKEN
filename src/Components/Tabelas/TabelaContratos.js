@@ -79,7 +79,7 @@ const TabelaDeContratos = () => {
 
     useEffect(() => {
         if (modalData !== null) {
-            console.log(modalData)
+            // console.log(modalData)
             pdfRef.current.downloadPDF();
         }
     }, [modalData]);

@@ -60,7 +60,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
             const newValue = (parseInt(lastDocId) + 1).toString();
             await updateDoc(docRef, { VALOR: newValue });
 
-            console.log("VALOR atualizado para:", newValue);
+            // console.log("VALOR atualizado para:", newValue);
         } else {
             console.log("O documento não existe.");
         }
@@ -100,14 +100,14 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
         return `${parte1}.${parte2}.${parte3}-${parte4}`; // Concatena no formato desejado
     }
 
-    console.log(formatarString(userData.CPF))
+    // console.log(formatarString(userData.CPF))
     
 
     const handlePostPIX = async (data) => {
         try {
             const response = await GeneratePIX_MP(data);
             const ticket = response.data.point_of_interaction.transaction_data.ticket_url;
-            console.log(ticket);
+            // console.log(ticket);
             return ticket;
         } catch (error) {
             console.log("Erro ao gerar PIX: ", error);
@@ -232,7 +232,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
 
     const handlePaymentMethodChange = (event) => {
         setPaymentMethod(event.target.value);
-        console.log(event.target.value)
+        // console.log(event.target.value)
     };
 
     return (

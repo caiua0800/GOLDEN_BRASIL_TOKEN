@@ -41,7 +41,7 @@ const LoginPage = () => {
       setShowError(true);
       const timer = setTimeout(() => {
         setShowError(false);
-        window.location.reload();  
+        // window.location.reload();  
       }, 2000);
       return () => clearTimeout(timer);
     }

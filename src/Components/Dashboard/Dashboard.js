@@ -35,16 +35,16 @@ export default function Dashboard() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (userData)
-      updateUserEntries();
-  }, []);
+  // useEffect(() => {
+  //   if (userData)
+  //     updateUserEntries();
+  // }, []);
 
   useEffect(() => {
     if (userData && userData.INDICADOS) {
       if (userData.INDICADOS.length > 0) {
         axios.post(rotaInfoIndicados, { INDICADOS: userData.INDICADOS }).then(res => {
-          console.log(res.data);
+          // console.log(res.data);
           setIndicados(res.data)
         }).catch(err => {
           console.log(err)
@@ -64,42 +64,41 @@ export default function Dashboard() {
   }, [userData, reloadUserData, showPulse, hidePulse]);
 
 
-  const updateUserEntries = async () => {
-    if (!userData || !userData.CPF) return;
+  // const updateUserEntries = async () => {
+  //   if (!userData || !userData.CPF) return;
 
-    const currentYear = moment().format('YYYY');
-    const currentMonth = moment().format('MM');
-    const currentMonthYear = `${currentMonth}${currentYear}`;
-    const now = moment().format('YYYY-MM-DD HH:mm:ss');
+  //   const currentYear = moment().format('YYYY');
+  //   const currentMonth = moment().format('MM');
+  //   const currentMonthYear = `${currentMonth}${currentYear}`;
+  //   const now = moment().format('YYYY-MM-DD HH:mm:ss');
 
-    // Verificar se já existe um documento para o mês/ano atual
-    const accessDocRef = doc(db, 'ACESSOS', currentMonthYear);
-    const accessDoc = await getDoc(accessDocRef);
+  //   // Verificar se já existe um documento para o mês/ano atual
+  //   const accessDocRef = doc(db, 'ACESSOS', currentMonthYear);
+  //   const accessDoc = await getDoc(accessDocRef);
 
-    if (!accessDoc.exists()) {
-      // Criar um novo documento para o mês/ano atual
-      await setDoc(accessDocRef, {
-        [userData.CPF]: {
-          ultima_visita: now,
-          contagem_mes: 1,
-          nome: userData.NAME
-        }
-      });
-    } else {
-      // Atualizar o documento existente
-      const accessData = accessDoc.data();
-      if (!accessData[userData.CPF] || moment(now).diff(moment(accessData[userData.CPF].ultima_visita), 'hours') >= 1) {
-        await updateDoc(accessDocRef, {
-          [`${userData.CPF}.ultima_visita`]: now,
-          [`${userData.CPF}.name`]: userData.NAME,
-          [`${userData.CPF}.contagem_mes`]: accessData[userData.CPF]
-            ? accessData[userData.CPF].contagem_mes + 1
-            : 1
-        });
-      }
-    }
-  };
-
+  //   if (!accessDoc.exists()) {
+  //     // Criar um novo documento para o mês/ano atual
+  //     await setDoc(accessDocRef, {
+  //       [userData.CPF]: {
+  //         ultima_visita: now,
+  //         contagem_mes: 1,
+  //         nome: userData.NAME
+  //       }
+  //     });
+  //   } else {
+  //     // Atualizar o documento existente
+  //     const accessData = accessDoc.data();
+  //     if (!accessData[userData.CPF] || moment(now).diff(moment(accessData[userData.CPF].ultima_visita), 'hours') >= 1) {
+  //       await updateDoc(accessDocRef, {
+  //         [`${userData.CPF}.ultima_visita`]: now,
+  //         [`${userData.CPF}.name`]: userData.NAME,
+  //         [`${userData.CPF}.contagem_mes`]: accessData[userData.CPF]
+  //           ? accessData[userData.CPF].contagem_mes + 1
+  //           : 1
+  //       });
+  //     }
+  //   }
+  // };
 
 
   const handleReloadWeb = () => { loadUserData(); }
@@ -143,7 +142,7 @@ export default function Dashboard() {
           enviarPara.forEach((item) => {
             if (item.CPF === userData?.CPF || item.CPF === '*') {
               setMessageExists(data);
-              console.log(`Mensagem encontrado no documento ${doc.id}:`, data);
+              // console.log(`Mensagem encontrado no documento ${doc.id}:`, data);
             }
           });
         });
@@ -170,7 +169,6 @@ export default function Dashboard() {
     const contratosFiltrados = userData.CONTRATOS ? userData.CONTRATOS.filter(contrato => contrato.STATUS === 2) : [];
     saldoDeRecompraAux = userData.CONTRATOS ? contratosFiltrados.reduce((total, contrato) => total + (contrato.TOTALSPENT), 0) : [];
     saldoDeRecompradoAux = contratosFiltrados.reduce((total, contrato) => total + (contrato.SALDO_SACADO_RECOMPRA || 0), 0);
-    console.log("SALDO RECOMPRADO: R$: ", saldoDeRecompradoAux)
     setSaldoDeRecomprado(saldoDeRecompradoAux);
     setSaldoDeRecompra(saldoDeRecompraAux)
   }, [userData]);
@@ -182,7 +180,6 @@ export default function Dashboard() {
     <SideBarBox>
       <D.DashboardContainer>
         <D.LoginBehind src='logo-golden.png' />
-        {/* <Modal /> */}
         <D.PrincipalContent>
           {messageExists && (
             <MensagemSchema data={messageExists} />

@@ -52,7 +52,7 @@ export default function MensagemSchema({ data }) {
                             <>
                                 <span onClick={handleClose}>x</span>
                                 <h1>{data.titulo || 'TÍTULO'}</h1>
-                                <p>{data.mensagem || 'MENSAGEM'}</p>
+                                <p className="textoColor">{data.mensagem || 'MENSAGEM'}</p>
                                 <div>
                                     <h5>{formatFirestoreTimestamp(data.data)}</h5>
                                     <h6 onClick={handleVerMaisClick}>ver mais</h6>

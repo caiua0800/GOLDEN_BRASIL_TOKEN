@@ -10,8 +10,13 @@ const messageTypeStyles = {
         }
     `,
     PROMOCAO: css`
-        background-color: #99d6ea;
-        color: white;
+        background-color: #F5004F;
+        color: #F9E400;
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.6));
+
+        .textoColor{
+            color: #FFFFFF;
+        }
     `,
     ATUALIZACAO: css`
         background-color: #e3e902;

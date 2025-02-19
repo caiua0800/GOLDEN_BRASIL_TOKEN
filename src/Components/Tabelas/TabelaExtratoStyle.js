@@ -65,6 +65,10 @@ export const Table = styled.table`
             color: #6acc1a; /* verde escuro para indicação */
         }
 
+        &.antecipacao {
+            color: #6acc1a; /* verde escuro para indicação */
+        }
+
         &.plus {
             color: rgba(100,255,255,1); /* verde escuro para indicação */
         }

@@ -228,7 +228,7 @@ export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const [chaveMestra, setChaveMestra] = useState(null);
-  const [token, setToken] = useState(null); // Estado para armazenar o token
+  const [token, setToken] = useState(null); 
 
   useEffect(() => {
     const fetchChaveMestra = async () => {
@@ -243,9 +243,10 @@ export const AuthProvider = ({ children }) => {
       }
     };
 
+    var it = sessionStorage.getItem('token', token);
+    setToken(it)
     fetchChaveMestra();
 
-    // Recuperar os dados do usuário e o token do sessionStorage ao iniciar
     const storedData = sessionStorage.getItem('userData');
     const storedToken = sessionStorage.getItem('token');
     if (storedData) {
@@ -259,7 +260,9 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       const response = await axios.post(`${BASE_ROUTE}${OBTER_EMAIL}`, { USERNAME: username });
-      const email = response.data.EMAIL;
+      const email = response.data.EMAIL.toLowerCase();
+
+      console.log(email)
 
       if (!email) {
         throw new Error('Email não encontrado');
@@ -273,12 +276,11 @@ export const AuthProvider = ({ children }) => {
         userCredential = await signInWithEmailAndPassword(auth, email, password);
       }
 
-      // Obtenha o token de ID do usuário autenticado
       const token = await userCredential.user.getIdToken();
-      setToken(token); // Armazene o token no estado
-      sessionStorage.setItem('token', token); // Armazena o token no sessionStorage
+      setToken(token); 
 
-      // Envie o email e o token para pesquisar cliente
+      sessionStorage.setItem('token', token);
+
       const userResponse = await axios.post(
         `${BASE_ROUTE}${PESQUISAR_CLIENTE2}`,
         { EMAIL: email, token: token },
@@ -382,7 +384,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ userData, setUserData, error, login, logout, reloadUserData }}>
+    <AuthContext.Provider value={{ userData, setUserData, error, login, logout, reloadUserData, token }}>
       {children}
     </AuthContext.Provider>
   );

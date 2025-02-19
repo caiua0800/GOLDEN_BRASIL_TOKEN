@@ -103,6 +103,7 @@ export const ProfilePicture = styled.div`
     overflow: hidden;
     margin-bottom: 10px;
     cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.3);
 
     img {
         width: 100%;
@@ -195,10 +196,12 @@ export const InfoBox = styled.div`
     input, select{
         height: 40px;
         flex: 1;
-        border: 0;
+        border: 1px solid rgba(0,0,0,0.3);
         box-shadow: 3px 3px 2px rgba(0,0,0,0.2); 
         box-sizing: border-box;
-        padding-left: 10px
+        padding-left: 10px;
+        font-size 18px;
+        font-weight: 600;
     }
 
     @media (max-width: 1000px){
@@ -330,4 +333,23 @@ export const MudarSenhaLink = styled.div`
     margin: 0;
     &:hover{color: black;}
     
+`;
+
+export const ProfileUsername = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    .icone{
+        // width: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: .3s;
+        
+
+    }
 `;

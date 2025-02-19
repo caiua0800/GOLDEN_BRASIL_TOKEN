@@ -138,6 +138,7 @@ const TabelaDeContratos = () => {
                         <Style.TabelaHeader>CONTRATO</Style.TabelaHeader>
                         <Style.TabelaHeader>TICKET</Style.TabelaHeader>
                         <Style.TabelaHeader>STATUS</Style.TabelaHeader>
+                        <Style.TabelaHeader>DESCRIÇÃO</Style.TabelaHeader>
                     </Style.TabelaRow>
                 </Style.TabelaHead>
                 <Style.TabelaBody>
@@ -187,6 +188,7 @@ const TabelaDeContratos = () => {
                                     ) : 'PAGO'}
                                 </Style.TabelaData>
                                 <Style.TabelaData>{retornaResposta(dado)}</Style.TabelaData>
+                                <Style.TabelaData>{dado.DESCRIPTION && dado.DESCRIPTION.trim() != "" ? dado.DESCRIPTION : "==="}</Style.TabelaData>
                             </Style.TabelaRow>
                         ))
                     )}

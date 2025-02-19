@@ -4,8 +4,8 @@ import SideBarBox from "../Sidebar/SideBarBox";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { usePulse } from "../../context/LoadContext";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import html2pdf from 'html2pdf.js';
+import { formatNumber } from "../../assets/utils";
 
 const BASE = process.env.REACT_APP_BASE_ROUTE;
 const DESTIN = process.env.REACT_APP_RELATORIO;
@@ -17,6 +17,7 @@ export default function Relatorio() {
     const [serverResponseContracts, setServerResponseContracts] = useState([]);
     const { showPulse, hidePulse } = usePulse();
     const [sortedContracts, setSortedContracts] = useState([]);
+    const [contratosEsseAninho, setContratosEsseAninho] = useState([]);
 
     const handleGetFilteredRelatorio = async () => {
         showPulse();
@@ -41,91 +42,97 @@ export default function Relatorio() {
         }
     }
 
-
-    const downloadPDF = async () => {
-        try {
-            const input = document.getElementById('pdfContent');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const pageHeight = 297;
-
-            const canvas = await html2canvas(input, {
-                scale: 2,
-                useCORS: true,
-                logging: true,
-            });
-
-            const imgData = canvas.toDataURL('image/png');
-            const imgWidth = 210; 
-            const imgHeight = canvas.height * imgWidth / canvas.width;
-
-            let heightLeft = imgHeight;
-            let position = 0;
-
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, 0);
-            heightLeft -= pageHeight;
-
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, 0);
-                heightLeft -= pageHeight;
-            }
-
-            pdf.save('relatorio_de_valorizacao.pdf');
-        } catch (error) {
-            console.error('Erro ao gerar PDF:', error);
-        }
-    };
-
-
     const sortContractsByDate = (contracts) => {
         return [...contracts].sort((a, b) => {
             return new Date(a.PURCHASEDATE) - new Date(b.PURCHASEDATE);
         });
     };
 
-
     useEffect(() => {
         setSortedContracts(sortContractsByDate(serverResponseContracts));
     }, [serverResponseContracts]);
 
+    const obterContratosPorAno = () => {
+        const contratosEsseAno = [];
+        if (userData.CONTRATOS && userData.CONTRATOS.length > 0) {
+            userData.CONTRATOS.forEach(contrato => {
+                if (contrato && contrato.STATUS && (contrato.STATUS === 1 || contrato.STATUS === 2)) {
+                    if (contrato.STATUS === 1) {
+                        const dataHoje = new Date();
+                        const dataInicio = new Date('2024-01-01');
+                        const diffTime = Math.abs(dataHoje - dataInicio);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                        var valorizacaoTotal = (parseFloat(contrato.MAXIMUMQUOTAYIELD) /
+                            (parseFloat(contrato.MAXIMUMNUMBEROFDAYSTOYIELD) * 30)) * diffDays;
+
+                        var valorizacaoTotalDinheiro = (valorizacaoTotal / 100) *
+                            parseFloat(contrato.TOTALSPENT > contrato.TOTALSPENTFEE ? contrato.TOTALSPENT : contrato.TOTALSPENTFEE);
+
+                        var valorPlus = 0;
+                        if (userData.PLUS && userData.PLUS.length > 0) {
+                            userData.PLUS.forEach(p => {
+                                if(parseFloat(p.IDCOMPRA) === parseFloat(contrato.IDCOMPRA)){
+                                    valorPlus += parseFloat(p.value_multiplied);
+                                }
+                            })
+                        }
+
+                        contratosEsseAno.push({ ctrId: contrato.IDCOMPRA, value: (valorizacaoTotalDinheiro + valorPlus) || 0 });
+                    }
+                }
+            });
+        }
+
+        if (contratosEsseAno && contratosEsseAno.length > 0) {
+            setContratosEsseAninho(contratosEsseAno);
+        }
+    }
+
+    useEffect(() => {
+        obterContratosPorAno();
+    }, []);
+
+    const gerarPDF = () => {
+        const element = document.getElementById('relatorioPDF');
+        const opt = {
+            margin: 1,
+            filename: 'relatorio2024.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Gera o PDF a partir do elemento HTML
+        html2pdf().from(element).set(opt).save();
+    };
 
     return (
         <SideBarBox>
-            <S.RelatorioContainer>
+            <S.RelatorioContainer id="relatorio">
                 <S.LoginBehind src='logo-golden.png' />
-                {/* <S.PrincipalContent>
-                    <S.TitleInitial>EMISSÃO DO RELATÓRIO DE VALORIZAÇÃO</S.TitleInitial>
-                    <S.RelatorioContent>
-                        <S.Filters>
-                            <S.RelatorioInputBox>
-                                <span>DATA DE INÍCIO</span>
-                                <input
-                                    type="date"
-                                    value={dateIn}
-                                    onChange={(e) => setDateIn(e.target.value)}
-                                />
-                            </S.RelatorioInputBox>
-                            <S.RelatorioInputBox>
-                                <span>DATA DE TÉRMINO</span>
-                                <input
-                                    type="date"
-                                    value={dateOut}
-                                    onChange={(e) => setDateOut(e.target.value)}
-                                />
-                            </S.RelatorioInputBox>
-                        </S.Filters>
+                <S.PrincipalContent id="relatorioPDF">
+                    <S.RelatorioPDF>
+                        <S.Titulo>RELATÓRIO DE VALORIZAÇÃO 🧾</S.Titulo>
+                        <S.SessaoTitulo>Referente 2024</S.SessaoTitulo>
 
-                        {dateIn !== "" && dateOut !== "" && (
-                            <S.ButtonGenerate onClick={handleGetFilteredRelatorio}>GERAR RELATÓRIO</S.ButtonGenerate>
-                        )}
-
-
-                        <S.DownloadPDF onClick={downloadPDF}>DOWNLOAD</S.DownloadPDF>
-
-                    </S.RelatorioContent>
-                </S.PrincipalContent> */}
-                <S.Manutencao> EM MANUTENÇÃO </S.Manutencao>
+                        <S.ContratosDoRelatorio>
+                            <S.ContratoItem>
+                                <span className="item1">ID DO CONTRATO</span>
+                                <span className="item2">VALORIZAÇÃO DE 2024 (R$)</span>
+                            </S.ContratoItem>
+                            {contratosEsseAninho && contratosEsseAninho.map(ctrAninho => (
+                                <S.ContratoItem key={ctrAninho.ctrId}>
+                                    <span className="item1">#{ctrAninho.ctrId}</span>
+                                    <span className="item2">R${formatNumber(ctrAninho.value)}</span>
+                                </S.ContratoItem>
+                            ))}
+                        </S.ContratosDoRelatorio>
+                        <S.BotaoGerarImprimirPDF>
+                            <button onClick={gerarPDF}>Imprimir</button>
+                        </S.BotaoGerarImprimirPDF>
+                    </S.RelatorioPDF>
+                </S.PrincipalContent>
             </S.RelatorioContainer>
         </SideBarBox>
     );

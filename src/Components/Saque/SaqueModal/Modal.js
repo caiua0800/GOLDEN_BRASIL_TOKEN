@@ -14,7 +14,7 @@ const CRIAR_SAQUE_IND = process.env.REACT_APP_CRIAR_SAQUE_IND;
 
 export default function Modal({ handleModalSaque }) {
     const [valorSolicitado, setValorSolicitado] = useState('');
-    const { userData, reloadUserData } = useContext(AuthContext);
+    const { userData, reloadUserData, logout } = useContext(AuthContext);
     const [usuario, setUsuario] = useState('');
     const [senha, setSenha] = useState('');
     const disponivelSaque = userData && userData.DISPONIVEL_SAQUE ? parseFloat(userData.DISPONIVEL_SAQUE) : 0;
@@ -26,16 +26,23 @@ export default function Modal({ handleModalSaque }) {
     const [isActive, setIsActive] = useState(true);
     const docRef = doc(db, "SYSTEM_VARIABLES", "JANELA_DE_SAQUES");
     const [selectedIndication, setSelectedIndication] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [token, setToken] = useState(null);
+
     const taxa = 0.04;
 
     const [selectedContract, setSelectedContract] = useState(null);
 
+    useEffect(() => {
+        valorTotalDisponivelHojeFunction();
+        const it = sessionStorage.getItem('token', token);
+        setToken(it);
+    }, [])
+
     let corSolicitado;
-    if (valorSolicitadoNumber < disponivelSaque) {
+    if (valorSolicitadoNumber <= disponivelSaque) {
         corSolicitado = '#4dff00';
-    } else if (valorSolicitadoNumber === disponivelSaque) {
-        corSolicitado = 'blue';
-    } else {
+    }else {
         corSolicitado = 'red';
     }
 
@@ -48,12 +55,13 @@ export default function Modal({ handleModalSaque }) {
 
     const handleSolicitarSaque = async () => {
 
+        if (isProcessing) return;
+
+        setIsProcessing(true);
         if (!handleClientesRetardados(senha)) {
             alert("Insira o seu CPF corretamente sem formatação.")
             return;
         }
-
-        console.log(handleClientesRetardados(senha))
 
         if (parseFloat(userData.DISPONIVEL_SAQUE) < (valorSolicitadoNumber)) {
             alert(`Valor insuficiente.`)
@@ -81,22 +89,38 @@ export default function Modal({ handleModalSaque }) {
                     IDCOMPRA: selectedContract.IDCOMPRA
                 }
             }
+
+
             try {
-                const response = await axios.post(`${BASE_ROUTE}${CRIAR_SAQUE}`, requestData);
+                const response = await axios.post(`${BASE_ROUTE}${CRIAR_SAQUE}`, requestData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 console.log('solicitação de saque feita', response)
                 hidePulse()
                 reloadUserData();
                 setTimeout(() => { alert('solicitação de saque feita!'); }, 1000);
+                setIsProcessing(false);
             } catch (error) {
                 hidePulse()
-                alert("Erro ao atualizar saque: ", error);
-                console.log(error)
+                console.log(error.response.data)
+                if (error.response.data.includes("IDCOMPRA")) {
+                    alert("Aguarde 5 minutos para fazer o próximo saque neste contrato.");
+                }
+                if(error.response.status === 401){
+                    alert("Sessão Expirada.");
+                    logout();
+                }else{
+                    alert("Erro ao atualizar saque: ", error);
+                    console.log(error)
+                }
+                setIsProcessing(false);
             }
 
             handleModalSaque();
         } else {
             showPulse();
-
             const requestData = {
                 userId: userData.CPF,
                 saqueData: {
@@ -105,20 +129,30 @@ export default function Modal({ handleModalSaque }) {
                 }
             }
             try {
-                const response = await axios.post(`${BASE_ROUTE}${CRIAR_SAQUE_IND}`, requestData);
+                const response = await axios.post(`${BASE_ROUTE}${CRIAR_SAQUE_IND}`, requestData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 console.log('solicitação de saque feita', response)
                 hidePulse()
                 reloadUserData();
                 setTimeout(() => { alert('solicitação de saque feita!'); }, 1000);
+                setIsProcessing(false);
             } catch (error) {
                 hidePulse()
-                alert("Erro ao atualizar saque: ", error);
-                console.log(error)
+                setIsProcessing(false);
+                if(error.response.status === 401){
+                    alert("Sessão Expirada.");
+                    logout();
+                }else{
+                    alert("Erro ao atualizar saque: ", error);
+                    console.log(error)
+                }
             }
 
             handleModalSaque();
         }
-
     }
 
     const handleCloseModal = () => {
@@ -152,8 +186,9 @@ export default function Modal({ handleModalSaque }) {
 
         let valorLucro = (contrato.RENDIMENTO_ATUAL / 100) * parseFloat(contrato.TOTALSPENT);
 
-        if (valorLucro && valorSacado)
-            return valorLucro - valorSacado
+        if (valorLucro && valorSacado){
+            return valorLucro - valorSacado;
+        }
         else {
             return valorLucro ? valorLucro : 0;
         }
@@ -194,10 +229,6 @@ export default function Modal({ handleModalSaque }) {
     }
 
     useEffect(() => {
-        valorTotalDisponivelHojeFunction();
-    }, [])
-
-    useEffect(() => {
         const fetchActiveState = async () => {
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
@@ -214,9 +245,6 @@ export default function Modal({ handleModalSaque }) {
     const handleClientesRetardados = (str) => {
         return str.replace(/[.\-\s]/g, "").trim();
     }
-
-
-
 
     return (
         <M.ModalContainer>
@@ -306,7 +334,7 @@ export default function Modal({ handleModalSaque }) {
                             <h2>Selecione o valor do saque</h2>
                             <input value={valorSolicitado} onChange={handleInputChange} />
 
-                            {(selectedContract ? returnValorDisponivel2(selectedContract) : parseFloat(userData.TOTAL_INDICACAO)) - valorSolicitadoNumber >= 0 ? (
+                            {((selectedContract ? returnValorDisponivel2(selectedContract) : parseFloat(userData.TOTAL_INDICACAO)).toFixed(2)) - valorSolicitadoNumber.toFixed(2) >= 0 ? (
                                 <>
                                     <span>{valorSolicitado != "" ? "Valor disponível" : ""} </span>
                                     <span>{valorSolicitado != "" ? "VALOR COM TAXA: R$" + (parseFloat(valorSolicitado) - (parseFloat(valorSolicitado) * taxa)) : ""}</span>

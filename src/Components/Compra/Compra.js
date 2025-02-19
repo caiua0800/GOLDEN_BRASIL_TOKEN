@@ -26,7 +26,7 @@ export default function Compra() {
     const [loadingSimulation, setLoadigSimulation] = useState(false);
     const [valorContratoUni, setValorContratoUni] = useState(0);
     const [minimum, setMinimum] = useState(null);
-    
+
 
     useEffect(() => {
         const fetchValorContrato = async () => {
@@ -63,7 +63,7 @@ export default function Compra() {
 
     const handleSimulate = () => {
 
-        if(parseFloat(qttContratos) < 5){
+        if (parseFloat(qttContratos) < 5) {
             alert("Quantidade mínima de 5 contratos");
             return;
         }
@@ -84,14 +84,9 @@ export default function Compra() {
     const handleImageLoad = () => { hidePulse(); };
 
     const handleModalCompra = () => {
-
-        // if(!userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS){
-        //     alert("ENVIE OS DOCUMENTOS PARA VERIFICAÇÃO");
-        //     return;
-        // }else if(userData.DOCSENVIADOS && !userData.DOCSVERIFICADOS){
-        //     alert("AGUARDE A VERIFICAÇÃO DOS SEUS DOCUMENTOS");
-        //     return;
-        // }
+        if (parseFloat(qttContratos * valorContratoUni) > 4300000){
+            return alert("Valor não autorizado a comprar pelo cliente, contate a empresa.");
+        }
 
         setModalCompra(!modalCompra);
     }
@@ -229,7 +224,6 @@ export default function Compra() {
                         )}
                         <S.TabelaContratosContainer>
                             <TabelaDeContratos dados={userData ? userData.CONTRATOS : []} />
-
                         </S.TabelaContratosContainer>
                     </S.Simulacao>
 

@@ -19,7 +19,7 @@ import TabelaRecompra from '../Tabelas/TabelaRecompra/TabelaRecompra';
 const rotaInfoIndicados = process.env.REACT_APP_BASE_ROUTE + process.env.REACT_APP_OBTER_INFO_INDICADOS;
 
 export default function Dashboard() {
-  const { userData, reloadUserData } = useContext(AuthContext);
+  const { userData, reloadUserData, token } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const { showPulse, hidePulse } = usePulse();
   const [messageExists, setMessageExists] = useState(null);
@@ -27,6 +27,7 @@ export default function Dashboard() {
   const [filtroContratos, setFiltroContratos] = useState("0");
   const [saldoDeRecompra, setSaldoDeRecompra] = useState(0);
   const [saldoDeRecomprado, setSaldoDeRecomprado] = useState(0);
+
 
   const loadUserData = async () => {
     showPulse();
@@ -43,8 +44,12 @@ export default function Dashboard() {
   useEffect(() => {
     if (userData && userData.INDICADOS) {
       if (userData.INDICADOS.length > 0) {
-        axios.post(rotaInfoIndicados, { INDICADOS: userData.INDICADOS }).then(res => {
-          // console.log(res.data);
+        axios.post(rotaInfoIndicados, { INDICADOS: userData.INDICADOS }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }).then(res => {
+          console.log(res.data)
           setIndicados(res.data)
         }).catch(err => {
           console.log(err)
@@ -62,43 +67,6 @@ export default function Dashboard() {
       loadUserData();
     }
   }, [userData, reloadUserData, showPulse, hidePulse]);
-
-
-  // const updateUserEntries = async () => {
-  //   if (!userData || !userData.CPF) return;
-
-  //   const currentYear = moment().format('YYYY');
-  //   const currentMonth = moment().format('MM');
-  //   const currentMonthYear = `${currentMonth}${currentYear}`;
-  //   const now = moment().format('YYYY-MM-DD HH:mm:ss');
-
-  //   // Verificar se já existe um documento para o mês/ano atual
-  //   const accessDocRef = doc(db, 'ACESSOS', currentMonthYear);
-  //   const accessDoc = await getDoc(accessDocRef);
-
-  //   if (!accessDoc.exists()) {
-  //     // Criar um novo documento para o mês/ano atual
-  //     await setDoc(accessDocRef, {
-  //       [userData.CPF]: {
-  //         ultima_visita: now,
-  //         contagem_mes: 1,
-  //         nome: userData.NAME
-  //       }
-  //     });
-  //   } else {
-  //     // Atualizar o documento existente
-  //     const accessData = accessDoc.data();
-  //     if (!accessData[userData.CPF] || moment(now).diff(moment(accessData[userData.CPF].ultima_visita), 'hours') >= 1) {
-  //       await updateDoc(accessDocRef, {
-  //         [`${userData.CPF}.ultima_visita`]: now,
-  //         [`${userData.CPF}.name`]: userData.NAME,
-  //         [`${userData.CPF}.contagem_mes`]: accessData[userData.CPF]
-  //           ? accessData[userData.CPF].contagem_mes + 1
-  //           : 1
-  //       });
-  //     }
-  //   }
-  // };
 
 
   const handleReloadWeb = () => { loadUserData(); }
@@ -131,7 +99,6 @@ export default function Dashboard() {
     }
   };
 
-  //quando quiseres uma maçã, não a peças, cultive e a colha, pois se pedires...
   useEffect(() => {
     const fetchMensagens = async () => {
       try {
@@ -140,9 +107,10 @@ export default function Dashboard() {
           const data = doc.data();
           const enviarPara = data.ENVIAR_PARA || [];
           enviarPara.forEach((item) => {
-            if (item.CPF === userData?.CPF || item.CPF === '*') {
-              setMessageExists(data);
-              // console.log(`Mensagem encontrado no documento ${doc.id}:`, data);
+            if (item === userData?.USERNAME || item === '*') {
+              var msgs = messageExists ? messageExists : [];
+              msgs.push(data)
+              setMessageExists(msgs);
             }
           });
         });
@@ -173,7 +141,6 @@ export default function Dashboard() {
     setSaldoDeRecompra(saldoDeRecompraAux)
   }, [userData]);
 
-
   if (loading) return null;
 
   return (
@@ -181,10 +148,10 @@ export default function Dashboard() {
       <D.DashboardContainer>
         <D.LoginBehind src='logo-golden.png' />
         <D.PrincipalContent>
-          {messageExists && (
-            <MensagemSchema data={messageExists} />
-          )
-          }
+          {messageExists && messageExists.map((it, index) => (
+            <MensagemSchema data={it} />
+          ))}
+
           <D.ContainerTitle>
 
           </D.ContainerTitle>
@@ -248,9 +215,9 @@ export default function Dashboard() {
                 </D.PercentageCount>
               </D.SaldoDisponivelParaSaque>
             </D.SecondRow>
-            <D.IndiqueEGanha>
+            {/* <D.IndiqueEGanha>
               <p>INDIQUE E GANHE 10% DA PRIMEIRA COMPRA DO INDICADO, <span onClick={copyLink}>COPIAR LINK</span></p>
-            </D.IndiqueEGanha>
+            </D.IndiqueEGanha> */}
 
             <D.Justing>
 

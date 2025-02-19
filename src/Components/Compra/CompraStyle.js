@@ -162,20 +162,24 @@ export const SimulacaoBox = styled.div`
     align-items: center;
     flex-direction: column;
     height: 150px;
-    background-color: rgba(254, 254, 255, 0.8);
+    // background-color: rgba(254, 254, 255, 0.8);
+    background: linear-gradient(-45deg, rgba(20, 20, 20, 1), rgba(50, 50, 50, 1), rgba(20, 20, 20, 1));
     box-shadow: 3px 3px 2px rgba(0,0,0,0.4);
     gap: 10px;
+
     p {
         margin: 0;
         font-size: 18px;
         font-weight: 800;
-        color: rgba(0,0,0,0.7);
+        // color: rgba(0,0,0,0.7);
+        color: white;
     }
+
     span {
         margin: 0;
         font-size: 18px;
         font-weight: 800;
-        color: rgba(0,0,0,0.7);
+        color: gold;
     }
 
     @media (max-width: 1000px){
@@ -195,6 +199,18 @@ export const RealizarCompraBtn = styled.div`
         width: 100%;
         cursor: pointer;
         height: 50px;
+        font-size: 22px;
+        background: linear-gradient(to right, rgba(0, 200, 0, 1), rgba(100, 255, 0, 1));
+        border: 0;
+        border-radius: 3px;
+        box-shadow: 3px 3px 1px rgba(0,0,0,0.4);
+        transition: .3s;
+        font-weight: 600;
+
+        &:hover{
+            transform: scale(0.97);
+            box-shadow: 10px 10px 1px rgba(0,0,0,0.4);
+        }
     }
 `;
 

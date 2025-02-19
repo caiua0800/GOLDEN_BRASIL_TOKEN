@@ -211,10 +211,12 @@ export const calculateProfit = (months, initialValue, percentage) => {
     const finalValue = initialValue + totalProfit;
 
     // Calcula o lucro diário
-    const dailyProfit = totalProfit / totalDays;
+    const dailyProfit = (initialValue*1.5/1095);
+
+    console.log(initialValue*1.5/1095)
 
     return {
-        dailyProfit: dailyProfit,
+        dailyProfit: (initialValue*1.5/1095),
         totalProfit: (dailyProfit * totalDays),
         finalValue: finalValue,
         totalDays: totalDays

@@ -13,6 +13,7 @@ export const RelatorioContainer = styled.div`
     box-sizing: border-box;
     padding: 50px 30px 200px 30px;
     display: flex;
+    align-items: center;
     flex-direction: column;
 
     @media (max-width: 1000px){
@@ -34,6 +35,7 @@ export const LoginBehind = styled.img`
 
 export const PrincipalContent = styled.div`
     z-index: 2;
+    width: 100%;
 `;
 
 export const TitleInitial = styled.h1`
@@ -223,4 +225,96 @@ export const Manutencao = styled.div`
     position: fixed;
     top: 0;
     left: 0;
+`;
+
+export const RelatorioPDF = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // height: 80vh;
+    background: white;
+    box-sizing: border-box;
+    padding: 40px 40px;
+    border: 1px solid rgba(0,0,0,0.4);
+`;
+
+export const Titulo = styled.div`
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: 32px;
+    color: rgba(0,0,0,0.8);
+    font-weight: 800;
+    text-align: center;
+`;
+
+export const SessaoTitulo = styled.div`
+    width: 100%;
+    margin-top: 40px;
+    box-sizing: border-box;
+    padding-left: 40px;
+    font-size: 26px;
+    color: rgba(0,0,0,0.8);
+    font-weight: 600;
+    text-align: start;
+`
+
+export const ContratosDoRelatorio = styled.div`
+    margin-top: 20px;
+    padding: 40px;
+    width: 100%;
+    box-sizing: border-box;
+    // height: 50vh;
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
+    gap: 5px;
+`;
+
+export const ContratoItem = styled.div`
+    background: rgba(30, 30, 30, 0.2);
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+
+    .item1{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        padding: 0 20px;
+        align-items: center;
+        box-sizing: border-box;
+        color: white;
+        font-weight: 600;
+        background: linear-gradient(-45deg, rgba(20, 20, 20, 1), rgba(60, 60, 60, 1), rgba(20, 20, 20, 1));
+    }
+
+    .item2{
+        padding: 0 20px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        box-sizing: border-box;
+        color: white;
+        font-weight: 600;
+        text-shadow: 1px 1px 1px rgba(0,0,0,0.8);
+        background: linear-gradient(-45deg, #c9a227, #fad643, #c9a227);
+    }
+`;
+
+export const BotaoGerarImprimirPDF = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    button{
+        width: 80%;
+        height: 40px;
+        cursor: pointer;
+    }
 `;

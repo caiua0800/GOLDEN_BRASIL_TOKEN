@@ -15,12 +15,14 @@ const EDITAR_CLIENTE_INFO = process.env.REACT_APP_EDITAR_CLIENTE_INFO;
 const REACT_APP_EDITAR_CLIENTE_MAIS_CAMPOS_INFO = process.env.REACT_APP_EDITAR_CLIENTE_MAIS_CAMPOS_INFO;
 
 const ProfilePage = ({ setProfilePage }) => {
-    const { userData, logout, reloadUserData } = useContext(AuthContext);
+    const { userData, logout, reloadUserData, token } = useContext(AuthContext);
     const { showPulse, hidePulse } = usePulse();
+    // const [editUsername, setEditUsername] = useState("");
     const [inputsEnabled, setInputsEnabled] = useState({
         nome: false,
-        usuario: false,
+        // usuario: false,
         email: false,
+        cpf: false,
         profissao: false,
         contato: false,
         endereco: false,
@@ -85,7 +87,7 @@ const ProfilePage = ({ setProfilePage }) => {
 
     const [inputValues, setInputValues] = useState({
         nome: "",
-        usuario: "",
+        cpf: "",
         email: "",
         contato: "",
         endereco: "",
@@ -102,13 +104,14 @@ const ProfilePage = ({ setProfilePage }) => {
         accountType: "",
     });
 
-    const [activeTab, setActiveTab] = useState('profile'); 
+    const [activeTab, setActiveTab] = useState('profile');
 
     useEffect(() => {
         if (userData) {
             setInputValues({
                 nome: userData.NAME || "",
                 usuario: userData.USERNAME || "",
+                cpf: userData.CNPJ ? formatCNPJ(userData.CPF) : userData.CPF ? formatCPF(userData.CPF) : userData.CPF,
                 email: userData.EMAIL || "",
                 contato: userData.CONTACT || "indefinido",
                 endereco: userData.ADRESS || "",
@@ -136,6 +139,8 @@ const ProfilePage = ({ setProfilePage }) => {
                     docId: userData.CPF,
                     field: firebaseFieldName,
                     newValue: inputValues[inputName]
+                }, {
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 reloadUserData();
                 console.log('Campo atualizado:', response.data);
@@ -178,9 +183,11 @@ const ProfilePage = ({ setProfilePage }) => {
                     axios.post(`${BASE_ROUTE}${REACT_APP_EDITAR_CLIENTE_MAIS_CAMPOS_INFO}`, {
                         docId: userData.CPF,
                         updates: [
-                            {field: "URLFOTOPERFIL", fieldNewValue: downloadURL},
-                            {field: "CONTEMFOTOPERFIL", fieldNewValue: true}
+                            { field: "URLFOTOPERFIL", fieldNewValue: downloadURL },
+                            { field: "CONTEMFOTOPERFIL", fieldNewValue: true }
                         ]
+                    }, {
+                        headers: { Authorization: `Bearer ${token}` }
                     }).then(res => {
                         console.log(res);
                         hidePulse();
@@ -242,6 +249,8 @@ const ProfilePage = ({ setProfilePage }) => {
                         fieldNewValue: inputValues["bank"]
                     }
                 ]
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
             })
 
             switch (response.status) {
@@ -285,7 +294,12 @@ const ProfilePage = ({ setProfilePage }) => {
                                 </U.ChangePhotoOverlay>
                             </U.ProfilePicture>
                             <U.ProfileName>{inputValues.usuario}</U.ProfileName>
-                            <U.ProfileName>{userData.CNPJ ? formatCNPJ(userData.CPF) : userData.CPF? formatCPF(userData.CPF) : userData.CPF}</U.ProfileName>
+
+                            {/* <U.ProfileUsername>
+                                <U.ProfileName>{inputValues.usuario}</U.ProfileName>
+                                
+                            </U.ProfileUsername> */}
+                            {/* <U.ProfileName>{userData.CNPJ ? formatCNPJ(userData.CPF) : userData.CPF ? formatCPF(userData.CPF) : userData.CPF}</U.ProfileName> */}
                             <U.MudarSenhaLink><Link to='/alterarSenha'>Mudar Senha</Link></U.MudarSenhaLink>
                         </U.InitialContent>
 

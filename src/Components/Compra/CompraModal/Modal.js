@@ -20,6 +20,13 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
     const { userData } = useContext(AuthContext);
     const [paymentMethod, setPaymentMethod] = useState('PIX'); // Estado para método de pagamento
     const [lastId, setLastId] = useState(null)
+    const [token, setToken] = useState(null);
+
+
+    useEffect(() => {
+        const it = sessionStorage.getItem('token', token);
+        setToken(it);
+    }, [])
 
     const fetchDolarValue = async () => {
         const docRef = doc(db, "SYSTEM_VARIABLES", "TOKEN");
@@ -83,25 +90,25 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
     };
 
     function formatarString(str) {
-        
-        if(userData.CNPJ)
+
+        if (userData.CNPJ)
             return formatCNPJ(userData.CPF)
 
         if (str.length !== 11) {
             throw new Error('A string deve ter 11 caracteres.');
         }
-    
+
         // Formata a string corretamente
         const parte1 = str.substring(0, 3); // primeiros 3 dígitos
         const parte2 = str.substring(3, 6); // próximos 3 dígitos
         const parte3 = str.substring(6, 9); // próximos 3 dígitos
         const parte4 = str.substring(9, 11); // últimos 2 dígitos
-    
+
         return `${parte1}.${parte2}.${parte3}-${parte4}`; // Concatena no formato desejado
     }
 
     // console.log(formatarString(userData.CPF))
-    
+
 
     const handlePostPIX = async (data) => {
         try {
@@ -152,7 +159,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                 number: formatarString(userData.CPF)
             }
 
-            
+
 
             const separeted_name = separarNome(userData.NAME);
 
@@ -210,7 +217,9 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
             };
 
             try {
-                const response = await axios.post(`${BASE_ROUTE}${CRIAR_CONTRATO}`, requestData);
+                const response = await axios.post(`${BASE_ROUTE}${CRIAR_CONTRATO}`, requestData, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
 
                 const type = response.data.includes('sucesso') ? 'success' : 'success';
                 setPopUpMessage(response.data);
@@ -249,7 +258,7 @@ export default function Modal({ modalData, handleModalCompra, handleOpenPopUp, s
                 </M.FecharModalBtn>
 
                 <M.ModalPDFContainer>
-                    <PDFGenerator ContratoData={modalData} assinatura={assinatura} lastId={lastId+1}/>
+                    <PDFGenerator ContratoData={modalData} assinatura={assinatura} lastId={lastId + 1} />
                 </M.ModalPDFContainer>
                 <M.CheckboxContainer>
                     <label>

@@ -37,10 +37,20 @@ const TabelaExtrato = ({ startDate, endDate, filter }) => {
     const indicacoes = userData?.INDICACAO || [];
     const saque_indicacao = userData?.SAQUES_INDICACAO || [];
     const plusData = userData?.PLUS || []; // Dados do array PLUS
-
+    const antecipacoes = userData?.ANTECIPACOES || []; // Dados do array PLUS
 
     const transactions = [
-        // Filtra e mapeia os contratos com status diferente de 4
+
+        ...antecipacoes.map(p => {
+            return {
+                date: formatDateSystem(p.DATACRIACAO) || '',
+                description: p.description,
+                value: p.value || 0,
+                status: 'ADICIONADO',
+                type: 'antecipacao'
+            };
+        }),
+        
         ...contratos
             .filter(c => c.STATUS !== 4)
             .map(c => ({
@@ -80,7 +90,6 @@ const TabelaExtrato = ({ startDate, endDate, filter }) => {
         })),
 
         ...plusData.map(p => {
-            console.log(p); // Log para verificar se os dados estão corretos
             return {
                 date: formatDateSystem(p.date_created) || '',
                 description: `PLUS DE R$${p.value_multiplied} PARA CONTRATO ${p.IDCOMPRA}`,
@@ -123,6 +132,8 @@ const TabelaExtrato = ({ startDate, endDate, filter }) => {
             case 'valorizacao':
                 return '+';
             case 'plus':
+                return '+';
+            case 'antecipacao':
                 return '+';
             default:
                 return '';
